@@ -6,14 +6,15 @@ import org.springframework.web.bind.annotation.*;
 import Circuit_De_Stage.Backend.Services.EmailService;
 
 @RestController
-@RequestMapping("/email")
+@RequestMapping("/api/email")
 public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @GetMapping("/send")
+    @GetMapping("/sendTest")
     public String sendTestEmail() {
-        emailService.sendEmail("recipient@example.com", "Test Subject", "This is a test email.");
+        emailService.sendEmail("sofienlaghouanem@gmail.com", "Test Subject", "This is a test email.");
         return "Email sent successfully!";
     }
+    
 }

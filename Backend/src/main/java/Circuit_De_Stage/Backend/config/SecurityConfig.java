@@ -2,6 +2,7 @@ package Circuit_De_Stage.Backend.config;
 
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,43 +22,49 @@ import Circuit_De_Stage.Backend.Security.JwtFilter;
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private JwtFilter jwtFilter;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
+
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtFilter jwtFilter) { 
+    	this.customUserDetailsService = customUserDetailsService;
+	}
+    
+    @Autowired
+    public void setJwtFilter(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
+    
+    @Bean
+    static BCryptPasswordEncoder passwordEncoder() { 
+        return new BCryptPasswordEncoder();
     }
 
-    // Configure authentication details
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    // Configure authentication manager with custom user details service
+    @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    // Configure HTTP security
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/forgot-password", "/api-docs/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/auth/login", "/api/auth/forgot-password", "/api-docs/**","/api/demandes","/api/email/sendTest").permitAll()
+                .requestMatchers("/admin/**").hasRole("SERVICE_ADMINISTRATIVE")
                 .requestMatchers("/encadrant/**").hasRole("ENCADRANT")
                 .requestMatchers("/DCRH/**").hasRole("DCRH")
                 .requestMatchers("/CF/**").hasRole("CF")
                 .requestMatchers("/stagiaire/**").hasRole("STAGIAIRE")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
-            .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
             
         return http.build();
     }
 
-    @Bean
-    BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

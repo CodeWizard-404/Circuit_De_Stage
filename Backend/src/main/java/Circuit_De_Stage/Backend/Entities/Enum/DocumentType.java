@@ -4,7 +4,8 @@ public enum DocumentType {
     CV,
     LETTRE_DE_MOTIVATION,
     DEMANDE_DE_STAGE,
-    
+    DEMANDE_DE_STAGE_SINGER,
+
     BULLETIN_DE_MOUVEMENT_REMPLIE, 
     BULLETIN_DE_MOUVEMENT_SIGNER, 
         

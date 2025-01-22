@@ -50,6 +50,14 @@ public class InternDocumentUserStatus {
 		this.seen = seen;
 	}
 
+	public RoleType getRole() {
+		return role;
+	}
+
+	public void setRole(RoleType role) {
+		this.role = role;
+	}
+
 	public Stagiaire getStagiaire() {
 		return stagiaire;
 	}
@@ -73,9 +81,8 @@ public class InternDocumentUserStatus {
 	public void setUtilisateur(User utilisateur) {
 		this.utilisateur = utilisateur;
 	}
+
     
     
     
-    
- 
 }

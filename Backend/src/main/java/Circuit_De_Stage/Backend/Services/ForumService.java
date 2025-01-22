@@ -1,11 +1,16 @@
 package Circuit_De_Stage.Backend.Services;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Circuit_De_Stage.Backend.Entities.Demande;
+import Circuit_De_Stage.Backend.Entities.Document;
 import Circuit_De_Stage.Backend.Entities.Stagiaire;
 import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
+import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import Circuit_De_Stage.Backend.Repositories.DemandeRepository;
 import Circuit_De_Stage.Backend.Repositories.StagiaireRepository;
 
@@ -65,6 +70,23 @@ public class ForumService {
             + "*Ce message est généré automatiquement - Merci de ne pas y répondre directement*";
       
         emailService.sendEmail(stagiaire.getEmail(), subject, body);
+    }
+    
+    // Method to get all unique document types for a specific demande
+    public Set<DocumentType> getDocumentTypes(int demandeId) {
+        // Retrieve the demande from the repository
+        Demande demande = demandeRepository.findById(demandeId)
+            .orElseThrow(() -> new RuntimeException("Demande not found"));
+
+        // Create a set to hold unique document types
+        Set<DocumentType> documentTypes = new HashSet<>();
+
+        // Iterate over the documents associated with the demande
+        for (Document document : demande.getDocuments()) {
+            documentTypes.add(document.getType()); 
+        }
+
+        return documentTypes; 
     }
 
 }

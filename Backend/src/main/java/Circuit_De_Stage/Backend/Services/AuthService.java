@@ -79,7 +79,7 @@ public class AuthService {
         String password = generateRandomPassword();
 
         stagiaire.setEmail(email);
-        stagiaire.setPasse(password);
+        stagiaire.setPasse(passwordEncoder.encode(password));
         
         stagiaireRepository.save(stagiaire);
         
