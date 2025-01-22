@@ -29,17 +29,45 @@ public class ForumService {
     @Autowired
     private StagiaireRepository stagiaireRepository;
 
+    
+    
     public void submit(Demande demande) {
-        // Ensure the associated stagiaire exists
-        Stagiaire stagiaire = demande.getStagiaire();
-        if (stagiaire != null && stagiaireRepository.existsById(stagiaire.getId())) {
-            demande.setStatus(DemandeStatus.SOUMISE);
-            demandeRepository.save(demande);
-        } else {
-            throw new RuntimeException("Invalid stagiaire");
-        }
-    }
+        Stagiaire incomingStagiaire = demande.getStagiaire();
+        String emailPerso = incomingStagiaire.getEmailPerso();
 
+        // Check for existing stagiaire with same personal email
+        Stagiaire existingStagiaire = stagiaireRepository.findByEmailPerso(emailPerso);
+        
+        if (existingStagiaire != null) {
+            // Check if existing demande has same stage type
+            if (existingStagiaire.getDemande() != null 
+            	    && existingStagiaire.getDemande().getStage() == demande.getStage()) {
+            	    throw new RuntimeException("A request for this stage type already exists");
+            	}
+            
+            // Use existing stagiaire for new demande
+            demande.setStagiaire(existingStagiaire);
+        } else {
+            // Create new stagiaire without credentials
+            Stagiaire newStagiaire = new Stagiaire();
+            newStagiaire.setNom(incomingStagiaire.getNom());
+            newStagiaire.setPrenom(incomingStagiaire.getPrenom());
+            newStagiaire.setEmailPerso(emailPerso);
+            newStagiaire.setCin(incomingStagiaire.getCin());
+            newStagiaire.setTel(incomingStagiaire.getTel());
+            newStagiaire.setInstitut(incomingStagiaire.getInstitut());
+            newStagiaire.setNiveau(incomingStagiaire.getNiveau());
+            newStagiaire.setAnnee(incomingStagiaire.getAnnee());
+            newStagiaire.setSpecialite(incomingStagiaire.getSpecialite());
+            
+            Stagiaire savedStagiaire = stagiaireRepository.save(newStagiaire);
+            demande.setStagiaire(savedStagiaire);
+        }
+
+        demande.setStatus(DemandeStatus.SOUMISE);
+        demandeRepository.save(demande);
+    }
+    
     public void validateDemande(int demandeId) {
         Demande demande = demandeRepository.findById(demandeId)
             .orElseThrow(() -> new RuntimeException("Demande not found"));
@@ -72,7 +100,6 @@ public class ForumService {
         emailService.sendEmail(stagiaire.getEmail(), subject, body);
     }
     
-    // Method to get all unique document types for a specific demande
     public Set<DocumentType> getDocumentTypes(int demandeId) {
         // Retrieve the demande from the repository
         Demande demande = demandeRepository.findById(demandeId)

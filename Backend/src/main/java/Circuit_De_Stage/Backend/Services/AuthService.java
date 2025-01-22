@@ -30,6 +30,8 @@ public class AuthService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;  
 
+    
+    
     public String login(String email, String password) {
         // Check if the email belongs to a User or Stagiaire
         User utilisateur = utilisateurRepository.findByEmail(email);
@@ -75,19 +77,26 @@ public class AuthService {
     public void registerStagiaire(Demande demande) {
         Stagiaire stagiaire = demande.getStagiaire();
         
-        String email = stagiaire.getNom() + stagiaire.getPrenom() + "@tunisair.com.tn";
+        String baseEmail = stagiaire.getNom() + stagiaire.getPrenom() + "@tunisair.com.tn";
+        String finalEmail = baseEmail;
         String password = generateRandomPassword();
+        
+        // Check if base email exists in system
+        if (stagiaireRepository.existsByEmail(baseEmail) || 
+        		utilisateurRepository.existsByEmail(baseEmail)) {
+            finalEmail = stagiaire.getNom() + stagiaire.getPrenom() + "2@tunisair.com.tn";
+        }
 
-        stagiaire.setEmail(email);
+        stagiaire.setEmail(finalEmail);
         stagiaire.setPasse(passwordEncoder.encode(password));
         
         stagiaireRepository.save(stagiaire);
         
-        String subject = "Confirmation de votre stage - Accès à la plateforme Tunisair";
+        String subject = "Confirmation de votre "+ demande.getStage() +" - Accès à la plateforme Tunisair";
         String message = "Madame/Monsieur " + stagiaire.getNom() + " " + stagiaire.getPrenom() + ",\n\n" 
         + "Nous avons le plaisir de vous informer que votre candidature pour un stage au sein de Tunisair a été approuvée.\n\n"
         + "🔐 Vos coordonnées d'accès :\n"
-        + "E-mail : " + email + "\n"
+        + "E-mail : " + finalEmail + "\n"
         + "Mot de passe : " + password + "\n\n"
         + "📌 Étapes à suivre :\n"
         + "1. Connectez-vous à : [lien_plateforme]\n"
@@ -96,7 +105,7 @@ public class AuthService {
         + "----------------------------------------\n"
         + "*Ce message est généré automatiquement - Merci de ne pas y répondre directement*";
 
-        emailService.sendEmail(email, subject, message);
+        emailService.sendEmail(stagiaire.getEmailPerso(), subject, message);
     }
     	
     private String generateRandomPassword() {

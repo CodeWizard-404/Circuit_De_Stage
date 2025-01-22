@@ -14,6 +14,9 @@ public class StagiaireService {
     @Autowired
     private StagiaireRepository stagiaireRepository;
 
+    
+    
+    
     public Stagiaire getStagiaireInfo(int stagiaireId) {
         return stagiaireRepository.findById(stagiaireId)
             .orElseThrow(() -> new RuntimeException("Stagiaire not found"));

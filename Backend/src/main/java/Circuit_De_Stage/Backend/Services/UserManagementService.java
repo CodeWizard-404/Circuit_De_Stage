@@ -17,12 +17,13 @@ public class UserManagementService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;  
 
-
+    
+    
+    
     public void createUser(User user) {
         user.setPasse(passwordEncoder.encode(user.getPasse()));
         utilisateurRepository.save(user);
     }
-
 
     public void updateUser(User user) {
         if (utilisateurRepository.existsById(user.getId())) {
@@ -33,7 +34,6 @@ public class UserManagementService {
         }
     }
 
-
     public void deleteUser(int userId) {
         if (utilisateurRepository.existsById(userId)) {
             utilisateurRepository.deleteById(userId);
@@ -42,11 +42,9 @@ public class UserManagementService {
         }
     }
 
-
     public List<User> listAllUsers() {
         return utilisateurRepository.findAll();
     }
-
 
     public User userInfo(int userId) {
         return utilisateurRepository.findById(userId)

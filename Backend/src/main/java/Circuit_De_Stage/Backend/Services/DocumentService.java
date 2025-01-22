@@ -32,6 +32,8 @@ public class DocumentService {
     @Autowired
     private InternDocumentUserStatusRepository internDocumentUserStatusRepository;
 
+    
+    
 
     public Document uploadDocument(int demandeId, MultipartFile file, DocumentType type) throws IOException, Throwable {
         Demande demande = demandeRepository.findById(demandeId)
