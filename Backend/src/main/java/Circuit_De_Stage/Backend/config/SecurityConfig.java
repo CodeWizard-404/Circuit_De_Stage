@@ -54,7 +54,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/login", "/api/auth/forgot-password", "/api-docs/**","/api/demandes","/api/email/sendTest").permitAll()
+                .requestMatchers("/api/auth/login", "/api/auth/forgot-password","/api/demande","/api/email/sendTest").permitAll()
                 .requestMatchers("/admin/**").hasRole("SERVICE_ADMINISTRATIVE")
                 .requestMatchers("/encadrant/**").hasRole("ENCADRANT")
                 .requestMatchers("/DCRH/**").hasRole("DCRH")

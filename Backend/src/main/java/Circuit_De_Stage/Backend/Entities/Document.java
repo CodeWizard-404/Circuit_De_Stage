@@ -24,6 +24,8 @@ public class Document {
     @Enumerated(EnumType.STRING)
     private DocumentType type;
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] fichier;
 
     @Enumerated(EnumType.STRING)

@@ -10,6 +10,6 @@ import Circuit_De_Stage.Backend.Entities.InternDocumentUserStatus;
 @Repository
 public interface InternDocumentUserStatusRepository extends CrudRepository<InternDocumentUserStatus, Integer> {
 
-    Optional<InternDocumentUserStatus> findByDocumentIdAndUtilisateurId(Long documentId, int utilisateurId);
+    Optional<InternDocumentUserStatus> findByDocumentIdAndUtilisateurId(int documentId, int utilisateurId);
 
 }

@@ -39,6 +39,7 @@ public class DocumentService {
         Demande demande = demandeRepository.findById(demandeId)
                 .orElseThrow(() -> new RuntimeException("Demande not found"));
 
+        
         Stagiaire stagiaire = demande.getStagiaire();
         User encadrant = demande.getEncadrant();
 
@@ -70,6 +71,7 @@ public class DocumentService {
             document.setStagiaire(stagiaire);
         }
 
+        document.setDemande(demande);
         return documentRepository.save(document);
     }
 
@@ -138,7 +140,7 @@ public class DocumentService {
         emailService.sendEmail(stagiaire.getEmail(), subject, body);
     }
 
-    public void updateSeenStatus(Long documentId, int utilisateurId, boolean seen) {
+    public void updateSeenStatus(int documentId, int utilisateurId, boolean seen) {
         InternDocumentUserStatus status = internDocumentUserStatusRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Status for the document and user not found"));
 
@@ -146,7 +148,7 @@ public class DocumentService {
         internDocumentUserStatusRepository.save(status);
     }
 
-    public boolean Status(Long documentId, int utilisateurId) {
+    public boolean Status(int documentId, int utilisateurId) {
         InternDocumentUserStatus status = internDocumentUserStatusRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Status for the document and user not found"));
 

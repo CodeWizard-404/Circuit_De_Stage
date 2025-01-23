@@ -1,18 +1,26 @@
 package Circuit_De_Stage.Backend.Services;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import Circuit_De_Stage.Backend.Entities.Demande;
 import Circuit_De_Stage.Backend.Entities.Document;
 import Circuit_De_Stage.Backend.Entities.Stagiaire;
+import Circuit_De_Stage.Backend.Entities.User;
 import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import Circuit_De_Stage.Backend.Repositories.DemandeRepository;
+import Circuit_De_Stage.Backend.Repositories.DocumentRepository;
 import Circuit_De_Stage.Backend.Repositories.StagiaireRepository;
+import Circuit_De_Stage.Backend.Repositories.UserRepository;
+import io.jsonwebtoken.io.IOException;
 
 @Service
 public class ForumService {
@@ -25,13 +33,22 @@ public class ForumService {
     
     @Autowired   
     private EmailService emailService;
+    
+    @Autowired
+    private DocumentService documentService;
+    
+    @Autowired
+    private DocumentRepository documentRepository; 
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private StagiaireRepository stagiaireRepository;
 
     
-    
-    public void submit(Demande demande) {
+    @Transactional
+    public void submit(Demande demande ,Map<DocumentType, MultipartFile> documents) throws IOException, Throwable  {
         Stagiaire incomingStagiaire = demande.getStagiaire();
         String emailPerso = incomingStagiaire.getEmailPerso();
 
@@ -63,16 +80,62 @@ public class ForumService {
             Stagiaire savedStagiaire = stagiaireRepository.save(newStagiaire);
             demande.setStagiaire(savedStagiaire);
         }
+        
 
         demande.setStatus(DemandeStatus.SOUMISE);
-        demandeRepository.save(demande);
+        // Save demande first
+        Demande savedDemande = demandeRepository.save(demande);
+
+        // Upload documents and add to Demande's collection
+        Set<Document> savedDocuments = new HashSet<>();
+        for (Map.Entry<DocumentType, MultipartFile> entry : documents.entrySet()) {
+            Document doc = documentService.uploadDocument(savedDemande.getId(), entry.getValue(), entry.getKey());
+            savedDemande.getDocuments().add(doc); // Add to existing collection
+            savedDocuments.add(doc);
+        }
+        
+        // Update Demande's documents collection
+        savedDemande.setDocuments(savedDocuments);
+        demandeRepository.save(savedDemande); // Re-save Demande with documents
+
+        // Now validate
+        validateRequiredDocuments(savedDemande); // No need to re-fetch
     }
     
-    public void validateDemande(int demandeId) {
+    
+    private void validateRequiredDocuments(Demande demande) throws Exception {
+        Set<DocumentType> required = switch(demande.getStage()) {
+            case PFE,PFA -> Set.of(DocumentType.CV, DocumentType.LETTRE_DE_MOTIVATION, DocumentType.DEMANDE_DE_STAGE);
+            case STAGE_PERFECTIONNEMENT,STAGE_INITIATION -> Set.of(DocumentType.CV, DocumentType.DEMANDE_DE_STAGE);
+            default -> throw new IllegalStateException("Unexpected stage type: " + demande.getStage());
+        };
+
+        Set<DocumentType> submitted = demande.getDocuments()
+                                          .stream()
+                                          .map(Document::getType)
+                                          .collect(Collectors.toSet());
+
+        if(!submitted.containsAll(required)) {
+            Set<DocumentType> missing = new HashSet<>(required);
+            missing.removeAll(submitted);
+            throw new Exception("Missing required documents for " + demande.getStage() + ": " + missing);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    public void validateDemande(int demandeId, int encadrantId) {
         Demande demande = demandeRepository.findById(demandeId)
             .orElseThrow(() -> new RuntimeException("Demande not found"));
+        
+        User encadrant = userRepository.findById(encadrantId)
+                .orElseThrow(() -> new RuntimeException("Encadrant not found"));
 
         demande.setStatus(DemandeStatus.VALIDE);
+        demande.setEncadrant(encadrant); 
         demandeRepository.save(demande);
 
         authService.registerStagiaire(demande);
@@ -115,5 +178,10 @@ public class ForumService {
 
         return documentTypes; 
     }
+    
+    
+    
+    
+
 
 }

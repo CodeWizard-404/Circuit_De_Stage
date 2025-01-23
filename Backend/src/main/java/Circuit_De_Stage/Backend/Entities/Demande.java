@@ -38,7 +38,7 @@ public class Demande {
     @JoinColumn(name = "encadrant_id")
     private User encadrant;
 
-    @OneToMany(mappedBy = "demande")
+    @OneToMany(mappedBy = "demande",fetch = FetchType.LAZY)
     private Set<Document> documents = new HashSet<>();
 
     

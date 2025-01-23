@@ -2,7 +2,6 @@ package Circuit_De_Stage.Backend.Controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,42 +19,41 @@ import Circuit_De_Stage.Backend.Services.UserManagementService;
 
 @RestController
 @RequestMapping("/api/users")
+@PreAuthorize("hasRole('SERVICE_ADMINISTRATIVE')")
 public class UserController {
 
- @Autowired
- private UserManagementService userManagementService;
+    private final UserManagementService userManagementService;
 
- @PostMapping
- @PreAuthorize("hasRole('SERVICE_ADMINISTRATIVE')")
- public ResponseEntity<User> createUser(@RequestBody User user) {
-     userManagementService.createUser(user);
-     return ResponseEntity.status(HttpStatus.CREATED).body(user);
- }
+    public UserController(UserManagementService userManagementService) {
+        this.userManagementService = userManagementService;
+    }
 
- @PutMapping("/{id}")
- @PreAuthorize("hasRole('SERVICE_ADMINISTRATIVE')")
- public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
-     user.setId(id);
-     userManagementService.updateUser(user);
-     return ResponseEntity.ok(user);
- }
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        userManagementService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
 
- @DeleteMapping("/{id}")
- @PreAuthorize("hasRole('SERVICE_ADMINISTRATIVE')")
- public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-     userManagementService.deleteUser(id);
-     return ResponseEntity.noContent().build();
- }
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+        user.setId(id);
+        userManagementService.updateUser(user);
+        return ResponseEntity.ok(user);
+    }
 
- @GetMapping
- @PreAuthorize("hasRole('SERVICE_ADMINISTRATIVE')")
- public ResponseEntity<List<User>> getAllUsers() {
-     return ResponseEntity.ok(userManagementService.listAllUsers());
- }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
+        userManagementService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 
- @GetMapping("/{id}")
- @PreAuthorize("hasRole('SERVICE_ADMINISTRATIVE')")
- public ResponseEntity<User> getUser(@PathVariable int id) {
-     return ResponseEntity.ok(userManagementService.userInfo(id));
- }
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userManagementService.listAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(userManagementService.userInfo(id));
+    }
 }
