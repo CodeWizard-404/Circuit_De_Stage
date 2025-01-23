@@ -113,7 +113,9 @@ public class Demande {
 	    Set<User> users = new HashSet<>();
 	    
 	    // Add the encadrant
-	    users.add(this.encadrant);
+	    if (this.encadrant != null) {
+	        users.add(this.encadrant);
+	    }
 	    
 	    // Add users from documents via InternDocumentUserStatus
 	    this.documents.forEach(document -> 

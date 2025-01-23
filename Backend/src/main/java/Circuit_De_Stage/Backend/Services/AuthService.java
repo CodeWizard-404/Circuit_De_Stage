@@ -1,5 +1,7 @@
 package Circuit_De_Stage.Backend.Services;
 
+import java.security.SecureRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,42 +54,32 @@ public class AuthService {
     }
 
     public void recoverPassword(String email) throws MessagingException {
-        // Check if the email belongs to a User or Stagiaire
-        User utilisateur = utilisateurRepository.findByEmail(email);
-        if (utilisateur != null) {
-            sendPasswordRecoveryEmail(utilisateur.getEmail(), utilisateur.getPasse());
+        User user = utilisateurRepository.findByEmail(email);
+        String subject = "Password Recovery";
+        String message = "Your New Password Is: ";
+        if (user != null) {
+            String newPass = generateAndSetNewPassword(user);
+            emailService.sendEmail(user.getEmail(), subject,message + newPass);
             return;
         }
 
         Stagiaire stagiaire = stagiaireRepository.findByEmail(email);
         if (stagiaire != null) {
-            sendPasswordRecoveryEmail(stagiaire.getEmail(), stagiaire.getPasse());
+            String newPass = generateAndSetNewPassword(stagiaire);
+            emailService.sendEmail(stagiaire.getEmailPerso(), subject,message + newPass);
             return;
         }
 
         throw new IllegalArgumentException("Email not found");
     }
 
-    private void sendPasswordRecoveryEmail(String email, String password) throws MessagingException {
-        String subject = "Password Recovery";
-        String message = "Your Password Is: " + password;
-        emailService.sendEmail(email, subject, message);
-    }
-
     public void registerStagiaire(Demande demande) {
         Stagiaire stagiaire = demande.getStagiaire();
         
-        String baseEmail = stagiaire.getNom() + stagiaire.getPrenom() + "@tunisair.com.tn";
-        String finalEmail = baseEmail;
+        String email = generateUniqueEmail(stagiaire);
         String password = generateRandomPassword();
         
-        // Check if base email exists in system
-        if (stagiaireRepository.existsByEmail(baseEmail) || 
-        		utilisateurRepository.existsByEmail(baseEmail)) {
-            finalEmail = stagiaire.getNom() + stagiaire.getPrenom() + "2@tunisair.com.tn";
-        }
-
-        stagiaire.setEmail(finalEmail);
+        stagiaire.setEmail(email);
         stagiaire.setPasse(passwordEncoder.encode(password));
         
         stagiaireRepository.save(stagiaire);
@@ -96,7 +88,7 @@ public class AuthService {
         String message = "Madame/Monsieur " + stagiaire.getNom() + " " + stagiaire.getPrenom() + ",\n\n" 
         + "Nous avons le plaisir de vous informer que votre candidature pour un stage au sein de Tunisair a été approuvée.\n\n"
         + "🔐 Vos coordonnées d'accès :\n"
-        + "E-mail : " + finalEmail + "\n"
+        + "E-mail : " + email + "\n"
         + "Mot de passe : " + password + "\n\n"
         + "📌 Étapes à suivre :\n"
         + "1. Connectez-vous à : [lien_plateforme]\n"
@@ -108,14 +100,45 @@ public class AuthService {
         emailService.sendEmail(stagiaire.getEmailPerso(), subject, message);
     }
     	
+    private String generateUniqueEmail(Stagiaire stagiaire) {
+        String base = stagiaire.getNom() + stagiaire.getPrenom();
+        String finalEmail = base + "@tunisair.com.tn";
+        int suffix = 1;
+        
+        while (stagiaireRepository.existsByEmail(finalEmail)) {
+            suffix++;
+            finalEmail = base + suffix + "@tunisair.com.tn";
+        }
+        return finalEmail;
+    }
+
     private String generateRandomPassword() {
-        // Generate a random password consisting of 6 alphanumeric characters
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#*";
         StringBuilder password = new StringBuilder(6);
+        
         for (int i = 0; i < 6; i++) {
-            int randomIndex = (int) (Math.random() * chars.length());
+            int randomIndex = random.nextInt(chars.length());
             password.append(chars.charAt(randomIndex));
         }
-        return "@Tunisair" + password.toString();
+        return "@Tunisair" + password;
     }
+    
+    private String generateAndSetNewPassword(Object user) {
+        String newPassword = generateRandomPassword(); 
+        if (user instanceof User) {
+            User u = (User) user;
+            u.setPasse(passwordEncoder.encode(newPassword));
+            utilisateurRepository.save(u);
+        } else if (user instanceof Stagiaire) {
+            Stagiaire s = (Stagiaire) user;
+            s.setPasse(passwordEncoder.encode(newPassword));
+            stagiaireRepository.save(s);
+        }
+        return newPassword;
+    }
+    
+    
+    
+    
 }

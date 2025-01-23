@@ -27,6 +27,7 @@ public class SecurityConfig {
 
     public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtFilter jwtFilter) { 
     	this.customUserDetailsService = customUserDetailsService;
+    	this.jwtFilter = jwtFilter; 
 	}
     
     @Autowired
@@ -35,7 +36,7 @@ public class SecurityConfig {
     }
     
     @Bean
-    static BCryptPasswordEncoder passwordEncoder() { 
+    BCryptPasswordEncoder passwordEncoder() { 
         return new BCryptPasswordEncoder();
     }
 

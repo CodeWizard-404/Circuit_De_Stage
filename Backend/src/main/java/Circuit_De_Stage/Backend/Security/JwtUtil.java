@@ -2,19 +2,31 @@ package Circuit_De_Stage.Backend.Security;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HexFormat;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtUtil {
+	
+    @Value("${jwt.secret}")
+    private String secret;
+
+    private Key secretKey;
+
+    @PostConstruct
+    public void init() {
+        byte[] keyBytes = HexFormat.of().parseHex(secret);
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);    }
     
     // Generate a secure key using the HS512 algorithm
-    private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    //private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String generateToken(String utilisateur) {
         return Jwts.builder()

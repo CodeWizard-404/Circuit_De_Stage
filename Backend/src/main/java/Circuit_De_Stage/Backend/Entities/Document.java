@@ -37,9 +37,6 @@ public class Document {
     @JoinColumn(name = "demande_id")
     private Demande demande;
 
-    @ManyToOne // Each document is associated with one stagiaire
-    @JoinColumn(name = "stagiaire_id")
-    private Stagiaire stagiaire;
 
     @OneToMany(
     	    mappedBy = "document", 
@@ -110,11 +107,11 @@ public class Document {
 	}
 
 	public Stagiaire getStagiaire() {
-		return stagiaire;
+        return this.demande.getStagiaire();
 	}
 
 	public void setStagiaire(Stagiaire stagiaire) {
-		this.stagiaire = stagiaire;
+		this.demande.setStagiaire(stagiaire);
 	}
 
 
