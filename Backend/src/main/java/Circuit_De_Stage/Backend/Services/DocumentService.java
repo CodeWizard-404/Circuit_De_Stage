@@ -56,6 +56,7 @@ public class DocumentService {
 
         Document existingDocument = documentRepository.findByDemandeAndType(demande, type);
         if (existingDocument != null) {
+            internDocumentUserStatusRepository.deleteAll(existingDocument.getInternDocumentUserStatuses());
             documentRepository.delete(existingDocument);
         }
 

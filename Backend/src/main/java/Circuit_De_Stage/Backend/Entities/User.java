@@ -29,13 +29,7 @@ public class User {
     @OneToMany(mappedBy = "encadrant")
     private Set<Demande> demandes = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_document",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "document_id")
-    )
-    private Set<Document> documents = new HashSet<>();
+
 
     @ManyToMany
     @JoinTable(
@@ -110,13 +104,6 @@ public class User {
 		this.demandes = demandes;
 	}
 
-	public Set<Document> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
-	}
 
 	public Set<Stagiaire> getStagiaires() {
 		return stagiaires;

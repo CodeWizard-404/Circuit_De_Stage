@@ -26,12 +26,21 @@ public class UserManagementService {
     }
 
     public void updateUser(User user) {
-        if (utilisateurRepository.existsById(user.getId())) {
-            user.setPasse(passwordEncoder.encode(user.getPasse()));
-            utilisateurRepository.save(user);
-        } else {
-            throw new RuntimeException("User with ID " + user.getId() + " not found.");
+        User existingUser = utilisateurRepository.findById(user.getId())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Only update password if provided
+        if (user.getPasse() != null && !user.getPasse().isEmpty()) {
+            existingUser.setPasse(passwordEncoder.encode(user.getPasse()));
         }
+        
+        // Update other fields
+        existingUser.setNom(user.getNom());
+        existingUser.setPrenom(user.getPrenom());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setType(user.getType());
+        
+        utilisateurRepository.save(existingUser);
     }
 
     public void deleteUser(int userId) {

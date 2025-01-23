@@ -41,10 +41,11 @@ public class Document {
     @JoinColumn(name = "stagiaire_id")
     private Stagiaire stagiaire;
 
-    @ManyToMany(mappedBy = "documents")
-    private Set<User> utilisateurs = new HashSet<>();
-
-    @OneToMany(mappedBy = "document")
+    @OneToMany(
+    	    mappedBy = "document", 
+    	    cascade = CascadeType.ALL, 
+    	    orphanRemoval = true
+    	)    
     private Set<InternDocumentUserStatus> internDocumentUserStatuses = new HashSet<>();
 
     
@@ -116,13 +117,7 @@ public class Document {
 		this.stagiaire = stagiaire;
 	}
 
-	public Set<User> getUtilisateurs() {
-		return utilisateurs;
-	}
 
-	public void setUtilisateurs(Set<User> utilisateurs) {
-		this.utilisateurs = utilisateurs;
-	}
 
 	public Set<InternDocumentUserStatus> getInternDocumentUserStatuses() {
 		return internDocumentUserStatuses;
