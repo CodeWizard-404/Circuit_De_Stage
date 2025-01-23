@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .requestMatchers("/DCRH/**").hasRole("DCRH")
                 .requestMatchers("/CF/**").hasRole("CF")
                 .requestMatchers("/stagiaire/**").hasRole("STAGIAIRE")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
             
