@@ -42,13 +42,26 @@ public class Document {
     
     
     
-    @ManyToOne // Each document is associated with one demande
+    @ManyToOne 
     @JoinColumn(name = "demande_id")
     private Demande demande;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "centre_formation_id")
+    private User centreFormation;
+    
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<InternDocumentUserStatus> internDocumentUserStatuses = new HashSet<>();
+    private Set<UserDocumentSeen> documentStatuses = new HashSet<>();
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -109,7 +122,7 @@ public class Document {
 	public void setDemande(Demande demande) {
 		this.demande = demande;
 	}
-
+	
 	public Stagiaire getStagiaire() {
         return this.demande.getStagiaire();
 	}
@@ -118,16 +131,22 @@ public class Document {
 		this.demande.setStagiaire(stagiaire);
 	}
 
-
-
-	public Set<InternDocumentUserStatus> getInternDocumentUserStatuses() {
-		return internDocumentUserStatuses;
+	public User getCentreFormation() {
+		return centreFormation;
 	}
 
-	public void setInternDocumentUserStatuses(Set<InternDocumentUserStatus> internDocumentUserStatuses) {
-		this.internDocumentUserStatuses = internDocumentUserStatuses;
+	public void setCentreFormation(User centreFormation) {
+		this.centreFormation = centreFormation;
 	}
-    
+
+	public Set<UserDocumentSeen> getDocumentStatuses() {
+		return documentStatuses;
+	}
+
+	public void setDocumentStatuses(Set<UserDocumentSeen> documentStatuses) {
+		this.documentStatuses = documentStatuses;
+	}
+
     
     
     

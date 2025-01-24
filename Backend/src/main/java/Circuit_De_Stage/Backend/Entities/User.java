@@ -10,6 +10,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "Utilisateur")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +21,8 @@ public class User {
     
     private String nom;
     private String prenom;
+    
+    @Column(unique = true)
     private String email;
     private String passe;
     
@@ -36,24 +39,21 @@ public class User {
     @OneToMany(mappedBy = "encadrant")
     private Set<Demande> demandes = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "Stagiaire_Utilisateur",
-        joinColumns = @JoinColumn(name = "utilisateur_id"),
-        inverseJoinColumns = @JoinColumn(name = "stagiaire_id")
-    )
-    private Set<Stagiaire> stagiaires = new HashSet<>();
-
     @OneToMany(mappedBy = "utilisateur")
-    private Set<InternDocumentUserStatus> internDocumentUserStatuses = new HashSet<>();
-    
-    
-    
-    
+    private Set<UserDocumentSeen> documentStatuses  = new HashSet<>();
 
     
     
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	public int getId() {
 		return id;
 	}
@@ -110,26 +110,13 @@ public class User {
 		this.demandes = demandes;
 	}
 
-
-	public Set<Stagiaire> getStagiaires() {
-		return stagiaires;
+	public Set<UserDocumentSeen> getDocumentStatuses() {
+		return documentStatuses;
 	}
 
-	public void setStagiaires(Set<Stagiaire> stagiaires) {
-		this.stagiaires = stagiaires;
+	public void setDocumentStatuses(Set<UserDocumentSeen> documentStatuses) {
+		this.documentStatuses = documentStatuses;
 	}
-
-	public Set<InternDocumentUserStatus> getDemandeDocumentUserStatuses() {
-		return internDocumentUserStatuses;
-	}
-
-	public void setDemandeDocumentUserStatuses(Set<InternDocumentUserStatus> internDocumentUserStatuses) {
-		this.internDocumentUserStatuses = internDocumentUserStatuses;
-	}
-    
-    
-    
-    
-
+   
 
 }

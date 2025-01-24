@@ -30,7 +30,7 @@ public class DocumentService {
     private EmailService emailService;
 
     @Autowired
-    private InternDocumentUserStatusRepository internDocumentUserStatusRepository;
+    private UserDocumentSeenRepository userDocumentSeenRepository;
 
     
     
@@ -56,7 +56,7 @@ public class DocumentService {
 
         Document existingDocument = documentRepository.findByDemandeAndType(demande, type);
         if (existingDocument != null) {
-            internDocumentUserStatusRepository.deleteAll(existingDocument.getInternDocumentUserStatuses());
+        	userDocumentSeenRepository.deleteAll(existingDocument.getDocumentStatuses());
             documentRepository.delete(existingDocument);
         }
 
@@ -92,12 +92,12 @@ public class DocumentService {
         document.setStatus(DocumentStatus.VALIDE);
         documentRepository.save(document);
 
-        InternDocumentUserStatus status = new InternDocumentUserStatus();
+        UserDocumentSeen status = new UserDocumentSeen();
         status.setDocument(document);
         status.setUtilisateur(utilisateur);
-        status.setRole(utilisateur.getType());
+        status.setRole(utilisateur.getType());// Next role to act
         status.setSeen(false);
-        internDocumentUserStatusRepository.save(status);
+        userDocumentSeenRepository.save(status);
     }
 
     public void rejectDocument(int documentId, int utilisateurId, String reason) {
@@ -115,13 +115,13 @@ public class DocumentService {
         User utilisateur = userRepository.findById(utilisateurId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        InternDocumentUserStatus status = new InternDocumentUserStatus();
+        UserDocumentSeen status = new UserDocumentSeen();
         status.setDocument(document);
         status.setUtilisateur(utilisateur);
         status.setRole(utilisateur.getType());
         status.setSeen(false);
         
-        internDocumentUserStatusRepository.save(status);
+        userDocumentSeenRepository.save(status);
         
         String subject = "Document non conforme - Mise à jour requise";
         String body = "Madame/Monsieur " + stagiaire.getNom() + " " + stagiaire.getPrenom() + ",\n\n"
@@ -144,15 +144,15 @@ public class DocumentService {
     }
 
     public void updateSeenStatus(int documentId, int utilisateurId, boolean seen) {
-        InternDocumentUserStatus status = internDocumentUserStatusRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
+    	UserDocumentSeen status = userDocumentSeenRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Status for the document and user not found"));
 
         status.setSeen(seen);
-        internDocumentUserStatusRepository.save(status);
+        userDocumentSeenRepository.save(status);
     }
 
     public boolean Status(int documentId, int utilisateurId) {
-        InternDocumentUserStatus status = internDocumentUserStatusRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
+    	UserDocumentSeen status = userDocumentSeenRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Status for the document and user not found"));
 
         return status.isSeen();

@@ -57,7 +57,12 @@ public class Demande {
     
     
     
-
+    
+    
+    
+    
+    
+    
 	public int getId() {
 		return id;
 	}
@@ -122,6 +127,22 @@ public class Demande {
 		this.documents = documents;
 	}
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+/*
+
 	public Set<User> getAllAssociatedUsers() {
 	    Set<User> users = new HashSet<>();
 	    
@@ -140,7 +161,7 @@ public class Demande {
 	    return users;
 	}
     
-    
+    */
     
     
 }

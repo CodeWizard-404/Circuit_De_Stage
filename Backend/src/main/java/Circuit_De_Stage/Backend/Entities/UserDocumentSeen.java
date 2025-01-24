@@ -8,33 +8,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "InternDocumentUserStatus")
+@Table(name = "UserDocumentSeen")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InternDocumentUserStatus {
+public class UserDocumentSeen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean seen;
+    private boolean seen= false;
 
     @Enumerated(EnumType.STRING)
     private RoleType role; 
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    @ManyToOne
-    @JoinColumn(name = "stagiaire_id")
-    private Stagiaire stagiaire;
+
 
     @ManyToOne
     @JoinColumn(name = "document_id")
@@ -44,6 +34,14 @@ public class InternDocumentUserStatus {
     @JoinColumn(name = "utilisateur_id")
     private User utilisateur;
 
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -75,14 +73,6 @@ public class InternDocumentUserStatus {
 		this.role = role;
 	}
 
-	public Stagiaire getStagiaire() {
-		return stagiaire;
-	}
-
-	public void setStagiaire(Stagiaire stagiaire) {
-		this.stagiaire = stagiaire;
-	}
-
 	public Document getDocument() {
 		return document;
 	}
@@ -99,6 +89,8 @@ public class InternDocumentUserStatus {
 		this.utilisateur = utilisateur;
 	}
 
+    
+    
     
     
     
