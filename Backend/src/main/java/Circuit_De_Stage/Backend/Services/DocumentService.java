@@ -50,10 +50,6 @@ public class DocumentService {
             uploaderName = encadrant.getNom() + "_" + encadrant.getPrenom();
         }
 
-        byte[] fileData = file.getBytes();
-
-        String documentName = type.toString() + "_" + uploaderName;
-
         Document existingDocument = documentRepository.findByDemandeAndType(demande, type);
         if (existingDocument != null) {
         	userDocumentSeenRepository.deleteAll(existingDocument.getDocumentStatuses());
@@ -63,8 +59,8 @@ public class DocumentService {
         Document document = new Document();
         document.setDemande(demande);
         document.setType(type);
-        document.setName(documentName);
-        document.setFichier(fileData);
+        document.setName(type + "_" + uploaderName);
+        document.setFichier(file.getBytes());
         document.setStatus(DocumentStatus.SOUMIS);
         document.setCreatedAt(LocalDateTime.now());
 

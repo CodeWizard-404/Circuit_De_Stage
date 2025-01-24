@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import jakarta.persistence.*;
@@ -44,6 +46,7 @@ public class Document {
     
     @ManyToOne 
     @JoinColumn(name = "demande_id")
+    @JsonIgnore
     private Demande demande;
     
     @ManyToOne

@@ -54,8 +54,7 @@ public class ForumService {
         
         if (existingStagiaire != null) {
             // Check if existing demande has same stage type
-            if (existingStagiaire.getDemandes() != null 
-            	    && ((Demande) existingStagiaire.getDemandes()).getStage() == demande.getStage()) {
+            if (demandeRepository.existsByStagiaireAndStage(existingStagiaire, demande.getStage())) {
             	    throw new RuntimeException("A request for this stage type already exists");
             	}
             

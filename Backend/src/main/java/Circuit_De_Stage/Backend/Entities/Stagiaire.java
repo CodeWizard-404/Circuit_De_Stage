@@ -15,6 +15,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class Stagiaire extends User{
     
+    @Column(unique = true)
     private String emailPerso;
     private long cin;
     private long tel;
