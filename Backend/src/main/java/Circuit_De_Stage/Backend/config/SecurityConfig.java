@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("SERVICE_ADMINISTRATIVE")
                 .requestMatchers("/encadrant/**").hasRole("ENCADRANT")
                 .requestMatchers("/DCRH/**").hasRole("DCRH")
-                .requestMatchers("/CF/**").hasRole("CF")
+                .requestMatchers("/CF/**").hasRole("CENTRE_DE_FORMATION")
                 .requestMatchers("/stagiaire/**").hasRole("STAGIAIRE")
                 .anyRequest().authenticated()
             )

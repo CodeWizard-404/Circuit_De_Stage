@@ -16,6 +16,7 @@ import Circuit_De_Stage.Backend.Entities.Stagiaire;
 import Circuit_De_Stage.Backend.Entities.User;
 import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
+import Circuit_De_Stage.Backend.Entities.Enum.RoleType;
 import Circuit_De_Stage.Backend.Repositories.DemandeRepository;
 import Circuit_De_Stage.Backend.Repositories.StagiaireRepository;
 import Circuit_De_Stage.Backend.Repositories.UserRepository;
@@ -65,6 +66,7 @@ public class ForumService {
             Stagiaire newStagiaire = new Stagiaire();
             newStagiaire.setNom(incomingStagiaire.getNom());
             newStagiaire.setPrenom(incomingStagiaire.getPrenom());
+            newStagiaire.setType(RoleType.STAGIAIRE);         
             newStagiaire.setEmailPerso(emailPerso);
             newStagiaire.setCin(incomingStagiaire.getCin());
             newStagiaire.setTel(incomingStagiaire.getTel());
