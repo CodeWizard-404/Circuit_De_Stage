@@ -33,16 +33,20 @@ public class Document {
 
     private LocalDateTime createdAt;
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @ManyToOne // Each document is associated with one demande
     @JoinColumn(name = "demande_id")
     private Demande demande;
 
-
-    @OneToMany(
-    	    mappedBy = "document", 
-    	    cascade = CascadeType.ALL, 
-    	    orphanRemoval = true
-    	)    
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<InternDocumentUserStatus> internDocumentUserStatuses = new HashSet<>();
 
     

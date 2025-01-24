@@ -22,6 +22,16 @@ public class InternDocumentUserStatus {
     @Enumerated(EnumType.STRING)
     private RoleType role; 
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @ManyToOne
     @JoinColumn(name = "stagiaire_id")
     private Stagiaire stagiaire;
@@ -34,6 +44,13 @@ public class InternDocumentUserStatus {
     @JoinColumn(name = "utilisateur_id")
     private User utilisateur;
 
+    
+    
+    
+    
+    
+    
+    
 	public Long getId() {
 		return id;
 	}

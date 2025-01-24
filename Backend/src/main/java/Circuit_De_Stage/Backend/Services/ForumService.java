@@ -17,7 +17,6 @@ import Circuit_De_Stage.Backend.Entities.User;
 import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import Circuit_De_Stage.Backend.Repositories.DemandeRepository;
-import Circuit_De_Stage.Backend.Repositories.DocumentRepository;
 import Circuit_De_Stage.Backend.Repositories.StagiaireRepository;
 import Circuit_De_Stage.Backend.Repositories.UserRepository;
 import io.jsonwebtoken.io.IOException;
@@ -38,9 +37,6 @@ public class ForumService {
     private DocumentService documentService;
     
     @Autowired
-    private DocumentRepository documentRepository; 
-    
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -57,8 +53,8 @@ public class ForumService {
         
         if (existingStagiaire != null) {
             // Check if existing demande has same stage type
-            if (existingStagiaire.getDemande() != null 
-            	    && existingStagiaire.getDemande().getStage() == demande.getStage()) {
+            if (existingStagiaire.getDemandes() != null 
+            	    && ((Demande) existingStagiaire.getDemandes()).getStage() == demande.getStage()) {
             	    throw new RuntimeException("A request for this stage type already exists");
             	}
             
@@ -95,14 +91,13 @@ public class ForumService {
         }
         
         // Update Demande's documents collection
-        savedDemande.setDocuments(savedDocuments);
-        demandeRepository.save(savedDemande); // Re-save Demande with documents
+        savedDemande.getDocuments().addAll(savedDocuments);
+        demandeRepository.save(savedDemande); 
 
         // Now validate
         validateRequiredDocuments(savedDemande); // No need to re-fetch
     }
-    
-    
+      
     private void validateRequiredDocuments(Demande demande) throws Exception {
         Set<DocumentType> required = switch(demande.getStage()) {
             case PFE,PFA -> Set.of(DocumentType.CV, DocumentType.LETTRE_DE_MOTIVATION, DocumentType.DEMANDE_DE_STAGE);
@@ -121,11 +116,6 @@ public class ForumService {
             throw new Exception("Missing required documents for " + demande.getStage() + ": " + missing);
         }
     }
-    
-    
-    
-    
-    
     
     public void validateDemande(int demandeId, int encadrantId) {
         Demande demande = demandeRepository.findById(demandeId)

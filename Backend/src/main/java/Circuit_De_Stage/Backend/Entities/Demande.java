@@ -30,7 +30,16 @@ public class Demande {
     @Enumerated(EnumType.STRING)
     private DemandeStatus status;
 
-    @OneToOne // Each demande has one stagiaire
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @ManyToOne
     @JoinColumn(name = "stagiaire_id")
     private Stagiaire stagiaire;
 
@@ -38,13 +47,17 @@ public class Demande {
     @JoinColumn(name = "encadrant_id")
     private User encadrant;
 
-    @OneToMany(mappedBy = "demande",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "demande",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Document> documents = new HashSet<>();
 
     
     
     
     
+    
+    
+    
+
 	public int getId() {
 		return id;
 	}

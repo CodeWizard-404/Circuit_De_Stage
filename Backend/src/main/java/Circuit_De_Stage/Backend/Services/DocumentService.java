@@ -95,6 +95,7 @@ public class DocumentService {
         InternDocumentUserStatus status = new InternDocumentUserStatus();
         status.setDocument(document);
         status.setUtilisateur(utilisateur);
+        status.setRole(utilisateur.getType());
         status.setSeen(false);
         internDocumentUserStatusRepository.save(status);
     }
@@ -117,6 +118,7 @@ public class DocumentService {
         InternDocumentUserStatus status = new InternDocumentUserStatus();
         status.setDocument(document);
         status.setUtilisateur(utilisateur);
+        status.setRole(utilisateur.getType());
         status.setSeen(false);
         
         internDocumentUserStatusRepository.save(status);

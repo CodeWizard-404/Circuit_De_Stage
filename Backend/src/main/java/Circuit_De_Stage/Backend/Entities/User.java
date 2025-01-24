@@ -26,10 +26,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleType type;  
     
+    
+    
+    
+    
+    
+    
+    
     @OneToMany(mappedBy = "encadrant")
     private Set<Demande> demandes = new HashSet<>();
-
-
 
     @ManyToMany
     @JoinTable(
@@ -46,6 +51,7 @@ public class User {
     
     
 
+    
     
 
 	public int getId() {
