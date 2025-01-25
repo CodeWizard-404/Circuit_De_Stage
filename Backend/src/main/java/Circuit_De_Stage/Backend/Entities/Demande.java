@@ -8,12 +8,14 @@ import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.StageType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Demande")
-@Data
+@Getter 
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Demande {
@@ -43,11 +45,14 @@ public class Demande {
     @JoinColumn(name = "stagiaire_id")
     private Stagiaire stagiaire;
 
-    @ManyToOne // Each demande has one encadrant
+    @ManyToOne 
     @JoinColumn(name = "encadrant_id")
     private User encadrant;
 
-    @OneToMany(mappedBy = "demande",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "demande",
+    		fetch = FetchType.LAZY, 
+    		cascade = CascadeType.ALL, 
+    		orphanRemoval = true)
     private Set<Document> documents = new HashSet<>();
 
     

@@ -11,6 +11,7 @@ import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 public interface DocumentRepository extends JpaRepository<Document, Integer> {
 	
     Document findByDemandeAndType(Demande demande, DocumentType type);
+    void deleteAllByDemande(Demande demande);
 
 
 

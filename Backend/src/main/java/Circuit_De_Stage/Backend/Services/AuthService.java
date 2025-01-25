@@ -84,6 +84,13 @@ public class AuthService {
         
         stagiaireRepository.save(stagiaire);
         
+        
+        String reciver = stagiaire.getNom() + " " + stagiaire.getPrenom();
+        
+    	if (stagiaire.getNom2() != null) {
+    		reciver = reciver +" et " + stagiaire.getNom2() + " " + stagiaire.getPrenom2();
+    	}
+
         String subject = "Confirmation de votre "+ demande.getStage() +" - Accès à la plateforme Tunisair";
         String message = "Madame/Monsieur " + stagiaire.getNom() + " " + stagiaire.getPrenom() + ",\n\n" 
         + "Nous avons le plaisir de vous informer que votre candidature pour un stage au sein de Tunisair a été approuvée.\n\n"
@@ -98,10 +105,19 @@ public class AuthService {
         + "*Ce message est généré automatiquement - Merci de ne pas y répondre directement*";
 
         emailService.sendEmail(stagiaire.getEmailPerso(), subject, message);
+        if (stagiaire.getEmailPerso2() != null ) {
+            emailService.sendEmail(stagiaire.getEmailPerso2(), subject, message);
+        }
     }
     	
     private String generateUniqueEmail(Stagiaire stagiaire) {
-        String base = stagiaire.getNom() + stagiaire.getPrenom();
+    	
+    	String base = stagiaire.getNom() + stagiaire.getPrenom();
+    	
+    	if (stagiaire.getNom2() != null) {
+    		base = stagiaire.getNom() + stagiaire.getNom2();
+    	}
+    	
         String finalEmail = base + "@tunisair.com.tn";
         int suffix = 1;
         

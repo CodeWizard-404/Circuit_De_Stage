@@ -2,6 +2,7 @@ package Circuit_De_Stage.Backend.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,11 +40,11 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @PostMapping("/upload/{demandeId}")
+    @PostMapping(value = "/upload/{demandeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Document> uploadDocument(
             @PathVariable("demandeId") int demandeId,
-            @RequestParam("file") MultipartFile file,
-            @RequestParam DocumentType type) throws Throwable {
+            @RequestPart("file") MultipartFile file,
+            @RequestParam("type") DocumentType type) throws Throwable { // Explicit param name
         
         return ResponseEntity.ok(documentService.uploadDocument(demandeId, file, type));
     }
@@ -79,4 +81,11 @@ public class DocumentController {
         documentService.rejectDocument(id, rejector.getId(), reason);
         return ResponseEntity.ok().build();
     }
+    
+    
+    
+    
+    
+    
+    
 }

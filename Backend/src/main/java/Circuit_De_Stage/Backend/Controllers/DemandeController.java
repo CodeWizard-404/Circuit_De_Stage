@@ -7,6 +7,7 @@ import Circuit_De_Stage.Backend.Repositories.UserRepository;
 import Circuit_De_Stage.Backend.Services.ForumService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,4 +73,15 @@ public class DemandeController {
     public ResponseEntity<Set<DocumentType>> getDocumentTypes(@PathVariable("id") int id) {
         return ResponseEntity.ok(forumService.getDocumentTypes(id));
     }
+    
+    @GetMapping
+    public ResponseEntity<List<Demande>> getAllStagiaires() {
+        return ResponseEntity.ok(forumService.getDemandeList());
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Demande> getStagiaireInfo(@PathVariable("id") int id) {
+        return ResponseEntity.ok(forumService.getStagiaireInfo(id));
+    }
+
 }

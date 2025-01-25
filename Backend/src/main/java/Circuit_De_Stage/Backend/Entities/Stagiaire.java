@@ -15,7 +15,6 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class Stagiaire extends User{
     
-    @Column(unique = true)
     private String emailPerso;
     private long cin;
     private long tel;
@@ -23,11 +22,20 @@ public class Stagiaire extends User{
     private String niveau;
     private String annee;
     private String specialite;
-
+    
+    private String emailPerso2;
+    private String nom2;
+    private String prenom2;
+    private long cin2;
+    private long tel2;
+    private String specialite2;
     
     
     
-    @OneToMany(mappedBy = "stagiaire", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "stagiaire",  
+    		fetch = FetchType.LAZY,    
+    		cascade = CascadeType.ALL, 
+    	    orphanRemoval = true)
     private Set<Demande> demandes = new HashSet<>();
 
 
@@ -40,6 +48,7 @@ public class Stagiaire extends User{
     
     
     
+
 
 
 	public String getEmailPerso() {
@@ -106,7 +115,54 @@ public class Stagiaire extends User{
 		this.demandes = demandes;
 	}
     
-    
+	public String getEmailPerso2() {
+		return emailPerso2;
+	}
+
+	public void setEmailPerso2(String emailPerso2) {
+		this.emailPerso2 = emailPerso2;
+	}
+
+	public String getNom2() {
+		return nom2;
+	}
+
+	public void setNom2(String nom2) {
+		this.nom2 = nom2;
+	}
+
+	public String getPrenom2() {
+		return prenom2;
+	}
+
+	public void setPrenom2(String prenom2) {
+		this.prenom2 = prenom2;
+	}
+
+	public long getCin2() {
+		return cin2;
+	}
+
+	public void setCin2(long cin2) {
+		this.cin2 = cin2;
+	}
+
+	public long getTel2() {
+		return tel2;
+	}
+
+	public void setTel2(long tel2) {
+		this.tel2 = tel2;
+	}
+
+	public String getSpecialite2() {
+		return specialite2;
+	}
+
+	public void setSpecialite2(String specialite2) {
+		this.specialite2 = specialite2;
+	}
+
     
     
 }

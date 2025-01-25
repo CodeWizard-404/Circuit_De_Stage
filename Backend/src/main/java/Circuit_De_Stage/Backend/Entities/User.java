@@ -4,6 +4,8 @@ package Circuit_De_Stage.Backend.Entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import Circuit_De_Stage.Backend.Entities.Enum.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,21 +38,14 @@ public class User {
     
     
     
-    @OneToMany(mappedBy = "encadrant")
+    @OneToMany(mappedBy = "encadrant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Demande> demandes = new HashSet<>();
 
-    @OneToMany(mappedBy = "utilisateur")
-    private Set<UserDocumentSeen> documentStatuses  = new HashSet<>();
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<UserDocumentSeen> documentStatuses = new HashSet<>();
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -117,6 +112,12 @@ public class User {
 	public void setDocumentStatuses(Set<UserDocumentSeen> documentStatuses) {
 		this.documentStatuses = documentStatuses;
 	}
-   
+
+    
+    
+    
+    
+    
+    
 
 }

@@ -13,7 +13,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "Document")
-@Data
+@Getter 
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Document {
@@ -54,6 +55,7 @@ public class Document {
     private User centreFormation;
     
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<UserDocumentSeen> documentStatuses = new HashSet<>();
 
     
@@ -126,6 +128,7 @@ public class Document {
 		this.demande = demande;
 	}
 	
+	@JsonIgnore
 	public Stagiaire getStagiaire() {
         return this.demande.getStagiaire();
 	}

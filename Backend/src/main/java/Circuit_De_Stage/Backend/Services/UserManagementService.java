@@ -5,8 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import Circuit_De_Stage.Backend.Entities.Demande;
 import Circuit_De_Stage.Backend.Entities.User;
+import Circuit_De_Stage.Backend.Repositories.DemandeRepository;
+import Circuit_De_Stage.Backend.Repositories.UserDocumentSeenRepository;
 import Circuit_De_Stage.Backend.Repositories.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserManagementService {
@@ -17,7 +22,12 @@ public class UserManagementService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;  
 
-    
+    @Autowired 
+    private DemandeRepository demandeRepository;
+
+    @Autowired 
+    private UserDocumentSeenRepository userDocumentSeenRepository;
+
     
     
     public void createUser(User user) {
@@ -43,14 +53,29 @@ public class UserManagementService {
         utilisateurRepository.save(existingUser);
     }
 
+    @Transactional
     public void deleteUser(int userId) {
-        if (utilisateurRepository.existsById(userId)) {
-            utilisateurRepository.deleteById(userId);
-        } else {
-            throw new RuntimeException("User with ID " + userId + " not found.");
-        }
-    }
+        User user = utilisateurRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Handle demandes
+        List<Demande> demandes = demandeRepository.findByEncadrant(user);
+        demandes.forEach(demande -> {
+            demande.setEncadrant(null);
+            demandeRepository.save(demande);
+        });
+
+        // Handle document statuses
+        userDocumentSeenRepository.deleteByUtilisateur(user);
+
+        // Clear caches
+        utilisateurRepository.flush();
+        user = utilisateurRepository.findById(userId).orElseThrow();
+
+        // Final delete
+        utilisateurRepository.delete(user);
+    }
+    
     public List<User> listAllUsers() {
         return utilisateurRepository.findAll();
     }

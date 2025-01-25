@@ -26,14 +26,14 @@ public class SecurityConfig {
 
     // Static PasswordEncoder bean to avoid circular dependency
     @Bean
-    public static BCryptPasswordEncoder passwordEncoder() {
+    static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth

@@ -19,7 +19,7 @@ public class EmailController {
 
     @PostMapping("/sendTest")
     public ResponseEntity<Void> sendTestEmail(@RequestBody Map<String, String> request) {
-        emailService.sendEmail(request.get("to"), "Test Email", "This is a test email");
+        emailService.sendEmail("test@ggmail.com", "Test Email", "This is a test email");
         return ResponseEntity.ok().build();
     }
 }
