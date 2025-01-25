@@ -4,6 +4,7 @@ import Circuit_De_Stage.Backend.Entities.Demande;
 import Circuit_De_Stage.Backend.Entities.User;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import Circuit_De_Stage.Backend.Repositories.UserRepository;
+import Circuit_De_Stage.Backend.Services.DocumentService;
 import Circuit_De_Stage.Backend.Services.ForumService;
 
 import java.util.HashMap;
@@ -31,6 +32,9 @@ public class DemandeController {
     
     @Autowired
     private final ForumService forumService;
+
+    @Autowired
+    private DocumentService documentService;
 
     public DemandeController(ForumService forumService) {
         this.forumService = forumService;
@@ -84,4 +88,18 @@ public class DemandeController {
         return ResponseEntity.ok(forumService.getStagiaireInfo(id));
     }
 
+    @PutMapping("/{documentId}/seen")
+    public ResponseEntity<Void> markAsSeen(@PathVariable int documentId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(auth.getName());
+        documentService.updateSeenStatus(documentId, user.getId(), true);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{documentId}/status")
+    public ResponseEntity<Boolean> getSeenStatus(@PathVariable int documentId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(auth.getName());
+        return ResponseEntity.ok(documentService.Status(documentId, user.getId()));
+    }
 }
