@@ -1,0 +1,48 @@
+ng g class classes/user --skip-tests
+ng g class classes/stagiaire --skip-tests
+ng g class classes/demande --skip-tests
+ng g class classes/document --skip-tests
+ng g class classes/user-document-seen --skip-tests
+
+ng g enum classes/enums/role-type
+ng g enum classes/enums/document-type
+ng g enum classes/enums/document-status
+ng g enum classes/enums/demande-status
+ng g enum classes/enums/stage-type
+
+ng g service services/auth --skip-tests
+ng g service services/demande --skip-tests
+ng g service services/document --skip-tests
+ng g service services/user --skip-tests
+ng g service services/stagiaire --skip-tests
+ng g service services/shared-data --skip-tests
+
+ng g guard guards/auth --skip-tests
+ng g guard guards/role --skip-tests
+
+ng g interceptor interceptors/auth --skip-tests
+ng g interceptor interceptors/error --skip-tests
+
+ng g component components/Public/login --skip-tests
+ng g component components/Public/forgot-password --skip-tests
+ng g component components/Public/intern-form --skip-tests
+ng g component components/Public/confirmation --skip-tests
+
+ng g component components/shared/intern-list --skip-tests
+ng g component components/shared/demande-view --skip-tests
+ng g component components/shared/header --skip-tests
+ng g component components/shared/footer --skip-tests
+
+
+
+
+
+
+
+
+ng g component components/dashboards/admin-dashboard/dashboard --skip-tests
+ng g component components/dashboards/admin-dashboard/users-management --skip-tests
+ng g component components/dashboards/encadrant-dashboard --skip-tests
+ng g component components/dashboards/dcrh-dashboard --skip-tests
+ng g component components/dashboards/centre-formation-dashboard --skip-tests
+ng g component components/dashboards/stagiaire-dashboard --skip-tests
