@@ -7,20 +7,36 @@ import { InternFormComponent } from './components/Public/intern-form/intern-form
 import { LoginComponent } from './components/Public/login/login.component';
 import { InternListComponent } from './components/shared/intern-list/intern-list.component';
 import { DemandeViewComponent } from './components/shared/demande-view/demande-view.component';
+import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
 
 export const routes: Routes = [
-    { path: '', component: InternFormComponent },
-    { path: 'confirmation', component: ConfirmationComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'intern-list', component: InternListComponent},
-    { path: 'demande-view/:id', component: DemandeViewComponent },
+  
 
-    /*{
-        path: 'admin',
-        loadComponent: () => import('./components/dashboards/admin-dashboard/dashboard.component'),
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['SERVICE_ADMINISTRATIVE'] }
-    },*/
-    // ... other routes
+      {
+        path: 'intern-list',
+        component: InternListComponent
+      },
+      {
+        path: 'demande-view/:id',
+        component: DemandeViewComponent
+      },
+      // Add other protected routes here
+    
+
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent
+  },
+  {
+    path: 'intern-form',
+    component: InternFormComponent
+  },
+  {
+    path: 'confirmation',
+    component: ConfirmationComponent
+  }
 ];

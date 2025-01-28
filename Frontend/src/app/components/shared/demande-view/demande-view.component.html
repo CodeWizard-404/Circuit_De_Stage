@@ -72,50 +72,58 @@
             <button (click)="downloadDocument(doc.id)" class="download-btn">
               Download
             </button>
-            <button (click)="validateDocument(doc.id)" class="validate-btn">
-              Validate
-            </button>
-            <div class="reject-section">
-              <textarea 
-                [(ngModel)]="rejectReason" 
-                placeholder="Enter reason for rejection..."
-                rows="3"
-              ></textarea>
-              <button 
-                class="reject-btn" 
-                [disabled]="!rejectReason"
-                (click)="rejectDocument(doc.id)"
-              >
-                Reject
-              </button>
-            </div>
           </div>
           <span [class]="'status-' + doc.status.toLowerCase()">{{ doc.status }}</span>
         </div>
       </div>
 
-      <div *ngIf="demande.status === demandeStatus.SOUMISE" class="upload-section">
-        <select 
-          [(ngModel)]="selectedDocumentType"
-          class="document-type-select"
-        >
-          <option [ngValue]="undefined">Select document type...</option>
-          <option *ngFor="let type of availableDocumentTypes" [value]="type">
-            {{type}}
-          </option>
-        </select>
-        <input 
-          type="file" 
-          (change)="onFileSelected($event)"
-          accept=".pdf,.doc,.docx"
-        >
-        <button 
-          [disabled]="!uploadedFile || !selectedDocumentType" 
-          (click)="uploadSignedDocument()"
-          class="upload-btn"
-        >
-          Upload Signed Document
-        </button>
+      <div *ngIf="shouldShowUpload()" class="upload-validation-section">
+        <div class="upload-controls">
+          <select 
+            [(ngModel)]="selectedDocumentType"
+            class="document-type-select"
+          >
+            <option [ngValue]="undefined">Select document type...</option>
+            <option *ngFor="let type of getAvailableDocumentTypes()" [value]="type">
+              {{type}}
+            </option>
+          </select>
+          <input 
+            type="file" 
+            (change)="onFileSelected($event)"
+            accept=".pdf,.doc,.docx"
+          >
+          <button 
+            [disabled]="!uploadedFile || !selectedDocumentType" 
+            (click)="uploadSignedDocument()"
+            class="upload-btn"
+          >
+            Upload Document
+          </button>
+        </div>
+        
+        <div class="validation-controls" *ngIf="shouldShowValidateDocument(selectedDocumentType)">
+          <button 
+            (click)="validateDocument(demande.documents[demande.documents.length-1].id)" 
+            class="validate-btn"
+          >
+            Validate Document
+          </button>
+          <div class="reject-section">
+            <textarea 
+              [(ngModel)]="rejectReason" 
+              placeholder="Enter reason for rejection..."
+              rows="3"
+            ></textarea>
+            <button 
+              class="reject-btn" 
+              [disabled]="!rejectReason"
+              (click)="rejectDocument(demande.documents[demande.documents.length-1].id)"
+            >
+              Reject Document
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 

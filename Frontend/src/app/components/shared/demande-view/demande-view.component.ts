@@ -36,12 +36,12 @@ export class DemandeViewComponent implements OnInit {
     private demandeService: DemandeService,
     private documentService: DocumentService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userRole = this.authService.getCurrentUser()?.type;
-    console.log("role",this.userRole);
-    console.log("user",this.authService.getCurrentUser());
+    console.log("role", this.userRole);
+    console.log("user", this.authService.getCurrentUser());
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadDemandeDetails(parseInt(id));
@@ -78,18 +78,18 @@ export class DemandeViewComponent implements OnInit {
 
         // Create blob URL with the correct content type
         const url = window.URL.createObjectURL(
-          new Blob([blob], { 
+          new Blob([blob], {
             type: blob.type || 'application/pdf' // Use the blob's type or default to PDF
           })
         );
-        
+
         // Create temporary link and trigger download
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
-        
+
         // Cleanup
         setTimeout(() => {
           document.body.removeChild(link);
@@ -106,8 +106,8 @@ export class DemandeViewComponent implements OnInit {
   uploadSignedDocument(): void {
     if (this.demande && this.uploadedFile && this.selectedDocumentType) {
       this.documentService.uploadDocument(
-        this.demande.id, 
-        this.uploadedFile, 
+        this.demande.id,
+        this.uploadedFile,
         this.selectedDocumentType
       ).subscribe({
         next: () => {
@@ -188,20 +188,148 @@ export class DemandeViewComponent implements OnInit {
           DocumentType.CLASSEMENT,
           DocumentType.BULLETIN_DE_MOUVEMENT_VIDE
         ];
-      
+
       case RoleType.CENTRE_DE_FORMATION:
         return [
           DocumentType.CONVOCATION,
           DocumentType.LAISSER_PASSER,
           DocumentType.PRISE_DE_SERVICE
         ];
-      
+
       case RoleType.ENCADRANT:
         return [
           DocumentType.DEMANDE_DE_STAGE_SINGER,
           DocumentType.RAPPORT_SIGNE
         ];
-      
+
+      default:
+        return [];
+    }
+  }
+
+
+
+
+
+  
+  shouldShowUpload(): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    const filter = this.route.snapshot.queryParams['filter'];
+
+    switch (filter) {
+      case 'demande_en_attente':
+        return this.userRole === RoleType.ENCADRANT;
+
+      case 'rapport_en_attente':
+        return this.userRole === RoleType.ENCADRANT;
+
+      case 'classement_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
+
+      case 'bulletin_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
+
+      case 'convocation_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+
+      case 'document_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+
+      default:
+        return false;
+    }
+  }
+
+  shouldShowValidateDocument(documentType?: DocumentType): boolean {
+    if (!this.demande || !this.userRole || !documentType) return false;
+
+    const filter = this.route.snapshot.queryParams['filter'];
+
+    switch (filter) {
+      case 'bulletin_recus':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
+          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
+
+      case 'stagiaire_en_attente':
+        return this.userRole === RoleType.DCRH &&
+          documentType === DocumentType.CLASSEMENT;
+
+      case 'convocation_recus':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION &&
+          documentType === DocumentType.CONVOCATION_SIGNER;
+
+      case 'document_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+
+      default:
+        return false;
+    }
+  }
+
+  shouldShowRejectDocument(documentType: DocumentType): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    const filter = this.route.snapshot.queryParams['filter'];
+
+    switch (filter) {
+      case 'bulletin_recus':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
+          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
+
+      case 'convocation_recus':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION &&
+          documentType === DocumentType.CONVOCATION_SIGNER;
+
+      default:
+        return false;
+    }
+  }
+
+  shouldShowValidateDemande(): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    const filter = this.route.snapshot.queryParams['filter'];
+    return filter === 'demande_en_attente' && this.userRole === RoleType.ENCADRANT;
+  }
+
+  shouldShowRejectDemande(): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    const filter = this.route.snapshot.queryParams['filter'];
+    return filter === 'demande_en_attente' && this.userRole === RoleType.ENCADRANT;
+  }
+
+  getAvailableDocumentTypes(): DocumentType[] {
+    if (!this.userRole) return [];
+
+    const filter = this.route.snapshot.queryParams['filter'];
+
+    switch (filter) {
+      case 'demande_en_attente':
+        return this.userRole === RoleType.ENCADRANT ?
+          [DocumentType.DEMANDE_DE_STAGE_SINGER] : [];
+
+      case 'rapport_en_attente':
+        return this.userRole === RoleType.ENCADRANT ?
+          [DocumentType.RAPPORT_SIGNE] : [];
+
+      case 'classement_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE ?
+          [DocumentType.CLASSEMENT] : [];
+
+      case 'bulletin_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE ?
+          [DocumentType.BULLETIN_DE_MOUVEMENT_VIDE] : [];
+
+      case 'convocation_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION ?
+          [DocumentType.CONVOCATION] : [];
+
+      case 'document_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION ?
+          [DocumentType.LAISSER_PASSER, DocumentType.PRISE_DE_SERVICE] : [];
+
       default:
         return [];
     }

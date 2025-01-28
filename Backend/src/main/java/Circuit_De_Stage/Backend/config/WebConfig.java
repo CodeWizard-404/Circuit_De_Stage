@@ -13,7 +13,7 @@ import org.springframework.lang.NonNull;
 public class WebConfig implements WebMvcConfigurer {
     
     @Bean
-    public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); 
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); 
@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {

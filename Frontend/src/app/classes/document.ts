@@ -1,7 +1,7 @@
 import { Demande } from './demande';
 import { DocumentStatus } from './enums/document-status';
+import { DocumentType } from './enums/document-type';
 import { User } from './user';
-
 
 export class Document {
     id: number;

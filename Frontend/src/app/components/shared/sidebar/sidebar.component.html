@@ -1,1 +1,11 @@
-<p>sidebar works!</p>
+<div class="sidebar">
+  <nav>
+    <ul>
+      <li *ngFor="let item of menuItems">
+        <a [routerLink]="['/intern-list']" [queryParams]="{filter: item.filter}" routerLinkActive="active">
+          {{ item.label }}
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

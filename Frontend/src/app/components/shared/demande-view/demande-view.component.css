@@ -170,3 +170,28 @@ button:disabled {
   width: 100%;
   margin-bottom: 10px;
 }
+
+.upload-validation-section {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.upload-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.validation-controls {
+  display: flex;
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+
+.validation-controls .reject-section {
+  flex: 1;
+}

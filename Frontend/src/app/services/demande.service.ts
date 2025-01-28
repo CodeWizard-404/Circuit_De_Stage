@@ -5,6 +5,7 @@ import { Demande } from '../classes/demande';
 import { DocumentType } from '../classes/enums/document-type';
 import { environment } from '../../environments/environment';
 import { StageType } from '../classes/enums/stage-type';
+import { DocumentStatus } from '../classes/enums/document-status';
 
 @Injectable({ providedIn: 'root' })
 export class DemandeService {
