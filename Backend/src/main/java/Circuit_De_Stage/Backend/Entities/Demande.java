@@ -1,8 +1,10 @@
 package Circuit_De_Stage.Backend.Entities;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.StageType;
@@ -26,8 +28,10 @@ public class Demande {
     @Enumerated(EnumType.STRING)
     private StageType stage;
 
-    private LocalDate debutStage;
-    private LocalDate finStage;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date debutStage;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date finStage;
 
     @Enumerated(EnumType.STRING)
     private DemandeStatus status;
@@ -84,19 +88,19 @@ public class Demande {
 		this.stage = stage;
 	}
 
-	public LocalDate getDebutStage() {
+	public Date getDebutStage() {
 		return debutStage;
 	}
 
-	public void setDebutStage(LocalDate debutStage) {
+	public void setDebutStage(Date debutStage) {
 		this.debutStage = debutStage;
 	}
 
-	public LocalDate getFinStage() {
+	public Date getFinStage() {
 		return finStage;
 	}
 
-	public void setFinStage(LocalDate finStage) {
+	public void setFinStage(Date finStage) {
 		this.finStage = finStage;
 	}
 

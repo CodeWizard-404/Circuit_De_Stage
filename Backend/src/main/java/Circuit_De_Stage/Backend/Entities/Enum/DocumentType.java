@@ -15,8 +15,10 @@ public enum DocumentType {
     CONVOCATION_SIGNER,
 
     LAISSER_PASSER, 
+    PRISE_DE_SERVICE,
     
     RAPPORT,
+    RAPPORT_SIGNE,
 
     ATTESTATION
 }

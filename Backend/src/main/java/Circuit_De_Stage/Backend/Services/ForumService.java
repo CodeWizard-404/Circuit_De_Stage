@@ -132,25 +132,6 @@ public class ForumService {
         validateRequiredDocuments(savedDemande); // No need to re-fetch
     }
       
-    private void validateRequiredDocuments(Demande demande) throws Exception {
-        Set<DocumentType> required = switch(demande.getStage()) {
-            case PFE,PFA -> Set.of(DocumentType.CV, DocumentType.LETTRE_DE_MOTIVATION, DocumentType.DEMANDE_DE_STAGE);
-            case STAGE_PERFECTIONNEMENT,STAGE_INITIATION -> Set.of(DocumentType.CV, DocumentType.DEMANDE_DE_STAGE);
-            default -> throw new IllegalStateException("Unexpected stage type: " + demande.getStage());
-        };
-
-        Set<DocumentType> submitted = demande.getDocuments()
-                                          .stream()
-                                          .map(Document::getType)
-                                          .collect(Collectors.toSet());
-
-        if(!submitted.containsAll(required)) {
-            Set<DocumentType> missing = new HashSet<>(required);
-            missing.removeAll(submitted);
-            throw new Exception("Missing required documents for " + demande.getStage() + ": " + missing);
-        }
-    }
-     
     public void validateDemande(int demandeId, int encadrantId) {
         Demande demande = demandeRepository.findById(demandeId)
             .orElseThrow(() -> new RuntimeException("Demande not found"));
@@ -200,25 +181,7 @@ public class ForumService {
             emailService.sendEmail(stagiaire.getEmailPerso2(), subject, body);
         }
     }
-    
-    @Transactional
-    public void deleteRejectedDemande(int demandeId) {
-        Demande demande = demandeRepository.findById(demandeId)
-            .orElseThrow(() -> new RuntimeException("Demande not found"));
-        
-        Stagiaire stagiaire = demande.getStagiaire();
-        
-        
-        // Delete demande
-        demandeRepository.delete(demande);
-        
-        // Check if stagiaire has other demandes
-        long remainingDemandes = demandeRepository.countByStagiaire(stagiaire);
-        if (remainingDemandes == 0) {
-            stagiaireRepository.delete(stagiaire);
-        }
-    }
-    
+      
     public Set<DocumentType> getDocumentTypes(int demandeId) {
         // Retrieve the demande from the repository
         Demande demande = demandeRepository.findById(demandeId)
@@ -235,7 +198,6 @@ public class ForumService {
         return documentTypes; 
     }
     
-    
     public List<Demande> getDemandeList() {
         return demandeRepository.findAll();
     }
@@ -245,6 +207,43 @@ public class ForumService {
                 .orElseThrow(() -> new RuntimeException("Demande not found"));
 	}
     
+	
+	
+    private void validateRequiredDocuments(Demande demande) throws Exception {
+        Set<DocumentType> required = switch(demande.getStage()) {
+            case PFE,PFA -> Set.of(DocumentType.CV, DocumentType.LETTRE_DE_MOTIVATION, DocumentType.DEMANDE_DE_STAGE);
+            case STAGE_PERFECTIONNEMENT,STAGE_INITIATION -> Set.of(DocumentType.CV, DocumentType.DEMANDE_DE_STAGE);
+            default -> throw new IllegalStateException("Unexpected stage type: " + demande.getStage());
+        };
 
+        Set<DocumentType> submitted = demande.getDocuments()
+                                          .stream()
+                                          .map(Document::getType)
+                                          .collect(Collectors.toSet());
+
+        if(!submitted.containsAll(required)) {
+            Set<DocumentType> missing = new HashSet<>(required);
+            missing.removeAll(submitted);
+            throw new Exception("Missing required documents for " + demande.getStage() + ": " + missing);
+        }
+    }
+
+    @Transactional
+    private void deleteRejectedDemande(int demandeId) {
+        Demande demande = demandeRepository.findById(demandeId)
+            .orElseThrow(() -> new RuntimeException("Demande not found"));
+        
+        Stagiaire stagiaire = demande.getStagiaire();
+        
+        
+        // Delete demande
+        demandeRepository.delete(demande);
+        
+        // Check if stagiaire has other demandes
+        long remainingDemandes = demandeRepository.countByStagiaire(stagiaire);
+        if (remainingDemandes == 0) {
+            stagiaireRepository.delete(stagiaire);
+        }
+    }
 
 }

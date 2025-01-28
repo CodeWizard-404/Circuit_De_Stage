@@ -1,0 +1,49 @@
+.mat-stepper-horizontal {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.form-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.form-section h3 {
+    margin-top: 0;
+    color: #3f51b5;
+}
+
+mat-form-field {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.stepper-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.documents-section {
+    margin: 1rem 0;
+}
+
+.document-upload {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+}
+
+.document-upload h4 {
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+}
+
+button[mat-raised-button] {
+    margin-left: auto;
+    display: block;
+}

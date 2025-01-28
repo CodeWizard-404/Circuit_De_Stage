@@ -1,1 +1,25 @@
-<p>confirmation works!</p>
+<mat-card class="confirmation-card">
+    <mat-card-header>
+        <mat-card-title>Application Submitted Successfully!</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="confirmation-content">
+            <mat-icon class="success-icon">check_circle</mat-icon>
+            <p>Your internship application has been received.</p>
+            <p *ngIf="authService.isLoggedIn()">
+                You can track your application status in your dashboard.
+            </p>
+            <p *ngIf="!authService.isLoggedIn()">
+                Check your email for login credentials to track your application.
+            </p>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/">
+            Return to Home
+        </button>
+        <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/dashboard">
+            Go to Dashboard
+        </button>
+    </mat-card-actions>
+</mat-card>

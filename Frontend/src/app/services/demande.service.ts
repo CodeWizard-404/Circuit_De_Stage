@@ -4,20 +4,38 @@ import { Observable } from 'rxjs';
 import { Demande } from '../classes/demande';
 import { DocumentType } from '../classes/enums/document-type';
 import { environment } from '../../environments/environment';
+import { StageType } from '../classes/enums/stage-type';
 
 @Injectable({ providedIn: 'root' })
 export class DemandeService {
   constructor(private http: HttpClient) { }
 
-  submitDemande(demande: Demande, documents: Map<DocumentType, File>): Observable<Demande> {
-    const formData = new FormData();
-    formData.append('demande', JSON.stringify(demande));
-    
-    documents.forEach((file, type) => {
-      formData.append(type.toString(), file);
+  submitDemande(formData: FormData): Observable<Demande> {
+    return this.http.post<Demande>(`${environment.apiUrl}/demande`, formData, {
+      headers: {
+        'Accept': 'application/json'
+      }
     });
+  }
 
-    return this.http.post<Demande>(`${environment.apiUrl}/demande`, formData);
+  getRequiredDocuments(stageType: StageType): DocumentType[] {
+    switch(stageType) {
+      case StageType.PFE:
+      case StageType.PFA:
+        return [
+          DocumentType.CV,
+          DocumentType.LETTRE_DE_MOTIVATION,
+          DocumentType.DEMANDE_DE_STAGE
+        ];
+      case StageType.STAGE_INITIATION:
+      case StageType.STAGE_PERFECTIONNEMENT:
+        return [
+          DocumentType.CV,
+          DocumentType.DEMANDE_DE_STAGE
+        ];
+      default:
+        return [];
+    }
   }
 
   validateDemande(demandeId: number): Observable<void> {
@@ -33,7 +51,7 @@ export class DemandeService {
   }
 
   getAllDemandes(): Observable<Demande[]> {
-    return this.http.get<Demande[]>(`${environment.apiUrl}/demande`);
+    return this.http.get<Demande[]>(`${environment.apiUrl}/demande/ALL`);
   }
 
   getDemandeDetails(demandeId: number): Observable<Demande> {

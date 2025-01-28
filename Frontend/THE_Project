@@ -1,0 +1,594 @@
+for my project I already finished the full backend code and in the frontend I finshed the classes and Enum and services and gurd and interceptors and envierment and these 4 comonents login forgot-password intern-form confirmation headercomponent
+
+now I need you to provide me with internlist component
+
+
+Structure:
+angular:
+src/
+├── app/
+│   ├── classes/
+│   │   ├── user.ts
+│   │   ├── stagiaire.ts
+│   │   ├── demande.ts
+│   │   ├── document.ts
+│   │   └── user-document-seen.ts
+│   ├── enums/
+│   │   ├── role-type.ts
+│   │   ├── document-type.ts
+│   │   ├── document-status.ts
+│   │   ├── demande-status.ts
+│   │   └── stage-type.ts
+│   ├── services/
+│   │   ├── auth.service.ts
+│   │   ├── demande.service.ts
+│   │   ├── document.service.ts
+│   │   ├── user.service.ts
+│   │   ├── stagiaire.service.ts
+│   │   └── shared-data.service.ts
+│   ├── guards/
+│   │   ├── auth.guard.ts
+│   │   └── role.guard.ts
+│   ├── interceptors/
+│   │   ├── auth.interceptor.ts
+│   │   └── error.interceptor.ts
+│   ├── components/
+│   │   ├── Public/
+│   │   │   ├── login/
+│   │   │   ├── forgot-password/
+│   │   │   ├── intern-form/
+│   │   │   └── confirmation/
+│   │   ├── shared/
+│   │   │   ├── intern-list/
+│   │   │   ├── demande-view/
+│   │   │   ├── header/
+│   │   │   └── footer/
+│   │   ├── admin-dashboard/
+│   │   │   ├── dashboard/
+│   │   │   └── users-management/
+│   │   ├── encadrant-dashboard/
+│   │   │   ├── dashboard/
+│   │   │   ├── demande-en-attente/
+│   │   │   ├── demande-validee/
+│   │   │   ├── rapports-en-attente/
+│   │   │   └── rapports-validee/
+│   │   ├── dcrh-dashboard/
+│   │   │   ├── dashboard/
+│   │   │   ├── stagiaire-en-attente/
+│   │   │   └── stagiaire-validee/
+│   │   ├── centre-formation-dashboard/
+│   │   │   ├── dashboard/
+│   │   │   ├── convocation-en-attente/
+│   │   │   ├── convocation-validee/
+│   │   │   ├── documents-en-attente/
+│   │   │   └── documents-validee/
+│   │   └── stagiaire-dashboard/
+│   │       ├── dashboard/
+│   │       ├── demande/
+│   │       ├── convocation/
+│   │       ├── documents/
+│   │       └── fin-du-stage/
+│   ├── environments/
+│   │   ├── environment.ts
+│   │   └── environment.prod.ts
+│   └── app.module.ts
+└── main.ts
+SpringBoot:
+
+1. config
+SecurityConfig
+WebConfig
+
+2. Controllers
+AuthController
+DemandeController
+DocumentController
+EmailController
+UserController
+InternController
+
+3. Entities
+Demande
+Document
+UserDocumentSeen
+Stagiaire
+User
+
+3.1. Enum
+DemandeStatus
+DocumentStatus
+Document Type
+Role Type
+StageType
+
+4. Repositories
+DemandeRepository
+DocumentRepository
+UserDocumentSeenRepository
+StagiaireRepository
+UserRepository
+
+5. Security
+CustomUserDetailsService
+JwtFilter
+JwtUtil
+
+6. Services
+AuthService
+DocumentService
+EmailService
+ForumService
+StagiaireService
+UserManagementService
+
+
+APIS:
+
+1. Authentication APIs
+POST /api/auth/login
+Authenticate user/stagiaire and return JWT token
+POST /api/auth/forgot-password
+Send password reset email to registered address
+2. Demande (Internship Request) APIs
+POST /api/demande (multipart/form-data)
+Submit new internship request with documents (Public access)
+PUT /api/demande/{id}/validate
+Validate demande (ENCADRANT role required)
+PUT /api/demande/{id}/reject
+Reject demande with reason (ENCADRANT role required)
+GET /api/demande
+Get all demandes (Authenticated users)
+GET /api/demande/{id}
+Get specific demande details
+GET /api/demande/{id}/document-types
+Get document types associated with demande
+3. Document APIs
+POST /api/document/upload/{demandeId} (multipart/form-data)
+Upload document for demande 
+GET /api/document/{id}/download
+Download document file
+PUT /api/document/{id}/validate
+Validate document (ENCADRANT/SERVICE_ADMINISTRATIVE/DCRH/CENTRE_DE_FORMATION)
+PUT /api/document/{id}/reject
+Reject document with reason (ENCADRANT/CENTRE_DE_FORMATION)
+PUT /api/document/{id}/seen
+Mark document as seen by user
+GET /api/document/{id}/status
+Check document seen status
+4. User Management APIs (SERVICE_ADMINISTRATIVE only)
+POST /api/users
+Create new user account
+PUT /api/users/{id}
+Update user details
+DELETE /api/users/{id}
+Delete user account
+GET /api/users
+List all users
+GET /api/users/{id}
+Get user details
+5. Stagiaire (Intern) APIs
+GET /api/stagiaires
+List all interns (Authenticated users)
+GET /api/stagiaires/{id}
+Get intern details
+DELETE /api/stagiaires/{id}/deactivate
+Deactivate intern account (SERVICE_ADMINISTRATIVE)
+
+
+
+Comprehensive System Description
+I. General Interface Elements
+•	Header:
+o	Displays company logo.
+o	Login Button (if user is logged out) or Logout Button (if user is logged in).
+•	Intern List (Shared Across Dashboards):
+o	Search Bar: Filter interns by name.
+o	Filters:
+	Type de stage: Initiation, Perfectionnement, PFA, PFE.
+	Year of demande creations date.
+o	Refresh Button: Reload the list.
+o	Table Columns: Name, Stage Type, Date Debut, Niveau, Action.
+o	Action Button: Opens a detailed intern page with:
+	Personal Information: Nom Prénom, Email, CIN, Tel, Institut.
+	Internship Information: Type, Spécialité, Niveau, Année,Date Debut, Date Fin.
+	Documents: Download buttons for CV, Lettre de Motivation, Demande de Stage.
+
+II. Authentication Module
+1.	Login Page:
+o	Email input field.
+o	Password input field.
+o	"Forgot Password?" hyperlink.
+o	"Login" button.
+2.	Forgot Password Page:
+o	Email input field.
+o	"Send" button to trigger a password reset email.
+
+III. Intern Forum
+1.	Application Form:
+o	Personal Info Section:
+	Input fields: Name, Last Name, CIN, Email, Tel, Institut, nombre(binome, monome).
+	Input fields(visible only if number choose is binome): Name2, Last Name2, CIN2, Email2, Tel2,
+o	Internship Info Section:
+	Input fields(text): Spécialité.
+	Input fields(visible only if number choose is binome): Spécialité2.
+	Input fields(dropdown): Type de stage, Niveau, Année (1er, 2eme, 3eme.
+	Input fields(date): Date Debut, Date Fin.
+o	Documents Section:
+	File upload for CV, Lettre de Motivation, Demande de Stage.
+o	Postuler Button: Submit the application.
+2.	Confirmation Page:
+o	Displays a success message after submission.
+
+IV. Intern Dashboard
+•	Sidebar:
+o	Displays user’s name and last name.
+o	Navigation links: Demande, Convocation, Documents, Fin du Stage.
+1.	Demande:
+o	Displays application steps with status indicators (Validée, En Cours, Non Commencée):
+	Demande Soumis.
+	Vérification Admin.
+	Validation DCRH.
+	Convocation.
+2.	Convocation:
+o	Download button for Convocation document.
+o	Instructions for legalization and signing.
+o	Upload button for signed Convocation.
+3.	Documents:
+o	Download buttons for:
+	Laissez-passer (access badge).
+	Bulletin de Mouvement (internal movement document).
+4.	Fin du Stage:
+o	Part 1: Upload buttons for Bulletin de Mouvement and signed Rapport de Stage.
+o	Part 2: Download button for Attestation de Stage (available after document validation).
+o	Part 3: Notification about account deactivation 48 hours post-internship.
+
+V. Encadrant (Supervisor) Dashboard
+•	Sidebar:
+o	User’s name and last name.
+o	Navigation links: Dashboard, Demande (En Attente/Validée), Rapports (En Attente/Validée).
+1.	Dashboard:
+o	Stats: Total Demande, Total Rapport, Total Stage.
+2.	Demande en Attente:
+o	Intern list with actions:
+	Text field for rejection reason + "Reject" button.
+	Upload button for signed request + "Approve" button.
+3.	Demande Validée:
+o	Intern list with downloadable approved requests.
+4.	Rapports en Attente:
+o	Intern list with actions:
+	Download button for unsigned rapport.
+	Upload button for signed rapport + "Valider" button.
+5.	Rapports Validée:
+o	Intern list with actions:
+	Download button for signed rapport.
+
+
+
+VI. Admin Dashboard
+•	Sidebar:
+o	User’s name and last name.
+o	Navigation links: Dashboard, Classement(En Attente/Validée), Prise de Service(En Attente/Validée), Bulletin de Mouvement(En Attente/Validée), Utilisateurs.
+1.	Dashboard:
+o	Stats: Total Stagiaires, Encadrants, Admins, Demandes, Bulletins.
+2.	Classement:
+o	Non Classée: Upload button for classification file + "Valider" button.
+o	Classée: Download button for classified files.
+3.	Prise de Service:
+o	En Attente: Intern list.
+o	Validée: Download button for "Prise de Service" files.
+4.	Bulletin de Mouvement:
+o	En Attente: Upload button + "Valider" button.
+o	Envoyer : Download button for Bulletin de movement + "Valider" button.
+o	Validée: Download button for bulletins.
+5.	Utilisateurs:
+o	Search bar.
+o	"Add User" button.
+o	User list with columns: Name, Last Name, Email, Password, Action.
+o	Action Button: Opens user details for editing/deletion.
+
+VII. DCRH Dashboard
+•	Sidebar:
+o	User’s name and last name.
+o	Navigation links: Dashboard, Stagiaire (En Attente/Validée).
+1.	Dashboard:
+o	Total Demandes stat.
+2.	Stagiaire:
+o	En Attente: Download classement file + "Valider" button.
+o	Validée: Download classement file.
+
+VIII. Centre de Formation Dashboard
+•	Sidebar:
+o	User’s name and last name.
+o	Navigation links: Dashboard, Convocation (En Attente/Validée), Documents (En Attente/Validée).
+1.	Dashboard:
+o	Stats: Total Convocations, Documents.
+2.	Convocation:
+o	En Attente: Upload convocation file + "Valider" button.
+o	Validée: Download convocation file.
+3.	Documents:
+o	En Attente:
+	Upload buttons for Prise de Service and Laissez-passer.
+	Text area for rejection reason + "Reject" button.
+	"Valider" button.
+o	Validée: Download buttons for all validated documents.
+
+
+
+
+ 
+Project user steps: 
+
+Phase 0: User Management
+•	Service Administrative (Admin):
+o	Creates, edits, deletes, or audits accounts for all roles:
+	Encadrant ,DCRH ,Service Administrative, Centre de Formation.
+o	Manages permissions and system-wide user data.
+
+Phase 1: Intern Application Submission
+1.	Stagiaire (Intern)(any public user without role or login):
+o	Submits the Intern Forum (no login required) with:
+	Personal info (name, CIN, email, etc.).
+	Internship details (type, dates, specialty).
+	Uploaded documents (CV, motivation letter, internship request).
+	And if the stage is binome he can add more details like name2 cin2 etc…
+o	Outcome: Application is visible to Encadrant.
+
+Phase 2: Encadrant Validation
+2.	Encadrant (Supervisor):
+o	Logs in and views pending intern applications.
+o	Actions:
+	Validate:
+	Intern account auto generate credentials (email + password sent to intern).
+	Application moves to Service Administrative for processing. 
+	And the intern now in the list of demande valide for the encadrant.
+	Reject:
+	Intern receives auto-email with rejection notice.
+	Application is deleted from the system after 1 hour.
+
+Phase 3: Service Administrative Processing
+3.	Service Administrative:
+o	Logs in and views validated intern applications from encdrant as classemnt en attent for him.
+o	Actions:
+	Downloads intern’s documents.
+	Uploads required document (classification file).
+	Validate button.
+	And the intern now in the list of classement valide for the service administartive.
+o	Outcome: Application moves to DCRH.
+
+Phase 4: DCRH Approval
+4.	DCRH (HR Director):
+o	Logs in and reviews applications validated from service administrative as demande en attent now for him.
+o	Actions:
+	Downloads documents (intern-submitted + classification file).
+	Validates application without adding new documents.
+	And the intern now in the list of demande valide for the DCRH.
+o	Outcome: Application moves to Centre de Formation.
+
+Phase 5: Centre de Formation Document Issuance
+5.	Centre de Formation:
+o	Logs in and views approved applications from DCRH as convocation en attente now for him.
+o	Actions:
+	Downloads documents (intern-submitted + classification file).
+	Uploads « convocation file vide » document.
+	Validates the application.
+	And the intern now in the list of convocation envoyer for the Centre de formation.
+o	Outcome:
+	Documents become visible to the Stagiaire in their dashboard.
+________________________________________
+Phase 6: Intern Document Upload
+6.	Stagiaire:
+o	Logs in with his new credentials.
+o	Actions:
+	Downloads convocation document from Centre de Formation.
+	Re-uploads signed/legalized convocation file.
+o	Outcome:
+	Updated documents appear in list document en attente for Centre de Formation.
+________________________________________
+Phase 7: Centre de Formation Final Validation
+7.	Centre de Formation:
+o	Logs in and reviews list document en attente.
+o	Actions:
+	Download convocation signed file.
+	Validate:
+	Adds two documents:
+	One (prise de service file) visible to Service Administrative in list prise de service en attente.
+	One visible to Stagiaire (laisser passer file).
+	Reject:
+	Provides feedback via text field.
+	Email sent with that reason
+	file returns to Stagiaire for corrections. (the stagiaire reupload new signed convocation file that will replace the old signed wrong file).
+
+Phase 8: Service Administrative Finalization
+8.	Service Administrative:
+o	Logs in and views validated prise de service document from Centre de formation in the list prise de service valide and also in the list bulletin de movement en attente.
+o	Actions:
+	Downloads document from Centre de Formation from the list prise de service valide.
+	Uploads additional document (bulletin de movement vide file) ibn the list of bulletin de movement en attente.
+	Validate the application.
+	And the intern now moves to the list bulletin de movement envoyer.
+o	Outcome:
+	Document bulletin de movement vide become visible to Stagiaire.
+________________________________________
+Phase 9: Stagiaire Compliance
+9.	Stagiaire:
+o	Logs in and downloads document bulletin de movement vide and laisser passer files.
+o	Actions:
+	Uploads two documents:
+	One (bulletin de movement remplie) for Service Administrative that will appear for the service administrative in the list of bulletin de movement remplie.
+	One (rappoert) for Encadrant that will appear for encadrant in the list of rapoet en attente.
+o	Outcome:
+	Documents are visible to both roles for review.
+________________________________________
+Phase 10: Administrative/Encadrant Final Review
+10.	Service Administrative/Encadrant:
+o	Logs in and reviews final documents.
+o	Actions:
+	Validate:
+	Sends signed final document back to Stagiaire.
+	Reject:
+	Sends feedback for modifications.
+________________________________________
+Phase 11: Account Deactivation
+11.	System Automation:
+o	After the intern downloads the final document:
+	Account is disabled automatically after 48 hours.
+o	Intern receives a notification email before deactivation.
+________________________________________
+Key Features:
+•	Automated Emails: Triggered at critical steps (rejection, account creation, deactivation).
+•	Role-Specific Visibility: Documents and actions are restricted based on user roles.
+•	Iterative Workflow: Rejected applications loop back to previous steps for corrections and validated moves to the next.
+•	Audit Trail: All actions (uploads, validations, rejections) are logged for transparency.
+
+
+
+@startuml
+left to right direction
+
+actor Stagiaire
+actor Encadrant
+actor DCRH
+actor Service_Administrative
+actor Centre_De_Formation
+
+Stagiaire --> (Téléverser Demande S)
+Stagiaire --> (Télécharger Demande S)
+Stagiaire --> (Suivre Statut du Demande)
+Stagiaire --> (Postuler Demande)
+
+(Téléverser Demande S) -|> (Document Personnel) : Generalization
+(Téléverser Demande S) -|> (Bulletin de Mouvement) : Generalization
+(Téléverser Demande S) -|> (Rapport) : Generalization
+(Téléverser Demande S) -|> (Convocation) : Generalization
+(Télécharger Demande S) -|> (Convocation) : Generalization
+(Télécharger Demande S) -|> (Rapport) : Generalization
+(Télécharger Demande S) -|> (Bulletin de Mouvement) : Generalization
+(Télécharger Demande S) -|> (Laisser Passer) : Generalization
+(Télécharger Demande S) -|> (Attestation) : Generalization
+
+Encadrant --> (Consulter Demande)
+Encadrant --> (Valider Rapport)
+(Consulter Demande) --> (Envoyer Email de Rejet)
+(Consulter Demande) --> (Valider)
+
+DCRH --> (Valider Demande)
+
+Service_Administrative --> (Télécharger Document SA)
+Service_Administrative --> (Téléverser Document SA)
+Service_Administrative --> (Gérer Utilisateur)
+(Télécharger Document SA) --> (Bulletin de Mouvement)
+(Télécharger Document SA) --> (Prise de Service)
+(Téléverser Document SA) --> (Bulletin de Mouvement)
+(Téléverser Document SA) --> (Classement)
+(Gérer Utilisateur) --> (Ajouter)
+(Gérer Utilisateur) --> (Supprimer)
+(Gérer Utilisateur) --> (Modifier)
+(Gérer Utilisateur) --> (Consulter)
+
+Centre_De_Formation --> (Téléverser Document CF)
+Centre_De_Formation --> (Consulter Convocation)
+(Téléverser Document CF) --> (Prise de Service)
+(Téléverser Document CF) --> (Laisser Passer)
+(Consulter Convocation) --> (Envoyer Email de Rejet)
+(Consulter Convocation) --> (Valider)
+
+Encadrant --> (Consulter Stagiaire)
+Service_Administrative --> (Consulter Stagiaire)
+DCRH --> (Consulter Stagiaire)
+Centre_De_Formation --> (Consulter Stagiaire)
+
+(Télécharger Demande S) ..> (Se Connecter) : <<Include>>
+(Téléverser Demande S) ..> (Se Connecter) : <<Include>>
+(Suivre Statut du Demande) ..> (Se Connecter) : <<Include>>
+(Consulter Demande) ..> (Se Connecter) : <<Include>>
+(Valider Rapport) ..> (Se Connecter) : <<Include>>
+(Valider Demande) ..> (Se Connecter) : <<Include>>
+(Télécharger Document SA) ..> (Se Connecter) : <<Include>>
+(Téléverser Document SA) ..> (Se Connecter) : <<Include>>
+(Gérer Utilisateur) ..> (Se Connecter) : <<Include>>
+(Téléverser Document CF) ..> (Se Connecter) : <<Include>>
+(Consulter Convocation) ..> (Se Connecter) : <<Include>>
+
+@enduml
+
+@startuml
+class Document {
+    +id: int
+    +type: string
+    +nom: string
+    +fichier: file
+    +status: string
+    +Status()
+    +updateSeenStatus()
+    +Telecharger()
+    +Televerser()
+    +ValiderDoc()  
+    +RejeterDoc()  
+}
+
+class Utilisateur {
+    +id: int
+    +nom: string
+    +prenom: string
+    +email: string
+    +passe: string
+    +Login()
+    +recoverPassword()
+    +userInfo() 
+    +createUser()  
+    +updateUser()
+    +deleteUser()
+    +listAllUsers()
+}
+
+class Demande {
+    +id: int
+    +type: string
+    +stage: string
+    +debutStage: date
+    +finStage: date
+    +status: string
+    +submit()
+    +validateDemande()
+    +rejectDemande()
+    +getDemandeList()
+    +getStagiaireInfo()
+    +getDocumentTypes()
+}
+
+class Stagiaire {
+    +emailPerso: string
+    +cin: long
+    +tel: long
+    +institut: string
+    +niveau: string
+    +annee: string
+    +specialite: string
+    +registerStagiaire()
+    +desactiverCompte()
+}
+
+' Roles (no methods – all logic centralized in Utilisateur + controlled by API)
+class ServiceAdministrative
+class Encadrant
+class DCRH
+class CentreDeFormation
+
+' Inheritance
+Utilisateur <|-- Stagiaire
+Utilisateur <|-- ServiceAdministrative
+Utilisateur <|-- Encadrant
+Utilisateur <|-- DCRH
+Utilisateur <|-- CentreDeFormation
+
+' Associations
+Stagiaire "1..2" --* "1..*" Demande : "cree par <"
+
+Demande "1" o-- "1..*" Document : "associe des >"
+Demande "1..*" -- "1" Encadrant : "valide/rejette <"
+
+CentreDeFormation "1" -- "1..*" Document : "valide/rejette >"
+
+ServiceAdministrative "1..*" --> "1..*" Utilisateur : "gère >"
+Utilisateur "1..*" -- "1..*" Demande : "consulte via\nListerDemandes()"
+@enduml

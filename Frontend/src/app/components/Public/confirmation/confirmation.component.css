@@ -1,0 +1,23 @@
+.confirmation-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 4rem;
+    height: 4rem;
+    width: 4rem;
+    color: #4caf50;
+    margin-bottom: 1rem;
+}
+
+.confirmation-content {
+    padding: 2rem 0;
+}
+
+mat-card-actions {
+    justify-content: center;
+    gap: 1rem;
+}

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 import Circuit_De_Stage.Backend.Security.JwtFilter;
 
 @Configuration
@@ -29,15 +30,19 @@ public class SecurityConfig {
     static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
+  
 
 
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configure(http)) // Enable CORS
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login", "/api/auth/forgot-password", "/api/demande", "/api/email/sendTest").permitAll()
+                .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/admin/**").hasRole("SERVICE_ADMINISTRATIVE")
                 .requestMatchers("/encadrant/**").hasRole("ENCADRANT")
                 .requestMatchers("/DCRH/**").hasRole("DCRH")

@@ -6,13 +6,17 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { errorInterceptor } from './interceptors/error.interceptor';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes), 
+    provideNativeDateAdapter(),
     provideHttpClient(
       withInterceptors([authInterceptor, errorInterceptor])
     ),
-    provideAnimationsAsync()]
+    provideAnimationsAsync(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+  ]
 };

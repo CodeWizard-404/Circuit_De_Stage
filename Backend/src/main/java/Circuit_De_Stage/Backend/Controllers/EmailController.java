@@ -9,6 +9,7 @@ import Circuit_De_Stage.Backend.Services.EmailService;
 
 @RestController
 @RequestMapping("/api/email")
+@CrossOrigin
 public class EmailController {
 
     private final EmailService emailService;

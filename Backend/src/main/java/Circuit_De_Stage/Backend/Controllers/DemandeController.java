@@ -22,9 +22,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @RestController
 @RequestMapping("/api/demande")
+@CrossOrigin
 public class DemandeController {
 	
     @Autowired
@@ -42,8 +45,12 @@ public class DemandeController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Demande> submitDemande(
-            @RequestPart("demande") Demande demande,
-            @RequestParam Map<String, MultipartFile> documents) throws Throwable { 
+            @RequestPart("demande") String demandeJson, // Get the JSON as a String
+            @RequestParam Map<String, MultipartFile> documents) throws Throwable {
+
+        // Deserialize the JSON into a Demande object
+        ObjectMapper objectMapper = new ObjectMapper();
+        Demande demande = objectMapper.readValue(demandeJson, Demande.class);
 
         Map<DocumentType, MultipartFile> docs = new HashMap<>();
         for (Map.Entry<String, MultipartFile> entry : documents.entrySet()) {
@@ -51,9 +58,12 @@ public class DemandeController {
             docs.put(type, entry.getValue());
         }
 
+        // Pass the demande object and documents to the service
         forumService.submit(demande, docs);
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(demande);
     }
+
 
     @PutMapping("/{id}/validate")
     @PreAuthorize("hasRole('ENCADRANT')")
@@ -78,13 +88,15 @@ public class DemandeController {
         return ResponseEntity.ok(forumService.getDocumentTypes(id));
     }
     
-    @GetMapping
-    public ResponseEntity<List<Demande>> getAllStagiaires() {
+    @GetMapping("/ALL")
+    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
+    public ResponseEntity<List<Demande>> getAllDemandes() {
         return ResponseEntity.ok(forumService.getDemandeList());
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Demande> getStagiaireInfo(@PathVariable("id") int id) {
+    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
+    public ResponseEntity<Demande> getDemandeInfo(@PathVariable("id") int id) {
         return ResponseEntity.ok(forumService.getStagiaireInfo(id));
     }
 

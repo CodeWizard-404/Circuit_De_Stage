@@ -1,1 +1,142 @@
-<p>demande-view works!</p>
+<div class="demande-view-container">
+  <div *ngIf="loading" class="loading">Loading...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="demande && !loading" class="demande-details">
+    <div class="section personal-info">
+      <h3>Personal Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Name:</label>
+          <span>{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</span>
+        </div>
+        <div class="info-item">
+          <label>CIN:</label>
+          <span>{{ demande.stagiaire.cin }}</span>
+        </div>
+        <div class="info-item">
+          <label>Email:</label>
+          <span>{{ demande.stagiaire.emailPerso }}</span>
+        </div>
+        <div class="info-item">
+          <label>Phone:</label>
+          <span>{{ demande.stagiaire.tel }}</span>
+        </div>
+        <div class="info-item">
+          <label>Institute:</label>
+          <span>{{ demande.stagiaire.institut }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section internship-info">
+      <h3>Internship Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Type:</label>
+          <span>{{ demande.stage }}</span>
+        </div>
+        <div class="info-item">
+          <label>Specialty:</label>
+          <span>{{ demande.stagiaire.specialite }}</span>
+        </div>
+        <div class="info-item">
+          <label>Level:</label>
+          <span>{{ demande.stagiaire.niveau }}</span>
+        </div>
+        <div class="info-item">
+          <label>Year:</label>
+          <span>{{ demande.stagiaire.annee }}</span>
+        </div>
+        <div class="info-item">
+          <label>Start Date:</label>
+          <span>{{ demande.debutStage | date }}</span>
+        </div>
+        <div class="info-item">
+          <label>End Date:</label>
+          <span>{{ demande.finStage | date }}</span>
+        </div>
+        <div class="info-item">
+          <label>Status:</label>
+          <span [class]="'status-' + demande.status.toLowerCase()">{{ demande.status }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section documents">
+      <h3>Documents</h3>
+      <div class="documents-grid">
+        <div *ngFor="let doc of demande.documents" class="document-item">
+          <span class="doc-name">{{ doc.type }}</span>
+          <div class="doc-actions">
+            <button (click)="downloadDocument(doc.id)" class="download-btn">
+              Download
+            </button>
+            <button (click)="validateDocument(doc.id)" class="validate-btn">
+              Validate
+            </button>
+            <div class="reject-section">
+              <textarea 
+                [(ngModel)]="rejectReason" 
+                placeholder="Enter reason for rejection..."
+                rows="3"
+              ></textarea>
+              <button 
+                class="reject-btn" 
+                [disabled]="!rejectReason"
+                (click)="rejectDocument(doc.id)"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+          <span [class]="'status-' + doc.status.toLowerCase()">{{ doc.status }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="demande.status === demandeStatus.SOUMISE" class="upload-section">
+        <select 
+          [(ngModel)]="selectedDocumentType"
+          class="document-type-select"
+        >
+          <option [ngValue]="undefined">Select document type...</option>
+          <option *ngFor="let type of availableDocumentTypes" [value]="type">
+            {{type}}
+          </option>
+        </select>
+        <input 
+          type="file" 
+          (change)="onFileSelected($event)"
+          accept=".pdf,.doc,.docx"
+        >
+        <button 
+          [disabled]="!uploadedFile || !selectedDocumentType" 
+          (click)="uploadSignedDocument()"
+          class="upload-btn"
+        >
+          Upload Signed Document
+        </button>
+      </div>
+    </div>
+
+    <div class="actions" *ngIf="demande.status === demandeStatus.SOUMISE">
+      <button class="validate-btn" (click)="validateDemande()">
+        Validate Application
+      </button>
+      <div class="reject-section">
+        <textarea 
+          [(ngModel)]="rejectReason" 
+          placeholder="Enter reason for rejection..."
+          rows="3"
+        ></textarea>
+        <button 
+          class="reject-btn" 
+          [disabled]="!rejectReason"
+          (click)="rejectDemande()"
+        >
+          Reject Application
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

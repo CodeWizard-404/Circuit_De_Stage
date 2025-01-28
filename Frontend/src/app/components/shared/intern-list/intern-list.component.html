@@ -1,1 +1,40 @@
-<p>intern-list works!</p>
+<div class="intern-list-container">
+    <div class="filters">
+        <input [(ngModel)]="searchName" (ngModelChange)="onSearchChange()" placeholder="Search by name" />
+
+        <select [(ngModel)]="selectedStageType" (ngModelChange)="onFilterChange()">
+            <option value="">Select Stage Type</option>
+            <option *ngFor="let type of stageTypes" [value]="type">{{ type }}</option>
+        </select>
+
+        <select [(ngModel)]="selectedYear" (ngModelChange)="onFilterChange()">
+            <option value="">Select Year</option>
+            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+    </div>
+
+    <table class="intern-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Stage Type</th>
+                <th>Date Debut</th>
+                <th>Niveau</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let demande of filtered">
+                <td>{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</td>
+                <td>{{ demande.stage }}</td>
+                <td>{{ demande.debutStage | date }}</td>
+                <td>{{ demande.stagiaire.niveau }}</td>
+                <td>
+                    <button (click)="viewInternDetails(demande.id)">View</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button (click)="loadInterns()">Refresh</button>
+</div>

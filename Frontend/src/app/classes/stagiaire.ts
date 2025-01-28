@@ -34,6 +34,7 @@ export class Stagiaire extends User {
         niveau: string,
         annee: string,
         specialite: string,
+        
         emailPerso2?: string,
         nom2?: string,
         prenom2?: string,
