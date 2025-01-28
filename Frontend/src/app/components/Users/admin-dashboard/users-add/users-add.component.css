@@ -1,0 +1,36 @@
+.users-add {
+  padding: 20px;
+}
+
+.users-add h2 {
+  margin-bottom: 20px;
+}
+
+.users-add form {
+  display: flex;
+  flex-direction: column;
+}
+
+.users-add label {
+  margin-top: 10px;
+}
+
+.users-add input {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.users-add button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.users-add button:hover {
+  background-color: #45a049;
+}

@@ -24,7 +24,7 @@ import { Document } from '../../../classes/document';
 export class InternListComponent implements OnInit {
   demande: Demande[] = [];
   filtered: Demande[] = [];
-  documentFiltered: Demande[] = []; // Add this new property
+  documentFiltered: Demande[] = [];
   stageTypes = Object.values(StageType);
   years: number[] = [2021, 2022, 2023, 2024, 2025];
   searchName: string = '';

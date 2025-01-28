@@ -1,0 +1,25 @@
+.users-management {
+  padding: 20px;
+}
+
+.users-management h2 {
+  margin-bottom: 20px;
+}
+
+.users-management table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-management th, .users-management td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.users-management th {
+  background-color: #f2f2f2;
+}
+
+.users-management button {
+  margin-right: 5px;
+}

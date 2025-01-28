@@ -41,6 +41,8 @@ src/
 │   │   │   └── footer/
 │   │   ├── admin-dashboard/
 │   │   │   ├── dashboard/
+│   │   │   ├── users-list/
+│   │   │   ├── users-add/
 │   │   │   └── users-management/
 │   │   ├── encadrant-dashboard/
 │   │   │   ├── dashboard/
@@ -61,8 +63,20 @@ src/
 └── main.ts
 
 
+ng generate component components/Users/admin-dashboard/dashboard --skip-tests
+ng generate component components/Users/admin-dashboard/users-management --skip-tests
+ng generate component components/Users/admin-dashboard/users-list --skip-tests
+ng generate component components/Users/admin-dashboard/users-add --skip-tests
 
 
+ng generate component components/Users/encadrant-dashboard/dashboard --skip-tests
+ng generate component components/Users/dcrh-dashboard/dashboard --skip-tests
+ng generate component components/Users/centre-formation-dashboard/dashboard --skip-tests
+ng generate component components/Users/stagiaire-dashboard/dashboard --skip-tests
+ng generate component components/Users/stagiaire-dashboard/demande --skip-tests
+ng generate component components/Users/stagiaire-dashboard/convocation --skip-tests
+ng generate component components/Users/stagiaire-dashboard/documents --skip-tests
+ng generate component components/Users/stagiaire-dashboard/fin-du-stage --skip-tests
 
 
 

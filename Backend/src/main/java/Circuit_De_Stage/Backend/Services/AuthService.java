@@ -92,7 +92,7 @@ public class AuthService {
     	}
 
         String subject = "Confirmation de votre "+ demande.getStage() +" - Accès à la plateforme Tunisair";
-        String message = "Madame/Monsieur " + stagiaire.getNom() + " " + stagiaire.getPrenom() + ",\n\n" 
+        String message = "Madame/Monsieur " + reciver + ",\n\n" 
         + "Nous avons le plaisir de vous informer que votre candidature pour un stage au sein de Tunisair a été approuvée.\n\n"
         + "🔐 Vos coordonnées d'accès :\n"
         + "E-mail : " + email + "\n"
@@ -142,12 +142,10 @@ public class AuthService {
     
     private String generateAndSetNewPassword(Object user) {
         String newPassword = generateRandomPassword(); 
-        if (user instanceof User) {
-            User u = (User) user;
+        if (user instanceof User u) {
             u.setPasse(passwordEncoder.encode(newPassword));
             utilisateurRepository.save(u);
-        } else if (user instanceof Stagiaire) {
-            Stagiaire s = (Stagiaire) user;
+        } else if (user instanceof Stagiaire s) {
             s.setPasse(passwordEncoder.encode(newPassword));
             stagiaireRepository.save(s);
         }

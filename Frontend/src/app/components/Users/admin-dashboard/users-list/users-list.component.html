@@ -1,0 +1,23 @@
+<div class="users-list">
+  <h2>Users List</h2>
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Search users...">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.nom }} - {{ user.prenom }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <button (click)="editUser(user.id)">Edit</button>
+          <button (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

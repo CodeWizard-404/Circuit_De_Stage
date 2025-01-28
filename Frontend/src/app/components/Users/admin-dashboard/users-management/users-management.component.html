@@ -1,0 +1,24 @@
+<div class="users-management">
+  <h2>User Management</h2>
+  <button (click)="addUser()">Add User</button>
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Search users...">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.nom }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <button (click)="editUser(user.id)">Edit</button>
+          <button (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -41,14 +41,16 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      console.log('Form Values:', { email, password }); // Log form values
+      console.log('Form Values:', { email, password });
       this.authService.login(email, password).subscribe({
         next: (response) => {
-          console.log('Login Success:', response); // Log success response
-          this.router.navigate([""]);
+          console.log('Login Success:', response);
+          this.router.navigate([""]).then(() => {
+            window.location.reload();
+          });
         },
         error: (err) => {
-          console.error('Login Error:', err); // Log error response
+          console.error('Login Error:', err);
           this.errorMessage = err.error?.message || 'Invalid credentials';
         }
       });
