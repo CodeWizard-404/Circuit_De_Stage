@@ -1,9 +1,9 @@
-
-
 .sidebar {
-    width: var(--sidebar-width);
+    padding-top: 20px;
+    width: 250px;
     height: 100%;
     background: #ffe4e4;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
  
 }
 
@@ -21,6 +21,7 @@
 .user-profile {
     display: flex;
     align-items: center;
+    gap: 1rem;
     padding: 1rem;
     background: #fffbfb;
     margin: 0rem 1rem 1rem 1rem;
@@ -28,6 +29,18 @@
     border: 1px solid #ff6d6d;
 }
 
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #D4192C;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
 
 .user-avatar i {
     font-size: 1.25rem;
@@ -142,7 +155,7 @@
     }
 
     .sidebar.active {
-        width: var(--sidebar-width);
+        width: 250px;
         transform: translateX(0);
     }
 }

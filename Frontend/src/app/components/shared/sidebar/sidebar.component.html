@@ -1,22 +1,25 @@
 <div class="sidebar">
-  <div class="user-profile">
-      <div class="user-info">
-          <h3>{{ userName }} {{ userLastName }}</h3>
-          <span class="user-role">{{ userRole }}</span>
-      </div>
-  </div>
-  
-  <nav class="sidebar-nav">
-      <ul>
-          <li *ngFor="let item of menuItems">
-              <a [routerLink]="[item.route || '/intern-list']" 
-                 [queryParams]="item.route ? null : {filter: item.filter}" 
-                 routerLinkActive="active">
-                  <i class="nav-icon" [ngClass]="getIconForMenuItem(item)"></i>
-                  <span class="nav-label">{{ item.label }}</span>
-                  <i class="fas fa-chevron-right arrow-icon"></i>
-              </a>
-          </li>
-      </ul>
-  </nav>
+    <div class="user-profile">
+        <div class="user-avatar">
+            {{ userName?.charAt(0) }}{{ userLastName?.charAt(0) }}
+        </div>
+        <div class="user-info">
+            <h3>{{ userName }} {{ userLastName }}</h3>
+            <span class="user-role">{{ userRole }}</span>
+        </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li *ngFor="let item of menuItems">
+                <a [routerLink]="[item.route || '/intern-list']" 
+                   [queryParams]="item.route ? null : {filter: item.filter}" 
+                   routerLinkActive="active">
+                    <i class="nav-icon" [ngClass]="getIconForMenuItem(item)"></i>
+                    <span class="nav-label">{{ item.label }}</span>
+                    <i class="fas fa-chevron-right arrow-icon"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
