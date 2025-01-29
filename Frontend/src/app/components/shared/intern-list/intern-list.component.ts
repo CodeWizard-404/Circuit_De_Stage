@@ -144,6 +144,14 @@ export class InternListComponent implements OnInit {
         return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE, DocumentStatus.VALIDE) &&
         !hasDocument(DocumentType.ATTESTATION);
 
+      case 'attestation_en_attente':
+        return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE, DocumentStatus.VALIDE) &&
+        hasDocument(DocumentType.RAPPORT_SIGNE) &&  
+        !hasDocument(DocumentType.ATTESTATION);
+        
+      case 'attestation_valide':
+        return hasDocument(DocumentType.ATTESTATION);
+
       case 'stagiaire_en_attente':
         return hasDocument(DocumentType.CLASSEMENT) &&
           !hasDocument(DocumentType.CLASSEMENT, DocumentStatus.VALIDE);

@@ -12,7 +12,8 @@
     <div *ngIf="!isLoading && !error" class="dashboard-content">
         <!-- Welcome Section -->
         <div class="welcome-section">
-            <h1>Bonjour, {{ stagiaire?.prenom }} {{ stagiaire?.nom }}</h1>
+            
+            <h1>Bonjour, {{ getFullName() }}</h1>
             <p>Bienvenue dans votre espace stagiaire Tunisair</p>
         </div>
 
@@ -94,21 +95,7 @@
                         <span class="label">Statut</span>
                         <span class="status-badge">{{ demande?.status }}</span>
                     </div>
-                </div>
-            </div>
 
-            <!-- Personal Information Card -->
-            <div class="dashboard-card">
-                <h2><i class="fas fa-user"></i> Informations personnelles</h2>
-                <div class="info-content">
-                    <div class="info-item">
-                        <span class="label">CIN</span>
-                        <span class="value">{{ stagiaire?.cin }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">Email</span>
-                        <span class="value">{{ stagiaire?.email }}</span>
-                    </div>
                     <div class="info-item">
                         <span class="label">Institut</span>
                         <span class="value">{{ stagiaire?.institut }}</span>
@@ -117,6 +104,48 @@
                         <span class="label">Spécialité</span>
                         <span class="value">{{ stagiaire?.specialite }}</span>
                     </div>
+                    <div *ngIf="stagiaire?.specialite2" class="info-item">
+                        <span class="label">Spécialité Binôme</span>
+                        <span class="value">{{ stagiaire?.specialite2 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information Card -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+                <div class="info-content">
+
+                    <div class="info-item">
+                        <span class="label">Email</span>
+                        <span class="value">{{ stagiaire?.email }}</span>
+                    </div>   
+                    <div class="info-item">
+                        <span class="label">Nom</span>
+                        <span class="value">{{ stagiaire?.nom }} {{ stagiaire?.prenom }}</span>
+                    </div>                    
+                    <div *ngIf="stagiaire?.nom2 && stagiaire?.prenom2" class="info-item">
+                        <span class="label">Nom Binôme</span>
+                        <span class="value">{{ stagiaire?.nom2 }} {{ stagiaire?.prenom2 }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">CIN</span>
+                        <span class="value">{{ stagiaire?.cin }}</span>
+                    </div>                    
+                    <div *ngIf="stagiaire?.cin2" class="info-item">
+                        <span class="label">CIN Binôme</span>
+                        <span class="value">{{ stagiaire?.cin2 }}</span>
+                    </div>
+  
+                    <div class="info-item">
+                        <span class="label">Tel°</span>
+                        <span class="value">{{ stagiaire?.tel }}</span>
+                    </div>  
+                    <div *ngIf="stagiaire?.tel2" class="info-item">
+                        <span class="label">Tel° Binôme</span>
+                        <span class="value">{{ stagiaire?.tel2 }}</span>
+                    </div>
+
                 </div>
             </div>
         </div>

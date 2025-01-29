@@ -8,13 +8,13 @@ import { environment } from '../../environments/environment';
 export class StagiaireService {
   constructor(private http: HttpClient) { }
 
-  getStagiaireInfo(stagiaireId: number): Observable<Stagiaire> {
-    return this.http.get<Stagiaire>(`${environment.apiUrl}/stagiaires/${stagiaireId}`);
-  }
+  // getStagiaireInfo(stagiaireId: number): Observable<Stagiaire> {
+  //   return this.http.get<Stagiaire>(`${environment.apiUrl}/stagiaires/${stagiaireId}`);
+  // }
 
-  getAllStagiaires(): Observable<Stagiaire[]> {
-    return this.http.get<Stagiaire[]>(`${environment.apiUrl}/stagiaires`);
-  }
+  // getAllStagiaires(): Observable<Stagiaire[]> {
+  //   return this.http.get<Stagiaire[]>(`${environment.apiUrl}/stagiaires`);
+  // }
 
   deactivateAccount(stagiaireId: number): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/stagiaires/${stagiaireId}/deactivate`);

@@ -25,6 +25,7 @@ public class Document {
     private String name;
     
     @Enumerated(EnumType.STRING)
+    @Column(length = 30) 
     private DocumentType type;
 
     @Lob

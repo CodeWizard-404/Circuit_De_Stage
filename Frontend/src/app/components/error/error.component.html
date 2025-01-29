@@ -1,6 +1,18 @@
 <div class="error-container">
-    <h1>404</h1>
-    <h2>Page Not Found</h2>
-    <p>The page you are looking for doesn't exist or has been moved.</p>
-    <button mat-raised-button color="primary" [routerLink]="['/']">Return Home</button>
-</div>
+    <div class="content">
+      <div class="error-code">404</div>
+      <div class="error-icon">⚠️</div>
+      <h1 class="error-title">Perdu dans le cyberespace ?</h1>
+      <p class="error-message">
+        Oups ! La page que vous recherchez a disparu dans le néant numérique.
+        Pas de panique, nous allons vous ramener à la page d'accueil !
+      </p>
+      <button mat-raised-button color="primary" [routerLink]="['/']" class="home-button">
+        <span>Retour à l'accueil</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>

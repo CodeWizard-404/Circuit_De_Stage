@@ -6,6 +6,7 @@ import { RoleType } from '../../../../classes/enums/role-type';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-users-add',
@@ -31,6 +32,11 @@ export class UsersAddComponent {
       return;
     }
 
+    if (this.user.passe.length < 8) {
+      this.toastr.error('Password must be at least 8 characters long');
+      return;
+    }
+
     if (this.user.passe !== this.confirmPassword) {
       this.toastr.error('Passwords do not match');
       return;
@@ -48,11 +54,13 @@ export class UsersAddComponent {
   }
 
   private validateUser(): boolean {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@Tunisair\.com\.tn$/;
     return !!(this.user.nom && 
               this.user.prenom &&
               this.user.passe && 
               this.user.email && 
-              this.user.type);
+              this.user.type &&
+              emailPattern.test(this.user.email));
   }
 
   formatRoleName(role: RoleType): string {

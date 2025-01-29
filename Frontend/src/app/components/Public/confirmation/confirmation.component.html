@@ -1,25 +1,26 @@
-<mat-card class="confirmation-card">
-    <mat-card-header>
-        <mat-card-title>Application Submitted Successfully!</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="confirmation-content">
-            <mat-icon class="success-icon">check_circle</mat-icon>
-            <p>Your internship application has been received.</p>
-            <p *ngIf="authService.isLoggedIn()">
-                You can track your application status in your dashboard.
-            </p>
-            <p *ngIf="!authService.isLoggedIn()">
-                Check your email for login credentials to track your application.
-            </p>
-        </div>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-raised-button color="primary" routerLink="/">
-            Return to Home
-        </button>
-        <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/">
-            Go to Dashboard
-        </button>
-    </mat-card-actions>
-</mat-card>
+<div class="confirmation-container">
+  <div class="confirmation-card">
+    <!-- Success Icon -->
+    <mat-icon class="success-icon">check_circle</mat-icon>
+    <!-- Success Message -->
+    <h1>Demande Soumise avec Succès!</h1>
+    <p>Votre demande de stage a été reçue.</p>
+    <!-- Logged In Message -->
+    <p *ngIf="authService.isLoggedIn()">
+      Vous pouvez suivre l'état de votre demande dans votre tableau de bord.
+    </p>
+    <!-- Not Logged In Message -->
+    <p *ngIf="!authService.isLoggedIn()">
+      Vous recevrez vos identifiants de connexion par email si un encadrant valide votre demande.
+    </p>
+    <!-- Action Buttons -->
+    <div class="confirmation-actions">
+      <button mat-raised-button color="primary" routerLink="/">
+        Retour à l'accueil
+      </button>
+      <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/">
+        Aller au tableau de bord
+      </button>
+    </div>
+  </div>
+</div>

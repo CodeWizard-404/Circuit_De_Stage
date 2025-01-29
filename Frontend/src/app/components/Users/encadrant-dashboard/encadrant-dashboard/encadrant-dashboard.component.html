@@ -1,1 +1,117 @@
-<p>encadrant-dashboard works!</p>
+<div class="dashboard-container">
+
+
+    <div  class="dashboard-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-flex">
+                <div class="welcome-content">
+                    <h1><i class="fas fa-user-tie"></i> Tableau de Bord Encadrant</h1>
+                    <p>{{ encadrant?.prenom }} {{ encadrant?.nom }} | Supervision des stagiaires</p>
+                </div>
+                <div class="completion-rate">
+                    <div class="rate-info">
+                        <div class="rate-number">{{ getCompletedValidationsCount() }}</div>
+                        <div class="rate-details">
+                            <p>Validations complétées</p>
+                            <small>{{ getCompletedValidationsCount() }}/{{ demandes.length }}</small>
+                        </div>
+                    </div>
+                    <div class="rate-progress">
+                        <div class="progress-bar" 
+                             [style.width.%]="(getCompletedValidationsCount() / demandes.length) * 100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ demandes.length }}</h3>
+                    <p>Stagiaires assignés</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getPendingValidationsCount() }}</h3>
+                    <p>Validations en attente</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getActiveInternsCount() }}</h3>
+                    <p>Stages en cours</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getCompletedValidationsCount() }}</h3>
+                    <p>Validations terminées</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="dashboard-grid">
+            <!-- Quick Actions -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-bolt"></i> Actions Rapides</h2>
+                <div class="actions-grid">
+                    <a [routerLink]="['/demande']" class="action-item">
+                        <i class="fas fa-list-ul"></i>
+                        <span>Gérer les demandes</span>
+                    </a>
+
+                    <a [routerLink]="['/rapports']" class="action-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Rapports de stage</span>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Pending Validations -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-clock"></i> Demandes en Attente</h2>
+                <div class="recent-requests">
+                    <div *ngFor="let demande of getRecentPendingDemandes()" class="request-item">
+                        <div class="request-info">
+                            <div class="request-header">
+                                <span class="name">{{ demande.stagiaire.prenom }} {{ demande.stagiaire.nom }}</span>
+                                <span class="status-badge soumise">
+                                    {{ demande.status }}
+                                </span>
+                            </div>
+                            <div class="request-details">
+                                <span class="type">{{ demande.stage }}</span>
+                                <span class="date">{{ demande.debutStage | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                        </div>
+                        <a [routerLink]="['/demande', demande.id]" class="view-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

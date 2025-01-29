@@ -65,7 +65,11 @@
                             </div>
                             <div class="intern-details">
                                 <span class="intern-name">{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</span>
-                                <span class="intern-email">{{ demande.stagiaire.email }}</span>
+                                <span class="intern-email">{{ demande.stagiaire.emailPerso }}</span>
+                                <div *ngIf="demande.stagiaire.nom2" class="intern-details">
+                                    <span class="intern-name">{{ demande.stagiaire.nom2 }} {{ demande.stagiaire.prenom2 }}</span>
+                                    <span class="intern-email">{{ demande.stagiaire.emailPerso2 }}</span>
+                                </div>
                             </div>
                         </td>
                         <td>

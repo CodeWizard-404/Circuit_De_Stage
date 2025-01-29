@@ -37,22 +37,25 @@ import { DemandeStatus } from '../../../classes/enums/demande-status';
   styleUrls: ['./intern-form.component.css']
 })
 export class InternFormComponent {
-  isLinear = true;
-  documentTypes = Object.values(DocumentType);
-  stageTypes = Object.values(StageType);
-  documentsMap = new Map<DocumentType, File>();
-  requiredDocuments: DocumentType[] = [];
-  errorMessage: string = '';
-  internForm: FormGroup;
-  personalInfo: FormGroup;
-  internshipInfo: FormGroup;
-  institueInfo: FormGroup;
+  isLinear = true; // Stepper linear mode
+  documentTypes = Object.values(DocumentType); // Document types
+  stageTypes = Object.values(StageType); // Stage types
+  documentsMap = new Map<DocumentType, File>(); // Map to store selected files
+  requiredDocuments: DocumentType[] = []; // Required documents for the selected stage type
+  errorMessage: string = ''; // Error message
+  internForm: FormGroup; // Main form group
+  personalInfo: FormGroup; // Personal information form group
+  internshipInfo: FormGroup; // Internship information form group
+  institueInfo: FormGroup; // Institute information form group
+  niveaux = ['Licence', 'Master', 'Prepa', 'Ingénierie', 'Doctorat']; // Education levels
+  annees = ['1er', '2eme', '3eme']; // Years
   
   constructor(
     private fb: FormBuilder,
     private demandeService: DemandeService,
     private router: Router
   ) {
+    // Initialize personal information form group
     this.personalInfo = this.fb.group({
       isGroup: [false],
       nom: ['', Validators.required],
@@ -69,6 +72,7 @@ export class InternFormComponent {
       tel2: ['',Validators.pattern(/^\d{8}$/)]
     });
 
+    // Initialize institute information form group
     this.institueInfo = this.fb.group({
       institut: ['', Validators.required],
       niveau: ['', Validators.required],
@@ -79,12 +83,14 @@ export class InternFormComponent {
 
     });
 
+    // Initialize internship information form group
     this.internshipInfo = this.fb.group({
       stageType: ['', Validators.required],
       dateDebut: ['', Validators.required],
       dateFin: ['', Validators.required]
     });
 
+    // Initialize main form group
     this.internForm = this.fb.group({
       personalInfo: this.personalInfo,
       institueInfo: this.institueInfo,
@@ -92,6 +98,7 @@ export class InternFormComponent {
     });
   }
 
+  // Handle file selection
   onFileSelected(event: any, type: DocumentType) {
     const file: File = event.target.files[0];
     if (file) {
@@ -99,16 +106,28 @@ export class InternFormComponent {
     }
   }
 
+  // Get required documents based on selected stage type
   getRequiredDocuments(): void {
     const stageType = this.internshipInfo.get('stageType')?.value as StageType;
     this.requiredDocuments = this.demandeService.getRequiredDocuments(stageType);
   }
 
+  // Add new method to filter document types
+  getFilteredDocumentTypes(): DocumentType[] {
+    return this.requiredDocuments.filter(type => type !== DocumentType.CV2);
+  }
+
+  // Handle form submission
   onSubmit() {
-    if (this.internForm.valid && this.documentsMap.size > 0) {
+    const hasSecondIntern = this.personalInfo.get('nom2')?.value?.trim();
+    const requiredDocsCount = hasSecondIntern ? 
+        this.requiredDocuments.length : 
+        this.requiredDocuments.filter(type => type !== DocumentType.CV2).length;
+
+    if (this.internForm.valid && this.documentsMap.size >= requiredDocsCount) {
       const formValue = this.internForm.value;
 
-      // Create Stagiaire
+      // Create Stagiaire object
       const stagiaire = new Stagiaire(
         0, // temp ID
         formValue.personalInfo.nom!,
@@ -131,7 +150,7 @@ export class InternFormComponent {
         formValue.institueInfo.specialite2
       );
 
-      // Create Demande
+      // Create Demande object
       const demande = {
         id: 0, // temp ID
         stage: formValue.internshipInfo.stageType! as StageType,
@@ -143,7 +162,7 @@ export class InternFormComponent {
         documents: [] // documents will be added by service
       };
 
-      // Create FormData
+      // Create FormData object
       const formData = new FormData();
 
       // Append the 'demande' part as JSON (flattened)
@@ -164,4 +183,7 @@ export class InternFormComponent {
       });
     }
   }
+
+  // Add this line to make DocumentType accessible in the template
+  protected DocumentType = DocumentType;
 }

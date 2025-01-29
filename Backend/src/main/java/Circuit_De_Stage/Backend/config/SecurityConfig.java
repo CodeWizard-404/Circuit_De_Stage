@@ -43,11 +43,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login", "/api/auth/forgot-password", "/api/demande", "/api/email/sendTest").permitAll()
                 .requestMatchers("/api/auth/me").authenticated()
-                .requestMatchers("/admin/**").hasRole("SERVICE_ADMINISTRATIVE")
-                .requestMatchers("/encadrant/**").hasRole("ENCADRANT")
-                .requestMatchers("/DCRH/**").hasRole("DCRH")
-                .requestMatchers("/CF/**").hasRole("CENTRE_DE_FORMATION")
-                .requestMatchers("/stagiaire/**").hasRole("STAGIAIRE")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -80,6 +80,7 @@ export class DemandeComponent implements OnInit {
     this.demandeService.getDocumentTypes(demandeId).subscribe({
       next: (types: DocumentType[]) => {
         this.documentTypes = types;
+        console.log('Loaded document types:', this.documentTypes); // Debugging statement
       },
       error: (err) => {
         console.error('Error loading document types:', err);
@@ -89,7 +90,9 @@ export class DemandeComponent implements OnInit {
   }
 
   hasDocument(documentType: string): boolean {
-    return this.documentTypes.includes(documentType as DocumentType);
+    const hasDoc = this.documentTypes.includes(documentType as DocumentType);
+    console.log(`Checking document type ${documentType}: ${hasDoc}`); // Debugging statement
+    return hasDoc;
   }
 
   isDocumentValidated(documentType: string): boolean {

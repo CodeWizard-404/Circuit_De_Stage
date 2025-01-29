@@ -111,17 +111,24 @@ public class AuthService {
     }
     	
     private String generateUniqueEmail(Stagiaire stagiaire) {
-    	
-    	String base = stagiaire.getNom() + stagiaire.getPrenom();
-    	
-    	if (stagiaire.getNom2() != null) {
-    		base = stagiaire.getNom() + stagiaire.getNom2();
-    	}
-    	
+        // Start with first person's full name
+        String base = stagiaire.getNom().toLowerCase() + "." + stagiaire.getPrenom().toLowerCase();
+        
+        // If there's a second person, create a combined email
+        if (stagiaire.getNom2() != null && stagiaire.getPrenom2() != null) {
+            base = stagiaire.getNom().toLowerCase() + stagiaire.getNom2().toLowerCase();
+        }
+        
+        // Remove any spaces and special characters
+        base = base.replaceAll("\\s+", "")
+                  .replaceAll("[^a-zA-Z0-9]", "");
+        
         String finalEmail = base + "@tunisair.com.tn";
         int suffix = 1;
         
-        while (stagiaireRepository.existsByEmail(finalEmail)) {
+        // Check for existing email and add suffix if needed
+        while (utilisateurRepository.existsByEmail(finalEmail) || 
+               stagiaireRepository.existsByEmail(finalEmail)) {
             suffix++;
             finalEmail = base + suffix + "@tunisair.com.tn";
         }

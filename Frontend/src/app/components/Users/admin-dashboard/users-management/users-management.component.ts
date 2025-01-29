@@ -31,6 +31,7 @@ export class UsersManagementComponent implements OnInit {
     if (userId) {
       this.userService.getUserById(userId).subscribe((data: User) => {
         this.user = data;
+        this.user.passe = ''; // Ensure password field is empty
       });
     }
   }
@@ -38,14 +39,32 @@ export class UsersManagementComponent implements OnInit {
 
   saveUser(): void {
     if (this.user) {
-      if (this.user.passe !== this.confirmPassword) {
+      if (!this.validateUser()) {
+        // Handle validation error
+        return;
+      }
+
+      if (this.user.passe && this.user.passe !== this.confirmPassword) {
         // Handle password mismatch
         return;
       }
+
       this.userService.updateUser(this.user).subscribe(() => {
         this.router.navigate(['/service-administrative-dashboard']);
       });
     }
+  }
+
+  private validateUser(): boolean {
+    if (!this.user) {
+      return false;
+    }
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@Tunisair\.com\.tn$/;
+    return !!(this.user.nom && 
+              this.user.prenom &&
+              this.user.email && 
+              this.user.type &&
+              emailPattern.test(this.user.email));
   }
 
   deleteUser(userId?: number): void {

@@ -13,7 +13,7 @@ import { routes } from './app.routes';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Frontend';
+  title = 'Circuit De Stage';
 
   constructor(private router: Router) {}
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+// Import necessary Angular modules and services
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
@@ -14,5 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./confirmation.component.css']
 })
 export class ConfirmationComponent {
+  // Inject AuthService to check login status
   constructor(public authService: AuthService) {}
 }

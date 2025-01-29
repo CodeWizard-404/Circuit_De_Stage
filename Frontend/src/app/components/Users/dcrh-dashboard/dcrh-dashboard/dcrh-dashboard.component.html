@@ -1,1 +1,114 @@
-<p>dcrh-dashboard works!</p>
+<!-- dcrh-dashboard.component.html -->
+<div class="dashboard-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+  
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="!isLoading && !error" class="dashboard-content">
+      <!-- Header Section -->
+      <div class="welcome-section">
+        <div class="welcome-flex">
+          <div class="welcome-content">
+            <h1>
+              <i class="fas fa-users-cog"></i>
+              Tableau de Bord DCRH
+            </h1>
+            <p>{{ currentUser?.prenom }} {{ currentUser?.nom }} | Gestion des Ressources Humaines</p>
+          </div>
+          <div class="completion-rate">
+            <div class="rate-info">
+              <div class="rate-number">{{ getActiveInterns() }}</div>
+              <div class="rate-details">
+                <p>Stagiaires actifs</p>
+                <small>Sur {{ getTotalInterns() }} au total</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon bg-hr">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ encadrants.length }}</h3>
+            <p>Encadrants</p>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <div class="stat-icon bg-hr">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ getStatusDistribution()['VALIDE'] || 0 }}</h3>
+            <p>Stages validés</p>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <div class="stat-icon bg-hr">
+            <i class="fas fa-balance-scale"></i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ getStatusDistribution()['SOUMISE'] || 0 }}</h3>
+            <p>En attente</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Main Content Grid -->
+      <div class="dashboard-grid">
+        <!-- Encadrant Management -->
+        <div class="dashboard-card">
+          <h2><i class="fas fa-chalkboard-teacher"></i> Charge des Encadrants</h2>
+          <div class="encadrant-list">
+            <div *ngFor="let encadrant of encadrants" class="encadrant-item">
+              <div class="encadrant-info">
+                <span>{{ encadrant.prenom }} {{ encadrant.nom }}</span>
+                <small>{{ encadrant.email }}</small>
+              </div>
+              <span class="workload-badge">
+                {{ getEncadrantWorkload(encadrant.id) }} stagiaires
+              </span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Status Distribution -->
+        <div class="dashboard-card">
+          <h2><i class="fas fa-chart-pie"></i> Répartition des Statuts</h2>
+          <div class="status-distribution">
+            <div *ngFor="let status of getStatusDistribution() | keyvalue" class="status-item">
+              <div class="status-label">{{ status.key }}</div>
+              <div class="status-bar">
+                <div class="bar-fill" [style.width.%]="(status.value / getTotalInterns()) * 100"></div>
+              </div>
+              <div class="status-value">{{ status.value }}</div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Quick Actions -->
+        <div class="dashboard-card">
+          <h2><i class="fas fa-bolt"></i> Actions Rapides</h2>
+          <div class="actions-grid">
+
+            <a [routerLink]="['/validation-requests']" class="action-item hr-action">
+              <i class="fas fa-clipboard-check"></i>
+              <span>Demandes de validation</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

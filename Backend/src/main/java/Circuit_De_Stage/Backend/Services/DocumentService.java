@@ -108,6 +108,12 @@ public class DocumentService {
         document.setStatus(DocumentStatus.REJETE);
         documentRepository.save(document);
 
+        // Delete UserDocumentSeen records associated with the document
+        userDocumentSeenRepository.deleteAll(document.getDocumentStatuses());
+
+        // Delete the document after rejecting it
+        documentRepository.delete(document);
+
         User utilisateur = userRepository.findById(utilisateurId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         

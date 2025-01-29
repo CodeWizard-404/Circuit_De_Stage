@@ -24,6 +24,7 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  // Form group for login inputs
   loginForm: FormGroup;
   errorMessage: string = '';
 
@@ -32,25 +33,21 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // Setup login form with email and password fields
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
+  // Handle form submission
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      console.log('Form Values:', { email, password });
+      // Try to login and redirect based on user role
       this.authService.login(email, password).subscribe({
-        next: (response) => {
-          console.log('Login Success:', response);
-          this.authService.navigateBasedOnRole();
-        },
-        error: (err) => {
-          console.error('Login Error:', err);
-          this.errorMessage = err.error?.message || 'Invalid credentials';
-        }
+        next: () => this.authService.navigateBasedOnRole(),
+        error: (err) => this.errorMessage = 'Identifiants invalides'
       });
     }
   }

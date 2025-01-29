@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
@@ -50,86 +49,116 @@ public class ForumService {
     @Autowired
     private TaskScheduler taskScheduler;
 
+    @Autowired
+    private StagiaireService stagiaireService;
+
     
     @Transactional
-    public void submit(Demande demande ,Map<DocumentType, MultipartFile> documents) throws IOException, Throwable  {
-        Stagiaire incomingStagiaire = demande.getStagiaire();
-        String email2 = incomingStagiaire.getEmailPerso2();
-        Long CIN = incomingStagiaire.getCin();
+    public void submit(Demande demande, Map<DocumentType, MultipartFile> documents) throws IOException, Throwable {
+        // Initial validation
+        if (documents == null || documents.isEmpty()) {
+            throw new RuntimeException("No documents were provided with the submission");
+        }
 
-        // Check for existing stagiaire with same personal email
-        Stagiaire existingStagiaire = stagiaireRepository.findByCINWithDemandes(CIN);
-        
-        if (existingStagiaire != null) {
-            // Check if existing demande has same stage type
-        	if (demandeRepository.existsByStagiaireAndStage(existingStagiaire, demande.getStage())) {
-        	    throw new RuntimeException("A request for this stage type already exists");
-        	}
-            
-            // Use existing stagiaire for new demande
-        	if(email2 != null) {
-            existingStagiaire.setAnnee(incomingStagiaire.getAnnee());
-            existingStagiaire.setEmailPerso2(incomingStagiaire.getEmailPerso2());
-            existingStagiaire.setNom2(incomingStagiaire.getNom2());
-            existingStagiaire.setPrenom2(incomingStagiaire.getPrenom2());
-            existingStagiaire.setCin2(incomingStagiaire.getCin2());
-            existingStagiaire.setTel2(incomingStagiaire.getTel2());
-            existingStagiaire.setSpecialite2(incomingStagiaire.getSpecialite2());
-            stagiaireRepository.save(existingStagiaire);
+        // Validate all files before processing
+        for (Map.Entry<DocumentType, MultipartFile> entry : documents.entrySet()) {
+            if (entry.getValue() == null || entry.getValue().isEmpty()) {
+                throw new RuntimeException("Empty or invalid file provided for document type: " + entry.getKey());
             }
-        	
+        }
+
+        // Pre-validate required documents based on stage type and stagiaire info
+        Set<DocumentType> providedTypes = documents.keySet();
+        Stagiaire incomingStagiaire = demande.getStagiaire();
+        
+        // Get required documents based on stage type
+        Set<DocumentType> required = switch(demande.getStage()) {
+            case PFE, PFA -> Set.of(
+                DocumentType.CV, 
+                DocumentType.LETTRE_DE_MOTIVATION, 
+                DocumentType.DEMANDE_DE_STAGE
+            );
+            case STAGE_PERFECTIONNEMENT, STAGE_INITIATION -> Set.of(
+                DocumentType.CV, 
+                DocumentType.DEMANDE_DE_STAGE
+            );
+            default -> throw new IllegalStateException("Unexpected stage type: " + demande.getStage());
+        };
+
+        // Add CV2 requirement if there's a second intern (check for both non-null and non-empty)
+        if (incomingStagiaire.getNom2() != null && !incomingStagiaire.getNom2().trim().isEmpty()) {
+            Set<DocumentType> withCV2 = new HashSet<>(required);
+            withCV2.add(DocumentType.CV2);
+            required = withCV2;
+        }
+
+        // Validate all required documents are provided
+        if (!providedTypes.containsAll(required)) {
+            Set<DocumentType> missing = new HashSet<>(required);
+            missing.removeAll(providedTypes);
+            throw new Exception("Missing required documents: " + missing);
+        }
+
+        // Check for existing stagiaire and stage request
+        Long CIN = incomingStagiaire.getCin();
+        Stagiaire existingStagiaire = stagiaireRepository.findByCINWithDemandes(CIN);
+        if (existingStagiaire != null && demandeRepository.existsByStagiaireAndStage(existingStagiaire, demande.getStage())) {
+            throw new RuntimeException("A request for this stage type already exists");
+        }
+
+        // After all validations pass, proceed with saving
+        if (existingStagiaire != null) {
+            if(incomingStagiaire.getEmailPerso2() != null) {
+                existingStagiaire.setAnnee(incomingStagiaire.getAnnee());
+                existingStagiaire.setEmailPerso2(incomingStagiaire.getEmailPerso2());
+                existingStagiaire.setNom2(incomingStagiaire.getNom2());
+                existingStagiaire.setPrenom2(incomingStagiaire.getPrenom2());
+                existingStagiaire.setCin2(incomingStagiaire.getCin2());
+                existingStagiaire.setTel2(incomingStagiaire.getTel2());
+                existingStagiaire.setSpecialite2(incomingStagiaire.getSpecialite2());
+            }
             demande.setStagiaire(existingStagiaire);
-            existingStagiaire.getDemandes().add(demande); 
-
-
-        }else{
-            // Create new stagiaire without credentials
+            existingStagiaire.getDemandes().add(demande);
+        } else {
             Stagiaire newStagiaire = new Stagiaire();
+            // Copy main stagiaire info
             newStagiaire.setNom(incomingStagiaire.getNom());
             newStagiaire.setPrenom(incomingStagiaire.getPrenom());
-            newStagiaire.setNom2(incomingStagiaire.getNom2());
-            newStagiaire.setPrenom2(incomingStagiaire.getPrenom2());      
-            
-            newStagiaire.setType(RoleType.STAGIAIRE);      
-            
-            newStagiaire.setEmailPerso(incomingStagiaire.getEmailPerso());            
-            newStagiaire.setEmailPerso2(incomingStagiaire.getEmailPerso2());
-
-            newStagiaire.setCin(incomingStagiaire.getCin());            
-            newStagiaire.setCin2(incomingStagiaire.getCin2());
+            newStagiaire.setType(RoleType.STAGIAIRE);
+            newStagiaire.setEmailPerso(incomingStagiaire.getEmailPerso());
+            newStagiaire.setCin(incomingStagiaire.getCin());
             newStagiaire.setTel(incomingStagiaire.getTel());
-            newStagiaire.setTel2(incomingStagiaire.getTel2());            
             newStagiaire.setInstitut(incomingStagiaire.getInstitut());
-            newStagiaire.setSpecialite2(incomingStagiaire.getSpecialite2());
-            
             newStagiaire.setNiveau(incomingStagiaire.getNiveau());
             newStagiaire.setAnnee(incomingStagiaire.getAnnee());
             newStagiaire.setSpecialite(incomingStagiaire.getSpecialite());
-            
+
+            // Copy second stagiaire info if it exists
+            if (incomingStagiaire.getNom2() != null && !incomingStagiaire.getNom2().trim().isEmpty()) {
+                newStagiaire.setNom2(incomingStagiaire.getNom2());
+                newStagiaire.setPrenom2(incomingStagiaire.getPrenom2());
+                newStagiaire.setEmailPerso2(incomingStagiaire.getEmailPerso2());
+                newStagiaire.setCin2(incomingStagiaire.getCin2());
+                newStagiaire.setTel2(incomingStagiaire.getTel2());
+                newStagiaire.setSpecialite2(incomingStagiaire.getSpecialite2());
+            }
             
             Stagiaire savedStagiaire = stagiaireRepository.save(newStagiaire);
             demande.setStagiaire(savedStagiaire);
         }
-        
 
         demande.setStatus(DemandeStatus.SOUMISE);
-        // Save demande first
         Demande savedDemande = demandeRepository.save(demande);
 
-        // Upload documents and add to Demande's collection
+        // Upload all documents
         Set<Document> savedDocuments = new HashSet<>();
         for (Map.Entry<DocumentType, MultipartFile> entry : documents.entrySet()) {
             Document doc = documentService.uploadDocument(savedDemande.getId(), entry.getValue(), entry.getKey());
-            savedDemande.getDocuments().add(doc); // Add to existing collection
             savedDocuments.add(doc);
         }
-        
-        // Update Demande's documents collection
-        savedDemande.getDocuments().addAll(savedDocuments);
-        demandeRepository.save(savedDemande); 
 
-        // Now validate
-        validateRequiredDocuments(savedDemande); // No need to re-fetch
+        savedDemande.getDocuments().addAll(savedDocuments);
+        demandeRepository.save(savedDemande);
     }
       
     public void validateDemande(int demandeId, int encadrantId) {
@@ -145,6 +174,8 @@ public class ForumService {
 
         authService.registerStagiaire(demande);
 
+        // Schedule deactivation 48 hours after stageFin date
+        stagiaireService.scheduleDeactivation(demande.getStagiaire().getId(), demande.getFinStage().toInstant());
     }
     
     public void rejectDemande(int demandeId, String rejectionReason) {
@@ -208,25 +239,6 @@ public class ForumService {
 	}
     
 	
-	
-    private void validateRequiredDocuments(Demande demande) throws Exception {
-        Set<DocumentType> required = switch(demande.getStage()) {
-            case PFE,PFA -> Set.of(DocumentType.CV, DocumentType.LETTRE_DE_MOTIVATION, DocumentType.DEMANDE_DE_STAGE);
-            case STAGE_PERFECTIONNEMENT,STAGE_INITIATION -> Set.of(DocumentType.CV, DocumentType.DEMANDE_DE_STAGE);
-            default -> throw new IllegalStateException("Unexpected stage type: " + demande.getStage());
-        };
-
-        Set<DocumentType> submitted = demande.getDocuments()
-                                          .stream()
-                                          .map(Document::getType)
-                                          .collect(Collectors.toSet());
-
-        if(!submitted.containsAll(required)) {
-            Set<DocumentType> missing = new HashSet<>(required);
-            missing.removeAll(submitted);
-            throw new Exception("Missing required documents for " + demande.getStage() + ": " + missing);
-        }
-    }
 
     @Transactional
     private void deleteRejectedDemande(int demandeId) {

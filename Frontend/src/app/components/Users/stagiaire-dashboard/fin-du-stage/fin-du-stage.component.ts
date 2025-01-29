@@ -6,6 +6,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { DocumentType } from '../../../../classes/enums/document-type';
 import { Document } from '../../../../classes/document';
 import { Demande } from '../../../../classes/demande';
+import { DocumentStatus } from '../../../../classes/enums/document-status';
 
 @Component({
   selector: 'app-fin-du-stage',
@@ -24,6 +25,7 @@ export class FinDuStageComponent implements OnInit {
   attestation: Document | null = null;
   selectedRapport: File | null = null;
   selectedBulletin: File | null = null;
+  bulletinRempliStatus: string | null = null;
   private demandeId: number | null = null;
 
   constructor(
@@ -55,6 +57,9 @@ export class FinDuStageComponent implements OnInit {
           this.bulletinRempli = stagiaireDemande.documents.find(
             doc => doc.type === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE
           ) || null;
+          if (this.bulletinRempli) {
+            this.bulletinRempliStatus = this.bulletinRempli.status === DocumentStatus.VALIDE ? 'Validé' : 'Soumis';
+          }
           this.rapport = stagiaireDemande.documents.find(
             doc => doc.type === DocumentType.RAPPORT
           ) || null;

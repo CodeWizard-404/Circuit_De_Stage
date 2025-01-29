@@ -70,10 +70,11 @@
                                 name="email" 
                                 required
                                 placeholder="Entrez l'adresse email"
+                                pattern="^[a-zA-Z0-9._%+-]+@Tunisair\.com\.tn$"
                                 #email="ngModel"
                             >
                             <div class="validation-message" *ngIf="email.invalid && (email.dirty || email.touched)">
-                                Une adresse email valide est requise
+                                Une adresse email valide est requise (doit se terminer par &#64;Tunisair.com.tn)
                             </div>
                         </div>
 
@@ -89,12 +90,13 @@
                                     [(ngModel)]="user.passe" 
                                     name="password" 
                                     required
+                                    minlength="8"
                                     placeholder="Entrez le mot de passe"
                                     #password="ngModel"
                                 >
                             </div>
                             <div class="validation-message" *ngIf="password.invalid && (password.dirty || password.touched)">
-                                Le mot de passe est requis
+                                Le mot de passe doit contenir au moins 8 caractères
                             </div>
                         </div>
 

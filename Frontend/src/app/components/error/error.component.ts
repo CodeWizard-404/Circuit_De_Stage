@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-error',
-  imports: [RouterModule],
+  standalone: true,
+  imports: [RouterModule, MatButtonModule],
   templateUrl: './error.component.html',
-  styleUrl: './error.component.css'
+  styleUrls: ['./error.component.css']
 })
-export class ErrorComponent {
-
-}
+export class ErrorComponent {}

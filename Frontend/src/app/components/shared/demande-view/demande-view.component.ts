@@ -1,5 +1,6 @@
+// Import required modules and services
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DemandeService } from '../../../services/demande.service';
@@ -11,66 +12,69 @@ import { DocumentType } from '../../../classes/enums/document-type';
 import { RoleType } from '../../../classes/enums/role-type';
 import { AuthService } from '../../../services/auth.service';
 import { DocumentStatus } from '../../../classes/enums/document-status';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-demande-view',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './demande-view.component.html',
-  styleUrl: './demande-view.component.css'
+  styleUrls: ['./demande-view.component.css']
 })
 export class DemandeViewComponent implements OnInit {
+  // Basic component properties
   demande?: Demande;
   rejectReason: string = '';
   loading: boolean = true;
   error?: string;
+
+  // Enums and types for the view
   stageTypes = StageType;
   uploadedFile?: File;
   selectedDocumentType?: DocumentType;
   documentTypes = Object.values(DocumentType);
-  demandeStatus = DemandeStatus; // Make enum available to template
+  demandeStatus = DemandeStatus;
   userRole?: RoleType;
   currentFilter: string = '';
+  showRejectForm: { [key: number]: boolean } = {};
 
   constructor(
     private route: ActivatedRoute,
     private demandeService: DemandeService,
     private documentService: DocumentService,
     private authService: AuthService,
-    private router: Router  // Add Router to constructor
+    private router: Router
   ) {
-    // Get the navigation state
+    // Get filter from navigation state
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.currentFilter = navigation.extras.state['filter'];
     }
   }
 
+  // Initialize component data
   ngOnInit(): void {
     this.userRole = this.authService.getCurrentUser()?.type;
-    console.log("role", this.userRole);
-    console.log("user", this.authService.getCurrentUser());
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadDemandeDetails(parseInt(id));
     }
   }
 
+  // Load demande details from server
   private loadDemandeDetails(id: number): void {
     this.demandeService.getDemandeDetails(id).subscribe({
       next: (data) => {
         this.demande = data;
         this.loading = false;
       },
-      error: (err) => {
-        this.error = 'Error loading demande details';
+      error: () => {
+        this.error = 'Erreur lors du chargement des détails de la demande';
         this.loading = false;
       }
     });
   }
 
-
+  // Handle file selection for upload
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -78,40 +82,36 @@ export class DemandeViewComponent implements OnInit {
     }
   }
 
+  // Download document handler
   downloadDocument(documentId: number): void {
     this.documentService.downloadDocument(documentId).subscribe({
       next: (blob) => {
-        // Get the document from the demande object
         const doc = this.demande?.documents.find(d => d.id === documentId);
-        const fileName = doc?.name || `document-${documentId}.pdf`; // Add default extension
+        const fileName = doc?.name || `document-${documentId}.pdf`;
 
-        // Create blob URL with the correct content type
         const url = window.URL.createObjectURL(
-          new Blob([blob], {
-            type: blob.type || 'application/pdf' // Use the blob's type or default to PDF
-          })
+          new Blob([blob], { type: blob.type || 'application/pdf' })
         );
 
-        // Create temporary link and trigger download
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
 
-        // Cleanup
         setTimeout(() => {
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
         }, 100);
       },
       error: (err) => {
-        this.error = 'Error downloading document';
+        this.error = 'Erreur lors du téléchargement du document';
         console.error('Download error:', err);
       }
     });
   }
 
+  // Upload signed document
   uploadSignedDocument(): void {
     if (this.demande && this.uploadedFile && this.selectedDocumentType) {
       this.documentService.uploadDocument(
@@ -122,23 +122,24 @@ export class DemandeViewComponent implements OnInit {
         next: () => {
           this.uploadedFile = undefined;
           this.selectedDocumentType = undefined;
-          this.loadDemandeDetails(this.demande!.id); // Refresh to show new document
+          this.loadDemandeDetails(this.demande!.id);
         },
-        error: (err) => {
-          this.error = 'Error uploading document';
+        error: () => {
+          this.error = 'Erreur lors du téléchargement du document';
         }
       });
     }
   }
 
+  // Validate or reject demande
   validateDemande(): void {
     if (this.demande) {
       this.demandeService.validateDemande(this.demande.id).subscribe({
         next: () => {
           this.demande!.status = DemandeStatus.VALIDE;
         },
-        error: (err) => {
-          this.error = 'Error validating demande';
+        error: () => {
+          this.error = 'Erreur lors de la validation de la demande';
         }
       });
     }
@@ -150,14 +151,14 @@ export class DemandeViewComponent implements OnInit {
         next: () => {
           this.demande!.status = DemandeStatus.REJETEE;
         },
-        error: (err) => {
-          this.error = 'Error rejecting demande';
+        error: () => {
+          this.error = 'Erreur lors du rejet de la demande';
         }
       });
     }
   }
 
-
+  // Document validation handlers
   validateDocument(documentId: number): void {
     this.documentService.validateDocument(documentId).subscribe({
       next: () => {
@@ -166,8 +167,8 @@ export class DemandeViewComponent implements OnInit {
           doc.status = DocumentStatus.VALIDE;
         }
       },
-      error: (err) => {
-        this.error = 'Error validating document';
+      error: () => {
+        this.error = 'Erreur lors de la validation du document';
       }
     });
   }
@@ -181,13 +182,14 @@ export class DemandeViewComponent implements OnInit {
             doc.status = DocumentStatus.REJETE;
           }
         },
-        error: (err) => {
-          this.error = 'Error rejecting document';
+        error: () => {
+          this.error = 'Erreur lors du rejet du document';
         }
       });
     }
   }
 
+  // Get available document types based on user role and filter
   getAvailableDocumentTypes(): DocumentType[] {
     if (!this.userRole) return [];
 
@@ -218,13 +220,16 @@ export class DemandeViewComponent implements OnInit {
         return this.userRole === RoleType.CENTRE_DE_FORMATION ?
           [DocumentType.LAISSER_PASSER, DocumentType.PRISE_DE_SERVICE] : [];
 
+      case 'attestation_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE ?
+        [DocumentType.ATTESTATION] : [];
+
       default:
         return [];
     }
   }
 
-
-
+  // UI visibility control methods
   shouldShowUpload(): boolean {
     if (!this.demande || !this.userRole) return false;
 
@@ -244,8 +249,8 @@ export class DemandeViewComponent implements OnInit {
       case 'convocation_en_attente':
         return this.userRole === RoleType.CENTRE_DE_FORMATION;
 
-      case 'document_en_attente':
-        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+      case 'attestation_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
 
       default:
         return false;
@@ -255,10 +260,9 @@ export class DemandeViewComponent implements OnInit {
   shouldShowValidateDocument(documentType?: DocumentType): boolean {
     if (!this.demande || !this.userRole) return false;
 
-    // Get the latest document of the specified type
     const relevantDoc = this.demande.documents
       .filter(d => d.type === documentType)
-      .sort((a, b) => b.id - a.id)[0];  // Get most recent document
+      .sort((a, b) => b.id - a.id)[0];
 
     switch (this.currentFilter) {
       case 'bulletin_recus':
@@ -290,19 +294,15 @@ export class DemandeViewComponent implements OnInit {
           documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
 
       case 'convocation_recus':
+        const relevantDoc = this.demande.documents.find(d => d.type === DocumentType.CONVOCATION_SIGNER);
         return this.userRole === RoleType.CENTRE_DE_FORMATION &&
-          documentType === DocumentType.CONVOCATION_SIGNER;
+          documentType === DocumentType.CONVOCATION_SIGNER &&
+          relevantDoc?.status !== DocumentStatus.VALIDE;
 
       default:
         return false;
     }
   }
-
-
-
-
-
-
 
   shouldShowValidateDemande(): boolean {
     if (!this.demande || !this.userRole) return false;
@@ -324,5 +324,7 @@ export class DemandeViewComponent implements OnInit {
     return filter === 'demande_en_attente' && this.userRole === RoleType.ENCADRANT;
   }
 
-
+  toggleRejectForm(documentId: number): void {
+    this.showRejectForm[documentId] = !this.showRejectForm[documentId];
+  }
 }

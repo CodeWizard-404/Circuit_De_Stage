@@ -28,7 +28,7 @@
                         <div class="document-info">
                             <h3>Bulletin de Mouvement</h3>
                             <span class="status-badge" [class.available]="bulletinRempli">
-                                {{ bulletinRempli ? 'Soumis' : 'En attente' }}
+                                {{ bulletinRempli ? bulletinRempliStatus : 'En attente' }}
                             </span>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                                    id="bulletin-upload">
                             <label for="bulletin-upload">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                Choisir le bulletin rempli
+                                Bulletin rempli
                             </label>
                             <button class="action-button upload"
                                     [disabled]="!selectedBulletin"

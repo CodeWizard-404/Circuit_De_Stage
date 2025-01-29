@@ -1,1 +1,76 @@
-<p>centre-formation-dashboard works!</p>
+<!-- centre-formation-dashboard.component.html -->
+<div class="dashboard-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+      <!-- Keep existing loading spinner -->
+    </div>
+  
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="!isLoading && !error" class="dashboard-content">
+      <!-- Header Section -->
+      <div class="welcome-section">
+        <h1>
+          <i class="fas fa-university"></i>
+          Training Center Dashboard
+        </h1>
+        <p>Welcome {{ admin?.prenom }} {{ admin?.nom }}</p>
+      </div>
+  
+      <!-- Key Metrics -->
+      <div class="stats-row">
+
+  
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ documentStats.validated }}</h3>
+            <p>Validated Documents</p>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ trainingStats.length }}</h3>
+            <p>Active Programs</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Main Content -->
+      <div class="dashboard-grid">
+        <!-- Document Overview -->
+        <div class="dashboard-card">
+          <h2><i class="fas fa-file-alt"></i> Document Status</h2>
+          <div class="status-bars">
+            <div class="status-item">
+              <span>Validation Rate</span>
+              <div class="progress-bar">
+                <div class="progress-fill" 
+                     [style.width.%]="(documentStats.validated / documentStats.total * 100) || 0">
+                </div>
+              </div>
+              <span>{{ (documentStats.validated / documentStats.total * 100 || 0) | number:'1.0-0' }}%</span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Program Distribution -->
+        <div class="dashboard-card">
+          <h2><i class="fas fa-project-diagram"></i> Program Distribution</h2>
+          <div class="program-list">
+            <div *ngFor="let program of trainingStats" class="program-item">
+              <span>{{ program[0] }}</span>
+              <span>{{ program[1] }} interns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

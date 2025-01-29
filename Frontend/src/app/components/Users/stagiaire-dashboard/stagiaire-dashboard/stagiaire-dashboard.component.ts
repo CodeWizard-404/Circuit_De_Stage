@@ -65,4 +65,18 @@ export class StagiaireDashboardComponent implements OnInit {
     const elapsed = today.getTime() - start.getTime();
     return Math.min(100, Math.max(0, Math.round((elapsed / total) * 100)));
   }
+
+  getFullName(): string {
+    if (this.stagiaire?.nom2) {
+      return `${this.stagiaire.nom} et ${this.stagiaire.nom2}`;
+    }
+    return this.stagiaire?.nom + ' ' + this.stagiaire?.prenom || '';
+  }
+
+  getSecondaryFullName(): string {
+    if (this.stagiaire?.nom2 && this.stagiaire?.prenom2) {
+      return `${this.stagiaire.prenom2} ${this.stagiaire.nom2}`;
+    }
+    return '';
+  }
 }

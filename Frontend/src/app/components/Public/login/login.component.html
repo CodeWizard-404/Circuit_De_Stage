@@ -1,48 +1,58 @@
+<!-- Main login container -->
 <div class="login-container">
+    <!-- Login card with logo and form -->
     <div class="auth-card">
+        <!-- Logo and welcome message section -->
         <div class="brand-section">
-            <img src="assets/logo.png" alt="Tunisair Logo" class="brand-logo">
-            <h1>Welcome Back</h1>
-            <p>Log in to access your internship portal</p>
+            <img src="assets/logo.png" alt="Logo Tunisair" class="brand-logo">
+            <h1>Bienvenue</h1>
+            <p>Connectez-vous à votre portail de stage</p>
         </div>
 
+        <!-- Login form -->
         <div class="form-section">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <!-- Email input field -->
                 <div class="form-group">
                     <div class="input-wrapper">
                         <i class="fas fa-envelope"></i>
                         <input formControlName="email" type="email" placeholder="Email" class="custom-input">
                     </div>
+                    <!-- Email validation messages -->
                     <div class="error-messages">
                         <span *ngIf="loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched">
-                            Email is required
+                            Email requis
                         </span>
                         <span *ngIf="loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched">
-                            Invalid email format
+                            Format d'email invalide
                         </span>
                     </div>
                 </div>
 
+                <!-- Password input field -->
                 <div class="form-group">
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
-                        <input formControlName="password" type="password" placeholder="Password" class="custom-input">
+                        <input formControlName="password" type="password" placeholder="Mot de passe" class="custom-input">
                     </div>
+                    <!-- Password validation messages -->
                     <div class="error-messages">
                         <span *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched">
-                            Password is required
+                            Mot de passe requis
                         </span>
                     </div>
                 </div>
 
+                <!-- Login button and forgot password link -->
                 <div class="actions">
                     <button type="submit" [disabled]="!loginForm.valid" class="submit-btn">
-                        <span>Login</span>
+                        <span>Se connecter</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
-                    <a routerLink="/forgot-password" class="forgot-link">Forgot Password?</a>
+                    <a routerLink="/forgot-password" class="forgot-link">Mot de passe oublié?</a>
                 </div>
 
+                <!-- Error message display -->
                 <div *ngIf="errorMessage" class="error-alert">
                     <i class="fas fa-exclamation-circle"></i>
                     <span>{{ errorMessage }}</span>

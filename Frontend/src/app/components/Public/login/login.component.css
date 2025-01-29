@@ -28,7 +28,7 @@ mat-form-field {
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .auth-card {
@@ -37,13 +37,11 @@ mat-form-field {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 450px;
-    overflow: hidden;
-    position: relative;
 }
 
 .brand-section {
     background: linear-gradient(135deg, #ffc6cc6b 0%, #fff1f2 100%);
-    padding: 2.5rem 2rem;
+    padding: 2rem;
     text-align: center;
 }
 
@@ -56,12 +54,10 @@ mat-form-field {
     color: #D4192C;
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    font-weight: 600;
 }
 
 .brand-section p {
     color: #666;
-    font-size: 1rem;
 }
 
 .form-section {
@@ -74,7 +70,6 @@ mat-form-field {
 
 .input-wrapper {
     position: relative;
-    transition: all 0.3s ease;
 }
 
 .input-wrapper i {
@@ -83,7 +78,6 @@ mat-form-field {
     top: 50%;
     transform: translateY(-50%);
     color: #D4192C;
-    font-size: 1.1rem;
 }
 
 .custom-input {
@@ -91,8 +85,6 @@ mat-form-field {
     padding: 15px 15px 15px 45px;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
     background: #f8f9fa;
 }
 
@@ -114,6 +106,7 @@ mat-form-field {
     justify-content: space-between;
     align-items: center;
     margin-top: 2rem;
+    gap: 1rem;
 }
 
 .submit-btn {
@@ -122,10 +115,8 @@ mat-form-field {
     border: none;
     padding: 15px 30px;
     border-radius: 12px;
-    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -145,8 +136,6 @@ mat-form-field {
 .forgot-link {
     color: #666;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
 }
 
 .forgot-link:hover {
@@ -171,7 +160,7 @@ mat-form-field {
     }
 
     .brand-section {
-        padding: 2rem 1.5rem;
+        padding: 2rem;
     }
 
     .form-section {
@@ -180,7 +169,6 @@ mat-form-field {
 
     .actions {
         flex-direction: column;
-        gap: 1rem;
     }
 
     .submit-btn {

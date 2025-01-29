@@ -72,7 +72,7 @@ public class DocumentController {
     	}
 
     @PutMapping("/{id}/reject")
-    @PreAuthorize("hasAnyRole('ENCADRANT', 'CENTRE_DE_FORMATION')")
+    @PreAuthorize("hasAnyRole('SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
     public ResponseEntity<Void> rejectDocument(@PathVariable("id") int id, 
                                              @RequestBody String reason) {
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -1,12 +1,9 @@
 .sidebar {
     padding-top: 20px;
-    width: 250px;
     height: 100%;
     background: #ffe4e4;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- 
 }
-
 
 .logo {
     text-align: center;
@@ -24,7 +21,7 @@
     gap: 1rem;
     padding: 1rem;
     background: #fffbfb;
-    margin: 0rem 1rem 1rem 1rem;
+    margin: 0 1rem 1rem;
     border-radius: 12px;
     border: 1px solid #ff6d6d;
 }
@@ -64,7 +61,6 @@
 }
 
 .sidebar-nav {
-    flex: 1;
     padding: 0.5rem;
     overflow-y: auto;
 }
@@ -87,7 +83,7 @@
     text-decoration: none;
     border-radius: 8px;
     transition: all 0.3s ease;
-    position: relative;
+    margin-bottom: 0.25rem;
 }
 
 .sidebar-nav a:hover {
@@ -128,8 +124,6 @@
     border-top: 1px solid #f0f0f0;
 }
 
-
-
 /* Scrollbar Styling */
 .sidebar-nav::-webkit-scrollbar {
     width: 4px;
@@ -146,6 +140,137 @@
 
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+.menu-group {
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.menu-group-header {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    color: #502c2c;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    background-color: #ffffff;
+}
+
+.menu-group-header:hover {
+    background: #ffffff;
+    color: #D4192C;
+}
+
+.menu-group-header .toggle-icon {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.menu-group-header.expanded .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: rgb(255, 255, 255);
+}
+
+.submenu.expanded {
+    max-height: 500px;
+}
+
+.submenu-item {
+    padding: 0.6rem 1rem 0.6rem 3rem;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.submenu-item:before {
+    content: '';
+    position: absolute;
+    left: 2.4rem;
+    width: 100%;
+    height: 100%;
+    background: #ff4d4d33;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.submenu-item:hover:before {
+    opacity: 1;
+}
+
+.submenu-item .nav-icon {
+    font-size: 0.8rem;
+    width: 16px;
+    margin-right: 0.8rem;
+    color: #666;
+}
+
+.menu-item, .submenu-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-item:hover, .submenu-item:hover {
+    background: #fff1f2;
+    color: #D4192C;
+}
+
+.menu-item.active, .submenu-item.active {
+    background: #D4192C;
+    color: white;
+}
+
+.menu-item.active .nav-icon, 
+.submenu-item.active .nav-icon {
+    color: white;
+}
+
+/* Add ripple effect */
+.menu-item:after,
+.submenu-item:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(212, 25, 44, 0.3);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.menu-item:focus:not(:active)::after,
+.submenu-item:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(100, 100);
+        opacity: 0;
+    }
 }
 
 @media (max-width: 768px) {

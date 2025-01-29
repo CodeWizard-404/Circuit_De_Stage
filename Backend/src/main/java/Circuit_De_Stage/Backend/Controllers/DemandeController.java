@@ -95,12 +95,13 @@ public class DemandeController {
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION', 'STAGIAIRE')")
+    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
     public ResponseEntity<Demande> getDemandeInfo(@PathVariable("id") int id) {
         return ResponseEntity.ok(forumService.getStagiaireInfo(id));
     }
 
     @PutMapping("/{documentId}/seen")
+    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
     public ResponseEntity<Void> markAsSeen(@PathVariable int documentId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
@@ -109,6 +110,7 @@ public class DemandeController {
     }
 
     @GetMapping("/{documentId}/status")
+    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
     public ResponseEntity<Boolean> getSeenStatus(@PathVariable int documentId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
