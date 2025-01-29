@@ -1,156 +1,196 @@
-<div class="demande-view-container">
-  <div *ngIf="loading" class="loading">Loading...</div>
-  <div *ngIf="error" class="error">{{ error }}</div>
+<div class="demande-view-wrapper">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading request details...</p>
+  </div>
 
-  <div *ngIf="demande && !loading" class="demande-details">
-    <div class="section personal-info">
-      <h3>Personal Information</h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>Name:</label>
-          <span>{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</span>
-        </div>
-        <div class="info-item">
-          <label>CIN:</label>
-          <span>{{ demande.stagiaire.cin }}</span>
-        </div>
-        <div class="info-item">
-          <label>Email:</label>
-          <span>{{ demande.stagiaire.emailPerso }}</span>
-        </div>
-        <div class="info-item">
-          <label>Phone:</label>
-          <span>{{ demande.stagiaire.tel }}</span>
-        </div>
-        <div class="info-item">
-          <label>Institute:</label>
-          <span>{{ demande.stagiaire.institut }}</span>
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="demande && !loading" class="demande-content">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-content">
+        <h1>Request Details</h1>
+        <div class="status-badge" [ngClass]="demande.status.toLowerCase()">
+          {{ demande.status }}
         </div>
       </div>
+      <p class="subtitle">Request ID: #{{ demande.id }}</p>
     </div>
 
-    <div class="section internship-info">
-      <h3>Internship Information</h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>Type:</label>
-          <span>{{ demande.stage }}</span>
+    <!-- Main Grid -->
+    <div class="content-grid">
+      <!-- Personal Information Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <i class="fas fa-user"></i>
+          <h2>Personal Information</h2>
         </div>
-        <div class="info-item">
-          <label>Specialty:</label>
-          <span>{{ demande.stagiaire.specialite }}</span>
-        </div>
-        <div class="info-item">
-          <label>Level:</label>
-          <span>{{ demande.stagiaire.niveau }}</span>
-        </div>
-        <div class="info-item">
-          <label>Year:</label>
-          <span>{{ demande.stagiaire.annee }}</span>
-        </div>
-        <div class="info-item">
-          <label>Start Date:</label>
-          <span>{{ demande.debutStage | date }}</span>
-        </div>
-        <div class="info-item">
-          <label>End Date:</label>
-          <span>{{ demande.finStage | date }}</span>
-        </div>
-        <div class="info-item">
-          <label>Status:</label>
-          <span [class]="'status-' + demande.status.toLowerCase()">{{ demande.status }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="section documents">
-      <h3>Documents</h3>
-      <div class="documents-grid">
-        <div *ngFor="let doc of demande.documents" class="document-item">
-          <span class="doc-name">{{ doc.type }}</span>
-          <div class="doc-actions">
-            <button (click)="downloadDocument(doc.id)" class="download-btn">
-              Download
-            </button>
-            <button *ngIf="shouldShowValidateDocument(doc.type)" 
-                    (click)="validateDocument(doc.id)" 
-                    class="validate-btn">
-              Validate
-            </button>
+        <div class="card-content">
+          <div class="info-group">
+            <label>Full Name</label>
+            <p>{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</p>
           </div>
-          <span [class]="'status-' + doc.status.toLowerCase()">{{ doc.status }}</span>
-        </div>
-      </div>
-
-      <div *ngIf="shouldShowUpload()" class="upload-validation-section">
-        <div class="upload-controls">
-          <select 
-            [(ngModel)]="selectedDocumentType"
-            class="document-type-select"
-          >
-            <option [ngValue]="undefined">Select document type...</option>
-            <option *ngFor="let type of getAvailableDocumentTypes()" [value]="type">
-              {{type}}
-            </option>
-          </select>
-          <input 
-            type="file" 
-            (change)="onFileSelected($event)"
-            accept=".pdf,.doc,.docx"
-          >
-          <button 
-            [disabled]="!uploadedFile || !selectedDocumentType" 
-            (click)="uploadSignedDocument()"
-            class="upload-btn"
-          >
-            Upload Document
-          </button>
-        </div>
-        
-        <div class="validation-controls" *ngIf="shouldShowValidateDocument(selectedDocumentType)">
-          <button 
-            (click)="validateDocument(demande.documents[demande.documents.length-1].id)" 
-            class="validate-btn"
-          >
-            Validate Document
-          </button>
-          <div class="reject-section">
-            <textarea 
-              [(ngModel)]="rejectReason" 
-              placeholder="Enter reason for rejection..."
-              rows="3"
-            ></textarea>
-            <button 
-              class="reject-btn" 
-              [disabled]="!rejectReason"
-              (click)="rejectDocument(demande.documents[demande.documents.length-1].id)"
-            >
-              Reject Document
-            </button>
+          <div class="info-group">
+            <label>CIN</label>
+            <p>{{ demande.stagiaire.cin }}</p>
+          </div>
+          <div class="info-group">
+            <label>Contact</label>
+            <div class="contact-info">
+              <p><i class="fas fa-envelope"></i> {{ demande.stagiaire.emailPerso }}</p>
+              <p><i class="fas fa-phone"></i> {{ demande.stagiaire.tel }}</p>
+            </div>
+          </div>
+          <div class="info-group">
+            <label>Institute</label>
+            <p>{{ demande.stagiaire.institut }}</p>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="actions" *ngIf="demande.status === demandeStatus.SOUMISE">
-      <button class="validate-btn" 
-              [disabled]="!shouldShowValidateDemande()"
-              (click)="validateDemande()">
-        Validate Application
-      </button>
-      <div class="reject-section">
-        <textarea 
-          [(ngModel)]="rejectReason" 
-          placeholder="Enter reason for rejection..."
-          rows="3"
-        ></textarea>
-        <button 
-          class="reject-btn" 
-          [disabled]="!rejectReason"
-          (click)="rejectDemande()"
-        >
-          Reject Application
-        </button>
+      <!-- Internship Details Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <i class="fas fa-briefcase"></i>
+          <h2>Internship Details</h2>
+        </div>
+        <div class="card-content">
+          <div class="info-grid">
+            <div class="info-group">
+              <label>Type</label>
+              <p>{{ demande.stage }}</p>
+            </div>
+            <div class="info-group">
+              <label>Specialty</label>
+              <p>{{ demande.stagiaire.specialite }}</p>
+            </div>
+            <div class="info-group">
+              <label>Level</label>
+              <p>{{ demande.stagiaire.niveau }}</p>
+            </div>
+            <div class="info-group">
+              <label>Year</label>
+              <p>{{ demande.stagiaire.annee }}</p>
+            </div>
+          </div>
+          <div class="date-range">
+            <div class="date-item">
+              <i class="fas fa-calendar-alt"></i>
+              <div>
+                <label>Start Date</label>
+                <p>{{ demande.debutStage | date }}</p>
+              </div>
+            </div>
+            <div class="date-separator"></div>
+            <div class="date-item">
+              <i class="fas fa-calendar-check"></i>
+              <div>
+                <label>End Date</label>
+                <p>{{ demande.finStage | date }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Section -->
+      <div class="documents-card">
+        <div class="card-header">
+          <i class="fas fa-file-alt"></i>
+          <h2>Documents</h2>
+        </div>
+        <div class="card-content">
+          <div class="documents-grid">
+            <div *ngFor="let doc of demande.documents" class="document-item" 
+                 [ngClass]="doc.status.toLowerCase()">
+              <div class="document-info">
+                <i class="fas fa-file-pdf"></i>
+                <div class="document-details">
+                  <h3>{{ doc.type }}</h3>
+                  <span class="document-status">{{ doc.status }}</span>
+                </div>
+              </div>
+              <div class="document-actions">
+                <button (click)="downloadDocument(doc.id)" class="action-button download">
+                  <i class="fas fa-download"></i>
+                  Download
+                </button>
+                <button *ngIf="shouldShowValidateDocument(doc.type)" 
+                        (click)="validateDocument(doc.id)" 
+                        class="action-button validate">
+                  <i class="fas fa-check"></i>
+                  Validate
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Section -->
+          <div *ngIf="shouldShowUpload()" class="upload-section">
+            <h3>Upload New Document</h3>
+            <div class="upload-form">
+              <select [(ngModel)]="selectedDocumentType" class="document-select">
+                <option [ngValue]="undefined">Select document type...</option>
+                <option *ngFor="let type of getAvailableDocumentTypes()" [value]="type">
+                  {{type}}
+                </option>
+              </select>
+              <div class="file-upload">
+                <input type="file" 
+                       (change)="onFileSelected($event)"
+                       accept=".pdf,.doc,.docx"
+                       id="file-input">
+                <label for="file-input" class="file-label">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  Choose File
+                </label>
+                <span class="file-name">{{ uploadedFile?.name || 'No file chosen' }}</span>
+              </div>
+              <button [disabled]="!uploadedFile || !selectedDocumentType" 
+                      (click)="uploadSignedDocument()"
+                      class="action-button upload">
+                <i class="fas fa-upload"></i>
+                Upload Document
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Section -->
+      <div *ngIf="demande.status === demandeStatus.SOUMISE" class="actions-card">
+        <div class="card-header">
+          <i class="fas fa-tasks"></i>
+          <h2>Actions</h2>
+        </div>
+        <div class="card-content">
+          <div class="actions-grid">
+            <button [disabled]="!shouldShowValidateDemande()"
+                    (click)="validateDemande()"
+                    class="action-button validate-large">
+              <i class="fas fa-check-circle"></i>
+              Validate Application
+            </button>
+            <div class="reject-form">
+              <textarea [(ngModel)]="rejectReason" 
+                        placeholder="Enter reason for rejection..."
+                        rows="3"></textarea>
+              <button [disabled]="!rejectReason"
+                      (click)="rejectDemande()"
+                      class="action-button reject-large">
+                <i class="fas fa-times-circle"></i>
+                Reject Application
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

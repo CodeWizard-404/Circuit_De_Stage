@@ -1,29 +1,168 @@
-<div class="users-add">
-  <h2>Add User</h2>
-  <form (ngSubmit)="addUser()">
-    <label for="name">Name:</label>
-    <input type="text" id="name" [(ngModel)]="user.nom" name="name" required>
+<div class="users-add-container">
+    <div class="content-wrapper">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1>
+                <i class="fas fa-user-plus"></i>
+                Ajouter un Utilisateur
+            </h1>
+            <p>Créer un nouveau compte utilisateur</p>
+        </div>
 
-    <label for="lastname">LastName:</label>
-    <input type="text" id="lastname" [(ngModel)]="user.prenom" name="lastname" required>
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" [(ngModel)]="user.email" name="email" required>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" [(ngModel)]="user.passe" name="password" required>
+        <!-- Form Card -->
+        <div class="form-card">
+            <form (ngSubmit)="addUser()" #userForm="ngForm">
+                <div class="form-grid">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Informations Personnelles</h3>
+                        <div class="form-group">
+                            <label for="name">
+                                <i class="fas fa-user-tag"></i>
+                                Nom
+                            </label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                [(ngModel)]="user.nom" 
+                                name="name" 
+                                required
+                                placeholder="Entrez le nom"
+                                #name="ngModel"
+                            >
+                            <div class="validation-message" *ngIf="name.invalid && (name.dirty || name.touched)">
+                                Le nom est requis
+                            </div>
+                        </div>
 
-    <label for="confirmPassword">Confirm Password:</label>
-    <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+                        <div class="form-group">
+                            <label for="lastname">
+                                <i class="fas fa-user-tag"></i>
+                                Prénom
+                            </label>
+                            <input 
+                                type="text" 
+                                id="lastname" 
+                                [(ngModel)]="user.prenom" 
+                                name="lastname" 
+                                required
+                                placeholder="Entrez le prénom"
+                                #lastname="ngModel"
+                            >
+                            <div class="validation-message" *ngIf="lastname.invalid && (lastname.dirty || lastname.touched)">
+                                Le prénom est requis
+                            </div>
+                        </div>
+                    </div>
 
-    <label for="role">Role:</label>
-    <select id="role" [(ngModel)]="user.type" name="role" required>
-      <option value="">Select a role</option>
-      <option *ngFor="let role of roles" [value]="role">
-        {{formatRoleName(role)}}
-      </option>
-    </select>
-    
-    <button type="submit">Add User</button>
-  </form>
+                    <!-- Account Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-lock"></i> Informations du Compte</h3>
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                [(ngModel)]="user.email" 
+                                name="email" 
+                                required
+                                placeholder="Entrez l'adresse email"
+                                #email="ngModel"
+                            >
+                            <div class="validation-message" *ngIf="email.invalid && (email.dirty || email.touched)">
+                                Une adresse email valide est requise
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="fas fa-key"></i>
+                                Mot de passe
+                            </label>
+                            <div class="password-input">
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    [(ngModel)]="user.passe" 
+                                    name="password" 
+                                    required
+                                    placeholder="Entrez le mot de passe"
+                                    #password="ngModel"
+                                >
+                            </div>
+                            <div class="validation-message" *ngIf="password.invalid && (password.dirty || password.touched)">
+                                Le mot de passe est requis
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">
+                                <i class="fas fa-key"></i>
+                                Confirmer le mot de passe
+                            </label>
+                            <div class="password-input">
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    [(ngModel)]="confirmPassword" 
+                                    name="confirmPassword" 
+                                    required
+                                    placeholder="Confirmez le mot de passe"
+                                    #confirmPwd="ngModel"
+                                >
+                            </div>
+                            <div class="validation-message" *ngIf="user.passe !== confirmPassword && confirmPwd.dirty">
+                                Les mots de passe ne correspondent pas
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role Selection -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-shield"></i> Rôle Utilisateur</h3>
+                        <div class="form-group">
+                            <label for="role">
+                                <i class="fas fa-users-cog"></i>
+                                Rôle
+                            </label>
+                            <select 
+                                id="role" 
+                                [(ngModel)]="user.type" 
+                                name="role" 
+                                required
+                                #role="ngModel"
+                            >
+                                <option value="">Sélectionner un rôle</option>
+                                <option *ngFor="let role of roles" [value]="role">
+                                    {{formatRoleName(role)}}
+                                </option>
+                            </select>
+                            <div class="validation-message" *ngIf="role.invalid && (role.dirty || role.touched)">
+                                Le rôle est requis
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" routerLink="/users-list">
+                        <i class="fas fa-times"></i>
+                        Annuler
+                    </button>
+                    <button 
+                        type="submit" 
+                        class="btn-primary" 
+                        [disabled]="!userForm.form.valid"
+                    >
+                        <i class="fas fa-user-plus"></i>
+                        Créer l'utilisateur
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

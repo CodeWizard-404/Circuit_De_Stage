@@ -8,6 +8,7 @@ import { RoleType } from '../../../../classes/enums/role-type';
 
 @Component({
   selector: 'app-users-management',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './users-management.component.html',
   styleUrls: ['./users-management.component.css']
@@ -17,6 +18,7 @@ export class UsersManagementComponent implements OnInit {
   searchTerm: string = '';
   user: User | null = null;
   roles = Object.values(RoleType); 
+  confirmPassword: string = '';
   
   constructor(
     private userService: UserService,
@@ -36,6 +38,10 @@ export class UsersManagementComponent implements OnInit {
 
   saveUser(): void {
     if (this.user) {
+      if (this.user.passe !== this.confirmPassword) {
+        // Handle password mismatch
+        return;
+      }
       this.userService.updateUser(this.user).subscribe(() => {
         this.router.navigate(['/service-administrative-dashboard']);
       });
@@ -49,5 +55,5 @@ export class UsersManagementComponent implements OnInit {
       });
     }
   }
-  }
+}
 

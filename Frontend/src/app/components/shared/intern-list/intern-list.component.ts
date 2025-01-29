@@ -18,6 +18,7 @@ import { Document } from '../../../classes/document';
   selector: 'app-intern-list',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  // Add FontAwesome to your project if not already added
   templateUrl: './intern-list.component.html',
   styleUrls: ['./intern-list.component.css']
 })

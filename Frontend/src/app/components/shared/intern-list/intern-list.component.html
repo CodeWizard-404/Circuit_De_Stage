@@ -1,40 +1,101 @@
 <div class="intern-list-container">
-    <div class="filters">
-        <input [(ngModel)]="searchName" (ngModelChange)="onSearchChange()" placeholder="Search by name" />
+    <div class="header-section">
+        <div class="title-section">
+            <h1><i class="fas fa-user-graduate"></i> Liste des Stagiaires</h1>
+            <p>Gérez et suivez tous les stagiaires</p>
+        </div>
 
-        <select [(ngModel)]="selectedStageType" (ngModelChange)="onFilterChange()">
-            <option value="">Select Stage Type</option>
-            <option *ngFor="let type of stageTypes" [value]="type">{{ type }}</option>
-        </select>
+        <div class="filters-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input 
+                    [(ngModel)]="searchName" 
+                    (ngModelChange)="onSearchChange()" 
+                    placeholder="Rechercher un stagiaire..."
+                />
+            </div>
 
-        <select [(ngModel)]="selectedYear" (ngModelChange)="onFilterChange()">
-            <option value="">Select Year</option>
-            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-        </select>
+            <div class="filter-group">
+                <div class="filter-select">
+                    <i class="fas fa-filter"></i>
+                    <select [(ngModel)]="selectedStageType" (ngModelChange)="onFilterChange()">
+                        <option value="">Type de Stage</option>
+                        <option *ngFor="let type of stageTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+
+                <div class="filter-select">
+                    <i class="fas fa-calendar"></i>
+                    <select [(ngModel)]="selectedYear" (ngModelChange)="onFilterChange()">
+                        <option value="">Année</option>
+                        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <table class="intern-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Stage Type</th>
-                <th>Date Debut</th>
-                <th>Niveau</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let demande of filtered">
-                <td>{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</td>
-                <td>{{ demande.stage }}</td>
-                <td>{{ demande.debutStage | date }}</td>
-                <td>{{ demande.stagiaire.niveau }}</td>
-                <td>
-                    <button (click)="viewInternDetails(demande.id)">View</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <div class="table-header">
+            <div class="refresh-button" (click)="loadInterns()">
+                <i class="fas fa-sync-alt"></i>
+                Actualiser
+            </div>
+            <div class="results-count">
+                {{ filtered.length }} stagiaires trouvés
+            </div>
+        </div>
 
-    <button (click)="loadInterns()">Refresh</button>
+        <div class="responsive-table">
+            <table class="intern-table">
+                <thead>
+                    <tr>
+                        <th>Stagiaire</th>
+                        <th>Type de Stage</th>
+                        <th>Date de Début</th>
+                        <th>Niveau</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let demande of filtered">
+                        <td class="intern-info">
+                            <div class="intern-avatar">
+                                {{ demande.stagiaire.nom.charAt(0) }}{{ demande.stagiaire.prenom.charAt(0) }}
+                            </div>
+                            <div class="intern-details">
+                                <span class="intern-name">{{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</span>
+                                <span class="intern-email">{{ demande.stagiaire.email }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="stage-type-badge">{{ demande.stage }}</span>
+                        </td>
+                        <td>
+                            <div class="date-info">
+                                <i class="fas fa-calendar-alt"></i>
+                                {{ demande.debutStage | date:'dd MMM yyyy' }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="niveau-badge">{{ demande.stagiaire.niveau }}</span>
+                        </td>
+                        <td>
+                            <button class="action-button" (click)="viewInternDetails(demande.id)">
+                                <i class="fas fa-eye"></i>
+                                <span>Voir détails</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="filtered.length === 0" class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>Aucun stagiaire trouvé</h3>
+            <p>Essayez de modifier vos filtres de recherche</p>
+        </div>
+    </div>
 </div>
