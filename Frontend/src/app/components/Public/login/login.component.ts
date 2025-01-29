@@ -45,9 +45,7 @@ export class LoginComponent {
       this.authService.login(email, password).subscribe({
         next: (response) => {
           console.log('Login Success:', response);
-          this.router.navigate([""]).then(() => {
-            window.location.reload();
-          });
+          this.authService.navigateBasedOnRole();
         },
         error: (err) => {
           console.error('Login Error:', err);

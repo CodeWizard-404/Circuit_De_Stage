@@ -1,1 +1,124 @@
-<p>stagiaire-dashboard works!</p>
+<div class="dashboard-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="dashboard-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1>Bonjour, {{ stagiaire?.prenom }} {{ stagiaire?.nom }}</h1>
+            <p>Bienvenue dans votre espace stagiaire Tunisair</p>
+        </div>
+
+        <!-- Stats Cards Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getDaysRemaining() }}</h3>
+                    <p>Jours restants</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getStageProgress() }}%</h3>
+                    <p>Progression</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ demande?.documents?.length || 0 }}</h3>
+                    <p>Documents</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="dashboard-grid">
+            <!-- Quick Actions Card -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-bolt"></i> Actions rapides</h2>
+                <div class="actions-grid">
+                    <a [routerLink]="['/document']" class="action-item">
+                        <i class="fas fa-folder"></i>
+                        <span>Documents</span>
+                    </a>
+                    <a [routerLink]="['/convocation']" class="action-item">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Convocation</span>
+                    </a>
+                    <a [routerLink]="['/fin-du-stage']" class="action-item">
+                        <i class="fas fa-flag-checkered"></i>
+                        <span>Fin du stage</span>
+                    </a>
+                    <a [routerLink]="['/demande']" class="action-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Suivi</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stage Information Card -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-info-circle"></i> Information du stage</h2>
+                <div class="info-content">
+                    <div class="info-item">
+                        <span class="label">Type de stage</span>
+                        <span class="value">{{ demande?.stage }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Début</span>
+                        <span class="value">{{ demande?.debutStage | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Fin</span>
+                        <span class="value">{{ demande?.finStage | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Statut</span>
+                        <span class="status-badge">{{ demande?.status }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information Card -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+                <div class="info-content">
+                    <div class="info-item">
+                        <span class="label">CIN</span>
+                        <span class="value">{{ stagiaire?.cin }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Email</span>
+                        <span class="value">{{ stagiaire?.email }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Institut</span>
+                        <span class="value">{{ stagiaire?.institut }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Spécialité</span>
+                        <span class="value">{{ stagiaire?.specialite }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -14,7 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { NgIf, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RoleType } from '../../../classes/enums/role-type';
 import { DemandeStatus } from '../../../classes/enums/demande-status';
 
@@ -22,6 +22,7 @@ import { DemandeStatus } from '../../../classes/enums/demande-status';
   selector: 'app-intern-form',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatStepperModule,
     MatFormFieldModule,
@@ -30,9 +31,7 @@ import { DemandeStatus } from '../../../classes/enums/demande-status';
     MatDatepickerModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatIconModule,
-    NgIf,
-    NgFor
+    MatIconModule
   ],
   templateUrl: './intern-form.component.html',
   styleUrls: ['./intern-form.component.css']
@@ -43,9 +42,11 @@ export class InternFormComponent {
   stageTypes = Object.values(StageType);
   documentsMap = new Map<DocumentType, File>();
   requiredDocuments: DocumentType[] = [];
+  errorMessage: string = '';
   internForm: FormGroup;
   personalInfo: FormGroup;
   internshipInfo: FormGroup;
+  institueInfo: FormGroup;
   
   constructor(
     private fb: FormBuilder,
@@ -59,17 +60,23 @@ export class InternFormComponent {
       cin: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
       emailPerso: ['', [Validators.required, Validators.email]],
       tel: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
-      institut: ['', Validators.required],
-      niveau: ['', Validators.required],
-      annee: ['', Validators.required],
-      specialite: ['', Validators.required],
+
       
       nom2: [''],
       prenom2: [''],
       cin2: ['',Validators.pattern(/^\d{8}$/)],
       emailPerso2: ['', Validators.email],
-      tel2: ['',Validators.pattern(/^\d{8}$/)],
+      tel2: ['',Validators.pattern(/^\d{8}$/)]
+    });
+
+    this.institueInfo = this.fb.group({
+      institut: ['', Validators.required],
+      niveau: ['', Validators.required],
+      annee: ['', Validators.required],
+      specialite: ['', Validators.required],
+
       specialite2: ['']
+
     });
 
     this.internshipInfo = this.fb.group({
@@ -80,6 +87,7 @@ export class InternFormComponent {
 
     this.internForm = this.fb.group({
       personalInfo: this.personalInfo,
+      institueInfo: this.institueInfo,
       internshipInfo: this.internshipInfo
     });
   }
@@ -111,16 +119,16 @@ export class InternFormComponent {
         formValue.personalInfo.emailPerso!,
         Number(formValue.personalInfo.cin!),
         Number(formValue.personalInfo.tel!),
-        formValue.personalInfo.institut!,
-        formValue.personalInfo.niveau!,
-        formValue.personalInfo.annee!,
-        formValue.personalInfo.specialite!,
+        formValue.institueInfo.institut!,
+        formValue.institueInfo.niveau!,
+        formValue.institueInfo.annee!,
+        formValue.institueInfo.specialite!,
         formValue.personalInfo.emailPerso2,
         formValue.personalInfo.nom2,
         formValue.personalInfo.prenom2,
         Number(formValue.personalInfo.cin2),
         Number(formValue.personalInfo.tel2),
-        formValue.personalInfo.specialite2
+        formValue.institueInfo.specialite2
       );
 
       // Create Demande
@@ -149,7 +157,10 @@ export class InternFormComponent {
       // Submit the form
       this.demandeService.submitDemande(formData).subscribe({
         next: () => this.router.navigate(['/confirmation']),
-        error: (err) => console.error('Submission error:', err),
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'A request for this stage type exists.';
+          console.error('Submission error:', err);
+        },
       });
     }
   }

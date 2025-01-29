@@ -17,3 +17,10 @@
     padding: 20px;
     overflow-y: auto;
   }
+
+
+footer{
+  margin-top: auto;
+  position: absolute;
+  bottom: 0; 
+}

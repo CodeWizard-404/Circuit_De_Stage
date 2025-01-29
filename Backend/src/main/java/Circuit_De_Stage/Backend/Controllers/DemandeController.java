@@ -95,7 +95,7 @@ public class DemandeController {
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
+    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION', 'STAGIAIRE')")
     public ResponseEntity<Demande> getDemandeInfo(@PathVariable("id") int id) {
         return ResponseEntity.ok(forumService.getStagiaireInfo(id));
     }

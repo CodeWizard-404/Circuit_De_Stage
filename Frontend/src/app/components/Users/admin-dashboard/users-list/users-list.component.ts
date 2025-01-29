@@ -23,11 +23,10 @@ export class UsersListComponent implements OnInit {
     private router: Router, 
     private route: ActivatedRoute
   ) {
-    this.roleFilter = RoleType.SERVICE_ADMINISTRATIVE; // Default value
+    this.roleFilter = RoleType.SERVICE_ADMINISTRATIVE; 
   }
 
   ngOnInit(): void {
-    // Get role from current route
     const currentPath = this.router.url;
     switch (currentPath) {
       case '/users-admin':
@@ -59,13 +58,11 @@ export class UsersListComponent implements OnInit {
     );
   }
 
-  editUser(userId: number): void {
-    this.router.navigate([`/users-edit/${userId}`]);
+  addUser(): void {
+    this.router.navigate(['/users-add']);
   }
 
-  deleteUser(userId: number): void {
-    this.userService.deleteUser(userId).subscribe(() => {
-      this.loadUsers();
-    });
+  manageUser(userId: number): void {
+    this.router.navigate([`/users-edit/${userId}`]);
   }
 }

@@ -86,7 +86,7 @@ export class SidebarComponent implements OnInit {
         { label: 'Stagiaires validés', filter: 'stagiaire_valide', role: RoleType.DCRH }
       ],
       [RoleType.CENTRE_DE_FORMATION]: [
-        { label: 'Dashboard', filter: 'dashboard',role: RoleType.CENTRE_DE_FORMATION, route: '/users-admin' },
+        { label: 'Dashboard', filter: 'dashboard',role: RoleType.CENTRE_DE_FORMATION, route: '/centre-formation-dashboard' },
         { label: 'Convocations en attente', filter: 'convocation_en_attente', role: RoleType.CENTRE_DE_FORMATION },
         { label: 'Convocations envoyées', filter: 'convocation_envoyer', role: RoleType.CENTRE_DE_FORMATION },
         { label: 'Convocations reçues', filter: 'convocation_recus', role: RoleType.CENTRE_DE_FORMATION },
@@ -96,11 +96,33 @@ export class SidebarComponent implements OnInit {
       ],
       [RoleType.STAGIAIRE]: [
         { label: 'Dashboard', filter: 'dashboard',role: RoleType.STAGIAIRE, route: '/stagiaire-dashboard' },
-
+        { label: 'Demande', filter: 'demande', role: RoleType.STAGIAIRE, route: '/demande' },
+        { label: 'Convocation', filter: 'convocation', role: RoleType.STAGIAIRE, route: '/convocation'},
+        { label: 'Document', filter: 'document', role: RoleType.STAGIAIRE, route: '/document' },
+        { label: 'Fin du stage', filter: 'fin_stage', role: RoleType.STAGIAIRE, route: '/fin-du-stage' },
 
       ]
     };
 
     this.menuItems = this.userRole ? menuMap[this.userRole] || [] : [];
+  }
+
+  getIconForMenuItem(item: MenuItem): string {
+    const iconMap: { [key: string]: string } = {
+      dashboard: 'fas fa-tachometer-alt',
+      demande: 'fas fa-file-alt',
+      convocation: 'fas fa-envelope',
+      document: 'fas fa-folder',
+      fin_stage: 'fas fa-flag-checkered',
+      stagiaire_en_attente: 'fas fa-user-clock',
+      stagiaire_valide: 'fas fa-user-check',
+      users_admin: 'fas fa-users-cog',
+      users_encadrant: 'fas fa-chalkboard-teacher',
+      users_dcrh: 'fas fa-building',
+      users_centre_formation: 'fas fa-graduation-cap'
+    };
+
+    const filter = item.filter.toLowerCase();
+    return iconMap[filter] || 'fas fa-circle';
   }
 }

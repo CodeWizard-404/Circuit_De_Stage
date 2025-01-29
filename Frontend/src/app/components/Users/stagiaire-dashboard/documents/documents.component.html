@@ -1,1 +1,78 @@
-<p>documents works!</p>
+<div class="documents-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="documents-content">
+        <!-- Header Section -->
+        <div class="welcome-section">
+            <h1>Gestion des documents</h1>
+            <p>Retrouvez tous vos documents essentiels pour votre stage</p>
+        </div>
+
+        <!-- Documents Grid -->
+        <div class="documents-grid">
+            <!-- Laissez-passer Card -->
+            <div class="dashboard-card">
+                <div class="document-header">
+                    <div class="document-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="document-info">
+                        <h2>Laissez-passer</h2>
+                        <span class="status-badge" [class.available]="laisserPasserDoc">
+                            {{ laisserPasserDoc ? 'Disponible' : 'Non disponible' }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="document-content">
+                    <p>Votre badge d'accès pour circuler dans les différents locaux de Tunisair
+                        et pour utiliser le Bus Tunisair.</p>
+                    
+                    <button 
+                        class="action-button"
+                        [disabled]="!laisserPasserDoc"
+                        (click)="downloadLaisserPasser()">
+                        <i class="fas fa-download"></i>
+                        {{ laisserPasserDoc ? 'Télécharger le document' : 'Document non disponible' }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bulletin de mouvement Card -->
+            <div class="dashboard-card">
+                <div class="document-header">
+                    <div class="document-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="document-info">
+                        <h2>Bulletin de mouvement</h2>
+                        <span class="status-badge" [class.available]="bulletinMouvementDoc">
+                            {{ bulletinMouvementDoc ? 'Disponible' : 'Non disponible' }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="document-content">
+                    <p>Ce document est requis pour les mouvements internes au sein de
+                        Tunisair. Veuillez l'imprimer et le conserver.</p>
+                    
+                    <button 
+                        class="action-button"
+                        [disabled]="!bulletinMouvementDoc"
+                        (click)="downloadBulletinMouvement()">
+                        <i class="fas fa-download"></i>
+                        {{ bulletinMouvementDoc ? 'Télécharger le document' : 'Document non disponible' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

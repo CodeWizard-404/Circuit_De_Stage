@@ -181,7 +181,9 @@ export class InternListComponent implements OnInit {
   }
 
   viewInternDetails(demandeID: number): void {
-    this.router.navigate([`/demande-view/${demandeID}`]);
+    this.router.navigate([`/demande-view/${demandeID}`], {
+      state: { filter: this.currentFilter }
+    });
   }
 }
 

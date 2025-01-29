@@ -1,1 +1,106 @@
-<p>convocation works!</p>
+<div class="convocation-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="convocation-content">
+        <!-- Header Section -->
+        <div class="welcome-section">
+            <h1>Gestion de votre convocation</h1>
+            <p>Suivez les étapes pour finaliser votre convocation de stage</p>
+        </div>
+
+        <div *ngIf="convocationDoc" class="dashboard-card">
+            <h2><i class="fas fa-file-alt"></i> État de la convocation</h2>
+            
+            <div class="status-grid">
+                <div class="status-item" [class.completed]="!!convocationDoc">
+                    <div class="status-icon">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <div class="status-content">
+                        <h4>Téléchargement</h4>
+                        <button (click)="downloadConvocation()" class="action-button">
+                            <i class="fas fa-download"></i> Télécharger la convocation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="status-item" [class.completed]="!!convocationSigneeDoc">
+                    <div class="status-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div class="status-content">
+                        <h4>Téléversement</h4>
+                        <div class="upload-section">
+                            <div class="file-input-wrapper">
+                                <input 
+                                    type="file" 
+                                    (change)="onFileSelected($event)" 
+                                    accept=".pdf"
+                                    [disabled]="!!convocationSigneeDoc"
+                                    id="file-upload"
+                                >
+                                <label for="file-upload" [class.disabled]="!!convocationSigneeDoc">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    Choisir un fichier
+                                </label>
+                            </div>
+                            <button 
+                                (click)="uploadSignedConvocation()" 
+                                [disabled]="!selectedFile || !!convocationSigneeDoc"
+                                class="action-button upload"
+                            >
+                                <i class="fas fa-upload"></i> Téléverser
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instructions-card">
+                <h3><i class="fas fa-info-circle"></i> Instructions à suivre</h3>
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <p>Légaliser la convocation à la municipalité</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <p>Signer la convocation auprès de l'institut ou faculté</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <p>Téléverser la convocation signée</p>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="uploadError" class="alert alert-danger">
+                {{ uploadError }}
+            </div>
+
+            <div *ngIf="uploadSuccess" class="alert alert-success">
+                <i class="fas fa-check-circle"></i> Document téléversé avec succès !
+            </div>
+
+            <div *ngIf="convocationSigneeDoc" class="alert alert-info">
+                <i class="fas fa-info-circle"></i> La convocation signée a déjà été téléversée.
+            </div>
+        </div>
+
+        <div *ngIf="!convocationDoc" class="dashboard-card">
+            <div class="warning-state">
+                <i class="fas fa-clock"></i>
+                <h3>La convocation n'est pas encore disponible</h3>
+                <p>Veuillez patienter, vous serez notifié dès que votre convocation sera prête.</p>
+            </div>
+        </div>
+    </div>
+</div>

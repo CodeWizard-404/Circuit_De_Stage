@@ -1,5 +1,6 @@
 <div class="users-list">
   <h2>Users List</h2>
+  <button (click)="addUser()">Add User</button>
   <input type="text" [(ngModel)]="searchTerm" placeholder="Search users...">
   <table>
     <thead>
@@ -14,8 +15,7 @@
         <td>{{ user.nom }} - {{ user.prenom }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <button (click)="editUser(user.id)">Edit</button>
-          <button (click)="deleteUser(user.id)">Delete</button>
+          <button (click)="manageUser(user.id)">Manage</button>
         </td>
       </tr>
     </tbody>

@@ -3,6 +3,9 @@
   <form (ngSubmit)="addUser()">
     <label for="name">Name:</label>
     <input type="text" id="name" [(ngModel)]="user.nom" name="name" required>
+
+    <label for="lastname">LastName:</label>
+    <input type="text" id="lastname" [(ngModel)]="user.prenom" name="lastname" required>
     
     <label for="email">Email:</label>
     <input type="email" id="email" [(ngModel)]="user.email" name="email" required>
@@ -10,9 +13,15 @@
     <label for="password">Password:</label>
     <input type="password" id="password" [(ngModel)]="user.passe" name="password" required>
 
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+
     <label for="role">Role:</label>
     <select id="role" [(ngModel)]="user.type" name="role" required>
-      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      <option value="">Select a role</option>
+      <option *ngFor="let role of roles" [value]="role">
+        {{formatRoleName(role)}}
+      </option>
     </select>
     
     <button type="submit">Add User</button>

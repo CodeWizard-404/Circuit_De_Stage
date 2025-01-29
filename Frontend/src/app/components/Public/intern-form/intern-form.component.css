@@ -1,49 +1,168 @@
+:root {
+  --tunisair-red: #D4192C;
+  --tunisair-dark: #1a1a1a;
+}
+
+.form-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.form-header {
+  background: #ffc6cc6b;
+  border-radius: 15px;
+  padding: 2rem;
+  color: rgb(43, 36, 36);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.form-header p {
+  margin: 0.5rem 0 0;
+  opacity: 0.9;
+}
+
 .mat-stepper-horizontal {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: transparent;
 }
 
 .form-section {
-    margin: 1.5rem 0;
-    padding: 1rem;
-    border: 1px solid #eee;
-    border-radius: 4px;
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: relative;
+  margin: 1rem 0;
+}
+
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--tunisair-red);
+  border-radius: 15px 15px 0 0;
 }
 
 .form-section h3 {
-    margin-top: 0;
-    color: #3f51b5;
+  color: var(--tunisair-dark);
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 0.75rem;
 }
 
 mat-form-field {
-    width: 100%;
-    margin: 0.5rem 0;
+  width: 100%;
+  margin: 0.5rem 0;
 }
 
 .stepper-actions {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.stepper-actions button {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.stepper-actions button[matStepperNext],
+.stepper-actions button[color="primary"] {
+  background: var(--tunisair-red);
+  color: white;
 }
 
 .documents-section {
-    margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0;
 }
 
 .document-upload {
-    margin: 1rem 0;
-    padding: 1rem;
-    border: 1px dashed #ccc;
-    border-radius: 4px;
+  background: #fff1f2;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.document-upload:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .document-upload h4 {
-    margin: 0 0 0.5rem 0;
-    font-weight: 500;
+  color: var(--tunisair-red);
+  margin: 0 0 1rem 0;
+  font-weight: 500;
 }
 
-button[mat-raised-button] {
-    margin-left: auto;
-    display: block;
+.error-message {
+  background: #fff1f2;
+  color: var(--tunisair-red);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Custom styling for form fields */
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #dee2e6;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--tunisair-red);
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+  color: var(--tunisair-red);
+}
+
+/* Checkbox styling */
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: var(--tunisair-red) !important;
+}
+
+/* Step header styling */
+::ng-deep .mat-step-header .mat-step-icon-selected {
+  background-color: var(--tunisair-red);
+}
+
+::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+  color: var(--tunisair-red);
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1rem;
+  }
+
+  .documents-section {
+    grid-template-columns: 1fr;
+  }
+
+  .stepper-actions {
+    flex-direction: column;
+  }
+
+  .stepper-actions button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
 }

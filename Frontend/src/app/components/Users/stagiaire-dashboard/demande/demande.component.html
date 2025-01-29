@@ -1,1 +1,98 @@
-<p>demande works!</p>
+<div class="demande-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error && demande" class="demande-content">
+        <!-- Header Section -->
+        <div class="welcome-section">
+            <h1>Suivi de votre demande de stage</h1>
+            <p>Consultez l'état d'avancement de votre demande de stage</p>
+        </div>
+
+        <!-- Stage Info Cards -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ demande.stage }}</h3>
+                    <p>Type de stage</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ demande.debutStage | date:'dd/MM/yyyy' }}</h3>
+                    <p>Date de début</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-flag-checkered"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ demande.finStage | date:'dd/MM/yyyy' }}</h3>
+                    <p>Date de fin</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Timeline -->
+        <div class="dashboard-card timeline-card">
+            <h2><i class="fas fa-tasks"></i> Progression de la demande</h2>
+            <div class="timeline">
+                <div class="timeline-item" [class.completed]="demande.status === 'SOUMISE' || hasDocument(DocumentType.CLASSEMENT)">
+                    <div class="timeline-badge">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Demande soumise</h4>
+                        <div class="status-badge">{{ demande.status }}</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" [class.completed]="hasDocument(DocumentType.CLASSEMENT)">
+                    <div class="timeline-badge">
+                        <i class="fas fa-check-square"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Vérification administrative</h4>
+                        <div class="status-badge">{{ hasDocument(DocumentType.CLASSEMENT) ? 'En cours' : 'En attente' }}</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" [class.completed]="isDocumentValidated(DocumentType.CLASSEMENT)">
+                    <div class="timeline-badge">
+                        <i class="fas fa-stamp"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Validation DCRH</h4>
+                        <div class="status-badge">{{ isDocumentValidated(DocumentType.CLASSEMENT) ? 'Validé' : 'En attente' }}</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" [class.completed]="hasDocument(DocumentType.CONVOCATION)">
+                    <div class="timeline-badge">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Convocation</h4>
+                        <div class="status-badge">{{ hasDocument(DocumentType.CONVOCATION) ? 'Terminé' : 'En attente' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,1 +1,178 @@
-<p>service-administrative-dashboard works!</p>
+<div class="dashboard-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="dashboard-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <h1>
+                    <i class="fas fa-user-shield"></i>
+                    Service Administratif
+                </h1>
+                <p>{{ admin?.prenom }} {{ admin?.nom }} | Gestion des stages</p>
+            </div>
+            <div class="welcome-stats">
+                <div class="completion-rate" [style.--progress]="getCompletionRate()">
+                    <div class="rate-circle">
+                        <span>{{ getCompletionRate() | number:'1.0-0' }}%</span>
+                    </div>
+                    <p>Taux de traitement des demandes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getCurrentStagiairesCount() }}</h3>
+                    <p>Stagiaires actifs</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getDemandesThisMonth() }}</h3>
+                    <p>Demandes ce mois</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getPendingDemandesCount() }}</h3>
+                    <p>En attente</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getAcceptedDemandesCount() }}</h3>
+                    <p>Acceptées</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Summary Section -->
+        <div class="summary-section">
+            <div class="summary-card">
+                <h3>Vue d'ensemble</h3>
+                <div class="summary-content">
+                    <div class="summary-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>{{ getDemandesThisMonth() }} nouvelles demandes ce mois</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>{{ getCurrentStagiairesCount() }} stagiaires actifs</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ getPendingDemandesCount() }} demandes en attente</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="dashboard-grid">
+            <!-- Quick Actions -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-bolt"></i> Actions rapides</h2>
+                <div class="actions-grid">
+                    <a [routerLink]="['/demandes']" class="action-item">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Gérer les demandes</span>
+                    </a>
+                    <a [routerLink]="['/users-add']" class="action-item">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Ajouter un utilisateur</span>
+                    </a>
+                    <a [routerLink]="['/attestations']" class="action-item">
+                        <i class="fas fa-certificate"></i>
+                        <span>Attestations</span>
+                    </a>
+                    <a [routerLink]="['/intern-list']" class="action-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Liste des stagiaires</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Applications -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-history"></i> Demandes récentes</h2>
+                <div class="recent-requests">
+                    <div *ngFor="let demande of getRecentDemandes()" class="request-item">
+                        <div class="request-info">
+                            <div class="request-header">
+                                <span class="name">{{ demande.stagiaire.prenom }} {{ demande.stagiaire.nom }}</span>
+                                <span class="status-badge" [ngClass]="demande.status.toLowerCase()">
+                                    {{ demande.status }}
+                                </span>
+                            </div>
+                            <div class="request-details">
+                                <span class="type">{{ demande.stage }}</span>
+                                <span class="date">{{ demande.debutStage | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                        </div>
+                        <a [routerLink]="['/demande-view', demande.id]" class="view-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage Distribution -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-chart-pie"></i> Distribution des stages</h2>
+                <div class="stage-distribution">
+                    <div *ngFor="let type of getStageTypeDistribution() | keyvalue" class="distribution-item">
+                        <div class="distribution-label">{{ type.key }}</div>
+                        <div class="distribution-bar">
+                            <div class="bar-fill" [style.width]="(type.value / demandes.length * 100) + '%'"></div>
+                        </div>
+                        <div class="distribution-value">{{ type.value }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Stats -->
+        <div class="footer-stats">
+            <div class="stats-summary">
+                <div class="stat-pill">
+                    <i class="fas fa-calendar"></i>
+                    <span>Mise à jour: {{ today | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="stat-pill">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Total des demandes: {{ demandes.length }}</span>
+                </div>
+                <div class="stat-pill">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Taux d'acceptation: {{ (getAcceptedDemandesCount() / demandes.length * 100) | number:'1.0-0' }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

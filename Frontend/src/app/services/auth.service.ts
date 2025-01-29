@@ -6,13 +6,14 @@ import { User } from '../classes/user';
 import { Stagiaire } from '../classes/stagiaire';
 import { environment } from '../../environments/environment';
 import { RoleType } from '../classes/enums/role-type';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | Stagiaire | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.initializeCurrentUser();
   }
 
@@ -30,7 +31,9 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/auth/login`, loginData, { headers, responseType: 'text' })
       .pipe(tap((token: string) => {
         localStorage.setItem('token', token);
-        this.fetchCurrentUser().subscribe();
+        this.fetchCurrentUser().subscribe(() => {
+          this.navigateBasedOnRole();
+        });
       }));
   }
 
@@ -47,6 +50,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
 
@@ -65,5 +69,26 @@ export class AuthService {
   hasRole(requiredRole: RoleType): boolean {
     const user = this.getCurrentUser();
     return user?.type === requiredRole;
+  }
+
+  navigateBasedOnRole() {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
+      this.router.navigate(['/intern-form']);
+      return;
+    }
+
+    const roleRouteMap: Record<RoleType, string> = {
+      [RoleType.ENCADRANT]: '/encadrant-dashboard',
+      [RoleType.SERVICE_ADMINISTRATIVE]: '/service-administrative-dashboard',
+      [RoleType.DCRH]: '/dcrh-dashboard',
+      [RoleType.CENTRE_DE_FORMATION]: '/centre-formation-dashboard',
+      [RoleType.STAGIAIRE]: '/stagiaire-dashboard'
+    };
+
+    const route = roleRouteMap[currentUser.type];
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 }

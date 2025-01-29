@@ -11,6 +11,7 @@ import { DocumentType } from '../../../classes/enums/document-type';
 import { RoleType } from '../../../classes/enums/role-type';
 import { AuthService } from '../../../services/auth.service';
 import { DocumentStatus } from '../../../classes/enums/document-status';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-demande-view',
@@ -30,13 +31,21 @@ export class DemandeViewComponent implements OnInit {
   documentTypes = Object.values(DocumentType);
   demandeStatus = DemandeStatus; // Make enum available to template
   userRole?: RoleType;
+  currentFilter: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private demandeService: DemandeService,
     private documentService: DocumentService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private router: Router  // Add Router to constructor
+  ) {
+    // Get the navigation state
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.currentFilter = navigation.extras.state['filter'];
+    }
+  }
 
   ngOnInit(): void {
     this.userRole = this.authService.getCurrentUser()?.type;
@@ -124,7 +133,7 @@ export class DemandeViewComponent implements OnInit {
 
   validateDemande(): void {
     if (this.demande) {
-      this.documentService.validateDocument(this.demande.id).subscribe({
+      this.demandeService.validateDemande(this.demande.id).subscribe({
         next: () => {
           this.demande!.status = DemandeStatus.VALIDE;
         },
@@ -179,131 +188,10 @@ export class DemandeViewComponent implements OnInit {
     }
   }
 
-  get availableDocumentTypes(): DocumentType[] {
-    if (!this.userRole) return [];
-
-    switch (this.userRole) {
-      case RoleType.SERVICE_ADMINISTRATIVE:
-        return [
-          DocumentType.CLASSEMENT,
-          DocumentType.BULLETIN_DE_MOUVEMENT_VIDE
-        ];
-
-      case RoleType.CENTRE_DE_FORMATION:
-        return [
-          DocumentType.CONVOCATION,
-          DocumentType.LAISSER_PASSER,
-          DocumentType.PRISE_DE_SERVICE
-        ];
-
-      case RoleType.ENCADRANT:
-        return [
-          DocumentType.DEMANDE_DE_STAGE_SINGER,
-          DocumentType.RAPPORT_SIGNE
-        ];
-
-      default:
-        return [];
-    }
-  }
-
-
-
-
-
-  
-  shouldShowUpload(): boolean {
-    if (!this.demande || !this.userRole) return false;
-
-    const filter = this.route.snapshot.queryParams['filter'];
-
-    switch (filter) {
-      case 'demande_en_attente':
-        return this.userRole === RoleType.ENCADRANT;
-
-      case 'rapport_en_attente':
-        return this.userRole === RoleType.ENCADRANT;
-
-      case 'classement_en_attente':
-        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
-
-      case 'bulletin_en_attente':
-        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
-
-      case 'convocation_en_attente':
-        return this.userRole === RoleType.CENTRE_DE_FORMATION;
-
-      case 'document_en_attente':
-        return this.userRole === RoleType.CENTRE_DE_FORMATION;
-
-      default:
-        return false;
-    }
-  }
-
-  shouldShowValidateDocument(documentType?: DocumentType): boolean {
-    if (!this.demande || !this.userRole || !documentType) return false;
-
-    const filter = this.route.snapshot.queryParams['filter'];
-
-    switch (filter) {
-      case 'bulletin_recus':
-        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
-          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
-
-      case 'stagiaire_en_attente':
-        return this.userRole === RoleType.DCRH &&
-          documentType === DocumentType.CLASSEMENT;
-
-      case 'convocation_recus':
-        return this.userRole === RoleType.CENTRE_DE_FORMATION &&
-          documentType === DocumentType.CONVOCATION_SIGNER;
-
-      case 'document_en_attente':
-        return this.userRole === RoleType.CENTRE_DE_FORMATION;
-
-      default:
-        return false;
-    }
-  }
-
-  shouldShowRejectDocument(documentType: DocumentType): boolean {
-    if (!this.demande || !this.userRole) return false;
-
-    const filter = this.route.snapshot.queryParams['filter'];
-
-    switch (filter) {
-      case 'bulletin_recus':
-        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
-          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
-
-      case 'convocation_recus':
-        return this.userRole === RoleType.CENTRE_DE_FORMATION &&
-          documentType === DocumentType.CONVOCATION_SIGNER;
-
-      default:
-        return false;
-    }
-  }
-
-  shouldShowValidateDemande(): boolean {
-    if (!this.demande || !this.userRole) return false;
-
-    const filter = this.route.snapshot.queryParams['filter'];
-    return filter === 'demande_en_attente' && this.userRole === RoleType.ENCADRANT;
-  }
-
-  shouldShowRejectDemande(): boolean {
-    if (!this.demande || !this.userRole) return false;
-
-    const filter = this.route.snapshot.queryParams['filter'];
-    return filter === 'demande_en_attente' && this.userRole === RoleType.ENCADRANT;
-  }
-
   getAvailableDocumentTypes(): DocumentType[] {
     if (!this.userRole) return [];
 
-    const filter = this.route.snapshot.queryParams['filter'];
+    const filter = this.currentFilter;
 
     switch (filter) {
       case 'demande_en_attente':
@@ -334,4 +222,107 @@ export class DemandeViewComponent implements OnInit {
         return [];
     }
   }
+
+
+
+  shouldShowUpload(): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    switch (this.currentFilter) {
+      case 'demande_en_attente':
+        return this.userRole === RoleType.ENCADRANT;
+
+      case 'rapport_en_attente':
+        return this.userRole === RoleType.ENCADRANT;
+
+      case 'classement_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
+
+      case 'bulletin_en_attente':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
+
+      case 'convocation_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+
+      case 'document_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+
+      default:
+        return false;
+    }
+  }
+
+  shouldShowValidateDocument(documentType?: DocumentType): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    // Get the latest document of the specified type
+    const relevantDoc = this.demande.documents
+      .filter(d => d.type === documentType)
+      .sort((a, b) => b.id - a.id)[0];  // Get most recent document
+
+    switch (this.currentFilter) {
+      case 'bulletin_recus':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
+          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE &&
+          relevantDoc?.status === DocumentStatus.SOUMIS;
+
+      case 'stagiaire_en_attente':
+        return this.userRole === RoleType.DCRH &&
+          documentType === DocumentType.CLASSEMENT &&
+          relevantDoc?.status === DocumentStatus.SOUMIS;
+
+      case 'convocation_recus':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION &&
+          documentType === DocumentType.CONVOCATION_SIGNER &&
+          relevantDoc?.status === DocumentStatus.SOUMIS;
+
+      default:
+        return false;
+    }
+  }
+
+  shouldShowRejectDocument(documentType: DocumentType): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    switch (this.currentFilter) {
+      case 'bulletin_recus':
+        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
+          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
+
+      case 'convocation_recus':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION &&
+          documentType === DocumentType.CONVOCATION_SIGNER;
+
+      default:
+        return false;
+    }
+  }
+
+
+
+
+
+
+
+  shouldShowValidateDemande(): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    const filter = this.currentFilter;
+    const hasRequiredDocument = this.demande.documents.some(
+      doc => doc.type === DocumentType.DEMANDE_DE_STAGE_SINGER
+    );
+
+    return filter === 'demande_en_attente' && 
+            this.userRole === RoleType.ENCADRANT && 
+            hasRequiredDocument;
+  }
+
+  shouldShowRejectDemande(): boolean {
+    if (!this.demande || !this.userRole) return false;
+
+    const filter = this.currentFilter;
+    return filter === 'demande_en_attente' && this.userRole === RoleType.ENCADRANT;
+  }
+
+
 }

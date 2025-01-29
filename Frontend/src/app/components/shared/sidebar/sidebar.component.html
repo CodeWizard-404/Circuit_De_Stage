@@ -1,17 +1,22 @@
 <div class="sidebar">
-  <div class="user-info">
-    <p>{{ userName }} {{ userLastName }}</p>
-    <p>{{ userRole }}</p>
+  <div class="user-profile">
+      <div class="user-info">
+          <h3>{{ userName }} {{ userLastName }}</h3>
+          <span class="user-role">{{ userRole }}</span>
+      </div>
   </div>
-  <nav>
-    <ul>
-      <li *ngFor="let item of menuItems">
-        <a [routerLink]="[item.route || '/intern-list']" 
-           [queryParams]="item.route ? null : {filter: item.filter}" 
-           routerLinkActive="active">
-          {{ item.label }}
-        </a>
-      </li>
-    </ul>
+  
+  <nav class="sidebar-nav">
+      <ul>
+          <li *ngFor="let item of menuItems">
+              <a [routerLink]="[item.route || '/intern-list']" 
+                 [queryParams]="item.route ? null : {filter: item.filter}" 
+                 routerLinkActive="active">
+                  <i class="nav-icon" [ngClass]="getIconForMenuItem(item)"></i>
+                  <span class="nav-label">{{ item.label }}</span>
+                  <i class="fas fa-chevron-right arrow-icon"></i>
+              </a>
+          </li>
+      </ul>
   </nav>
 </div>

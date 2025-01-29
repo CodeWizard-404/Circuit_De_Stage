@@ -1,201 +1,234 @@
-<mat-stepper [linear]="isLinear" #stepper>
-    <!-- Personal Info Step -->
-    <mat-step [stepControl]="personalInfo">
-        <form [formGroup]="personalInfo">
-            <ng-template matStepLabel>Personal Information</ng-template>
+<div class="form-container">
+    <div class="form-header">
+        <h1>Demande de Stage</h1>
+        <p>Bienvenue sur le portail de demande de stage Tunisair</p>
+    </div>
 
-            <mat-checkbox formControlName="isGroup">Group Application (Binôme)</mat-checkbox>
+    <mat-stepper [linear]="isLinear" #stepper>
+        <!-- Personal Info Step -->
+        <mat-step [stepControl]="personalInfo">
+            <form [formGroup]="personalInfo">
+                <ng-template matStepLabel>Informations Personnelles</ng-template>
 
-            <div class="form-section">
-                <h3>Primary Applicant</h3>
+                <mat-checkbox formControlName="isGroup">Demande en Binôme</mat-checkbox>
+
+                <div class="form-section">
+                    <h3>Primary Applicant</h3>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Prénom</mat-label>
+                        <input matInput formControlName="prenom" required>
+                        <mat-error *ngIf="personalInfo.get('prenom')?.hasError('required')">
+                            Prénom est requis
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nom</mat-label>
+                        <input matInput formControlName="nom" required>
+                        <mat-error *ngIf="personalInfo.get('nom')?.hasError('required')">
+                            Nom est requis
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>CIN</mat-label>
+                        <input matInput formControlName="cin" required>
+                        <mat-error *ngIf="personalInfo.get('cin')?.hasError('required')">
+                            CIN est requis
+                        </mat-error>
+                        <mat-error *ngIf="personalInfo.get('cin')?.hasError('pattern')">
+                            CIN doit être de 8 chiffres
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email Personnel</mat-label>
+                        <input matInput formControlName="emailPerso" required>
+                        <mat-error *ngIf="personalInfo.get('emailPerso')?.hasError('required')">
+                            Email est requis
+                        </mat-error>
+                        <mat-error *ngIf="personalInfo.get('emailPerso')?.hasError('email')">
+                            Format d'email invalide
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Numéro de Téléphone</mat-label>
+                        <input matInput formControlName="tel" required>
+                        <mat-error *ngIf="personalInfo.get('tel')?.hasError('required')">
+                            Numéro de Téléphone est requis
+                        </mat-error>
+                        <mat-error *ngIf="personalInfo.get('tel')?.hasError('pattern')">
+                            Numéro de Téléphone doit être de 8 chiffres
+                        </mat-error>
+                    </mat-form-field>
+
+                </div>
+
+                <div *ngIf="personalInfo.get('isGroup')?.value" class="form-section">
+                    <h3>Membre du Groupe</h3>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Prénom</mat-label>
+                        <input matInput formControlName="prenom2">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nom</mat-label>
+                        <input matInput formControlName="nom2">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>CIN</mat-label>
+                        <input matInput formControlName="cin2">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email Personnel</mat-label>
+                        <input matInput formControlName="emailPerso2">
+                        <mat-error *ngIf="personalInfo.get('emailPerso2')?.hasError('email')">
+                            Format d'email invalide
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Numéro de Téléphone</mat-label>
+                        <input matInput formControlName="tel2">
+                    </mat-form-field>
+                </div>
+
+                <div class="stepper-actions">
+                    <button mat-button matStepperNext [disabled]="personalInfo.invalid">Suivant</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <!-- Institue Info Step -->
+        <mat-step [stepControl]="institueInfo">
+            <form [formGroup]="institueInfo">
+                <ng-template matStepLabel>Informations sur l'Institut</ng-template>
+
+
+                <div class="form-section">
+                    <h3>Primary Applicant</h3>
+                    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Institut</mat-label>
+                        <input matInput formControlName="institut" required>
+                        <mat-error *ngIf="institueInfo.get('institut')?.hasError('required')">
+                            Institut est requis
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Niveau</mat-label>
+                        <input matInput formControlName="niveau" required>
+                        <mat-error *ngIf="institueInfo.get('niveau')?.hasError('required')">
+                            Niveau est requis
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Année</mat-label>
+                        <input matInput formControlName="annee" required>
+                        <mat-error *ngIf="institueInfo.get('annee')?.hasError('required')">
+                            Année est requis
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Spécialité</mat-label>
+                        <input matInput formControlName="specialite" required>
+                        <mat-error *ngIf="institueInfo.get('specialite')?.hasError('required')">
+                            Spécialité est requis
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div *ngIf="personalInfo.get('isGroup')?.value" class="form-section">
+                    <h3>Membre du Groupe</h3>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Spécialité</mat-label>
+                        <input matInput formControlName="specialite2">
+                    </mat-form-field>
+                </div>
+
+                <div class="stepper-actions">
+                    <button mat-button matStepperPrevious>Retour</button>
+                    <button mat-button matStepperNext [disabled]="institueInfo.invalid">Suivant</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <!-- Internship Details Step -->
+        <mat-step [stepControl]="internshipInfo">
+            <form [formGroup]="internshipInfo">
+                <ng-template matStepLabel>Détails du Stage</ng-template>
+
                 <mat-form-field appearance="outline">
-                    <mat-label>First Name</mat-label>
-                    <input matInput formControlName="prenom" required>
-                    <mat-error *ngIf="personalInfo.get('prenom')?.hasError('required')">
-                        First Name is required
+                    <mat-label>Type de Stage</mat-label>
+                    <mat-select formControlName="stageType" (selectionChange)="getRequiredDocuments()" required>
+                        <mat-option *ngFor="let type of stageTypes" [value]="type">
+                            {{ type }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="internshipInfo.get('stageType')?.hasError('required')">
+                        Type de Stage est requis
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Last Name</mat-label>
-                    <input matInput formControlName="nom" required>
-                    <mat-error *ngIf="personalInfo.get('nom')?.hasError('required')">
-                        Last Name is required
+                    <mat-label>Date de Début</mat-label>
+                    <input matInput [matDatepicker]="startDatePicker" formControlName="dateDebut" required>
+                    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startDatePicker></mat-datepicker>
+                    <mat-error *ngIf="internshipInfo.get('dateDebut')?.hasError('required')">
+                        Date de Début est requis
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>CIN</mat-label>
-                    <input matInput formControlName="cin" required>
-                    <mat-error *ngIf="personalInfo.get('cin')?.hasError('required')">
-                        CIN is required
-                    </mat-error>
-                    <mat-error *ngIf="personalInfo.get('cin')?.hasError('pattern')">
-                        CIN must be 8 digits
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Personal Email</mat-label>
-                    <input matInput formControlName="emailPerso" required>
-                    <mat-error *ngIf="personalInfo.get('emailPerso')?.hasError('required')">
-                        Email is required
-                    </mat-error>
-                    <mat-error *ngIf="personalInfo.get('emailPerso')?.hasError('email')">
-                        Invalid email format
+                    <mat-label>Date de Fin</mat-label>
+                    <input matInput [matDatepicker]="endDatePicker" formControlName="dateFin" required>
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endDatePicker></mat-datepicker>
+                    <mat-error *ngIf="internshipInfo.get('dateFin')?.hasError('required')">
+                        Date de Fin est requis
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                    <mat-label>Phone Number</mat-label>
-                    <input matInput formControlName="tel" required>
-                    <mat-error *ngIf="personalInfo.get('tel')?.hasError('required')">
-                        Phone Number is required
-                    </mat-error>
-                    <mat-error *ngIf="personalInfo.get('tel')?.hasError('pattern')">
-                        Phone Number must be 8 digits
-                    </mat-error>
-                </mat-form-field>
+                <div class="stepper-actions">
+                    <button mat-button matStepperPrevious>Retour</button>
+                    <button mat-button matStepperNext [disabled]="internshipInfo.invalid">Suivant</button>
+                </div>
+            </form>
+        </mat-step>
 
-                <mat-form-field appearance="outline">
-                    <mat-label>Institute</mat-label>
-                    <input matInput formControlName="institut" required>
-                    <mat-error *ngIf="personalInfo.get('institut')?.hasError('required')">
-                        Institute is required
-                    </mat-error>
-                </mat-form-field>
+        <!-- Documents Step -->
+        <mat-step>
+            <ng-template matStepLabel>Documents</ng-template>
 
-                <mat-form-field appearance="outline">
-                    <mat-label>Level</mat-label>
-                    <input matInput formControlName="niveau" required>
-                    <mat-error *ngIf="personalInfo.get('niveau')?.hasError('required')">
-                        Level is required
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Year</mat-label>
-                    <input matInput formControlName="annee" required>
-                    <mat-error *ngIf="personalInfo.get('annee')?.hasError('required')">
-                        Year is required
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Specialty</mat-label>
-                    <input matInput formControlName="specialite" required>
-                    <mat-error *ngIf="personalInfo.get('specialite')?.hasError('required')">
-                        Specialty is required
-                    </mat-error>
-                </mat-form-field>
+            <!-- Add error message display -->
+            <div *ngIf="errorMessage" class="error-message">
+                <mat-error>{{ errorMessage }}</mat-error>
             </div>
 
-            <div *ngIf="personalInfo.get('isGroup')?.value" class="form-section">
-                <h3>Group Member</h3>
-                <mat-form-field appearance="outline">
-                    <mat-label>First Name</mat-label>
-                    <input matInput formControlName="prenom2">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Last Name</mat-label>
-                    <input matInput formControlName="nom2">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>CIN</mat-label>
-                    <input matInput formControlName="cin2">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Personal Email</mat-label>
-                    <input matInput formControlName="emailPerso2">
-                    <mat-error *ngIf="personalInfo.get('emailPerso2')?.hasError('email')">
-                        Invalid email format
+            <div class="documents-section">
+                <div *ngFor="let docType of requiredDocuments" class="document-upload">
+                    <h4>{{ docType }} Document</h4>
+                    <input type="file" (change)="onFileSelected($event, docType)" [accept]="'application/pdf'">
+                    <mat-error *ngIf="documentsMap.get(docType) === undefined">
+                        {{ docType }} est requis
                     </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Phone Number</mat-label>
-                    <input matInput formControlName="tel2">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Specialty</mat-label>
-                    <input matInput formControlName="specialite2">
-                </mat-form-field>
+                </div>
             </div>
 
             <div class="stepper-actions">
-                <button mat-button matStepperNext [disabled]="personalInfo.invalid">Next</button>
+                <button mat-button matStepperPrevious>Retour</button>
+                <button mat-raised-button color="primary" (click)="onSubmit()"
+                    [disabled]="documentsMap.size < requiredDocuments.length">
+                    Soumettre la Demande
+                </button>
             </div>
-        </form>
-    </mat-step>
-
-    <!-- Internship Details Step -->
-    <mat-step [stepControl]="internshipInfo">
-        <form [formGroup]="internshipInfo">
-            <ng-template matStepLabel>Internship Details</ng-template>
-
-            <mat-form-field appearance="outline">
-                <mat-label>Internship Type</mat-label>
-                <mat-select formControlName="stageType" (selectionChange)="getRequiredDocuments()" required>
-                    <mat-option *ngFor="let type of stageTypes" [value]="type">
-                        {{ type }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="internshipInfo.get('stageType')?.hasError('required')">
-                    Internship Type is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-                <mat-label>Start Date</mat-label>
-                <input matInput [matDatepicker]="startDatePicker" formControlName="dateDebut" required>
-                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #startDatePicker></mat-datepicker>
-                <mat-error *ngIf="internshipInfo.get('dateDebut')?.hasError('required')">
-                    Start Date is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-                <mat-label>End Date</mat-label>
-                <input matInput [matDatepicker]="endDatePicker" formControlName="dateFin" required>
-                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #endDatePicker></mat-datepicker>
-                <mat-error *ngIf="internshipInfo.get('dateFin')?.hasError('required')">
-                    End Date is required
-                </mat-error>
-            </mat-form-field>
-
-            <div class="stepper-actions">
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext [disabled]="internshipInfo.invalid">Next</button>
-            </div>
-        </form>
-    </mat-step>
-
-    <!-- Documents Step -->
-    <mat-step>
-        <ng-template matStepLabel>Documents Upload</ng-template>
-
-        <div class="documents-section">
-            <div *ngFor="let docType of requiredDocuments" class="document-upload">
-                <h4>{{ docType }} Document</h4>
-                <input type="file" (change)="onFileSelected($event, docType)" [accept]="'application/pdf'">
-                <mat-error *ngIf="documentsMap.get(docType) === undefined">
-                    {{ docType }} is required
-                </mat-error>
-            </div>
-        </div>
-
-        <div class="stepper-actions">
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-raised-button color="primary" (click)="onSubmit()"
-                [disabled]="documentsMap.size < requiredDocuments.length">
-                Submit Application
-            </button>
-        </div>
-    </mat-step>
-</mat-stepper>
+        </mat-step>
+    </mat-stepper>
+</div>

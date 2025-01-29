@@ -72,6 +72,11 @@
             <button (click)="downloadDocument(doc.id)" class="download-btn">
               Download
             </button>
+            <button *ngIf="shouldShowValidateDocument(doc.type)" 
+                    (click)="validateDocument(doc.id)" 
+                    class="validate-btn">
+              Validate
+            </button>
           </div>
           <span [class]="'status-' + doc.status.toLowerCase()">{{ doc.status }}</span>
         </div>
@@ -128,7 +133,9 @@
     </div>
 
     <div class="actions" *ngIf="demande.status === demandeStatus.SOUMISE">
-      <button class="validate-btn" (click)="validateDemande()">
+      <button class="validate-btn" 
+              [disabled]="!shouldShowValidateDemande()"
+              (click)="validateDemande()">
         Validate Application
       </button>
       <div class="reject-section">
