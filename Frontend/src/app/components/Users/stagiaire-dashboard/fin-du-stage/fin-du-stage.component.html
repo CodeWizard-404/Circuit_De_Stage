@@ -16,48 +16,9 @@
 
         <!-- Documents Section -->
         <div class="dashboard-card">
-            <h2><i class="fas fa-file-alt"></i> Documents à soumettre</h2>
-            
+            <h2><i class="fas fa-file-alt"></i> Document à soumettre</h2>
+
             <div class="documents-grid">
-                <!-- Bulletin de Mouvement Card -->
-                <div class="document-item">
-                    <div class="document-header">
-                        <div class="document-icon">
-                            <i class="fas fa-file-contract"></i>
-                        </div>
-                        <div class="document-info">
-                            <h3>Bulletin de Mouvement</h3>
-                            <span class="status-badge" [class.available]="bulletinRempli">
-                                {{ bulletinRempli ? bulletinRempliStatus : 'En attente' }}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="document-actions">
-                        <button *ngIf="bulletinVide" 
-                                class="action-button download"
-                                (click)="downloadDocument(bulletinVide, 'Bulletin_de_Mouvement.pdf')">
-                            <i class="fas fa-download"></i> Télécharger le bulletin
-                        </button>
-
-                        <div class="file-input-wrapper" *ngIf="bulletinVide && !bulletinRempli">
-                            <input type="file" 
-                                   (change)="onBulletinSelected($event)" 
-                                   accept=".pdf"
-                                   id="bulletin-upload">
-                            <label for="bulletin-upload">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                Bulletin rempli
-                            </label>
-                            <button class="action-button upload"
-                                    [disabled]="!selectedBulletin"
-                                    (click)="uploadBulletin()">
-                                <i class="fas fa-upload"></i> Téléverser
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Rapport de Stage Card -->
                 <div class="document-item">
                     <div class="document-header">
@@ -74,24 +35,19 @@
 
                     <div class="document-actions">
                         <div class="file-input-wrapper" *ngIf="!rapportSigne">
-                            <input type="file" 
-                                   (change)="onRapportSelected($event)" 
-                                   accept=".pdf"
-                                   id="rapport-upload">
+                            <input type="file" (change)="onRapportSelected($event)" accept=".pdf" id="rapport-upload">
                             <label for="rapport-upload">
                                 <i class="fas fa-cloud-upload-alt"></i>
                                 Choisir le rapport
                             </label>
-                            <button class="action-button upload"
-                                    [disabled]="!selectedRapport"
-                                    (click)="uploadRapport()">
+                            <button class="action-button upload" [disabled]="!selectedRapport"
+                                (click)="uploadRapport()">
                                 <i class="fas fa-upload"></i> Téléverser
                             </button>
                         </div>
 
-                        <button *ngIf="rapportSigne" 
-                                class="action-button download"
-                                (click)="downloadDocument(rapportSigne, 'Rapport_Signe.pdf')">
+                        <button *ngIf="rapportSigne" class="action-button download"
+                            (click)="downloadDocument(rapportSigne, 'Rapport_Signe.pdf')">
                             <i class="fas fa-download"></i> Télécharger le rapport
                         </button>
                     </div>
@@ -109,9 +65,8 @@
                 <div class="attestation-info">
                     <h3>{{ attestation ? 'Attestation disponible' : 'En attente de validation' }}</h3>
                     <p>L'attestation sera générée après validation de tous les documents requis.</p>
-                    <button *ngIf="attestation" 
-                            class="action-button download"
-                            (click)="downloadDocument(attestation, 'Attestation_de_Stage.pdf')">
+                    <button *ngIf="attestation" class="action-button download"
+                        (click)="downloadDocument(attestation, 'Attestation_de_Stage.pdf')">
                         <i class="fas fa-download"></i> Télécharger l'attestation
                     </button>
                 </div>
@@ -123,8 +78,8 @@
             <div class="warning-content">
                 <i class="fas fa-exclamation-triangle"></i>
                 <h3>Information importante</h3>
-                <p>Votre compte sera désactivé 48 heures après la fin de votre stage. 
-                   Assurez-vous de télécharger tous vos documents avant cette échéance.</p>
+                <p>Votre compte sera désactivé 48 heures après la fin de votre stage.
+                    Assurez-vous de télécharger tous vos documents avant cette échéance.</p>
             </div>
         </div>
     </div>

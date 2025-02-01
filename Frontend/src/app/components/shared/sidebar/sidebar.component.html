@@ -9,28 +9,25 @@
             <span class="user-role">{{ userRole }}</span>
         </div>
     </div>
-    
+
     <!-- Navigation menu -->
     <nav class="sidebar-nav">
         <ul>
             <li *ngFor="let item of menuItems">
                 <!-- Menu items without children (simple links) -->
-                <a *ngIf="!item.children" 
-                   [routerLink]="[item.route || '/intern-list']" 
-                   [queryParams]="item.route ? null : {filter: item.filter}" 
-                   routerLinkActive="active"
-                   class="menu-item">
+                <a *ngIf="!item.children" [routerLink]="[item.route || '/intern-list']"
+                    [queryParams]="item.route ? null : {filter: item.filter}" routerLinkActive="active"
+                    class="menu-item">
                     <i class="nav-icon" [ngClass]="getIconForMenuItem(item)"></i>
                     <span class="nav-label">{{ item.label }}</span>
                     <i class="fas fa-chevron-right arrow-icon"></i>
                 </a>
-                
+
                 <!-- Menu items with children (expandable) -->
                 <div *ngIf="item.children" class="menu-group">
                     <!-- Parent menu item header -->
-                    <div class="menu-group-header" 
-                         (click)="toggleSubmenu(item.label)"
-                         [class.expanded]="currentExpandedMenu === item.label">
+                    <div class="menu-group-header" (click)="toggleSubmenu(item.label)"
+                        [class.expanded]="currentExpandedMenu === item.label">
                         <i class="nav-icon" [ngClass]="getIconForMenuItem(item)"></i>
                         <span class="nav-label">{{ item.label }}</span>
                         <i class="fas fa-chevron-right toggle-icon"></i>
@@ -38,10 +35,9 @@
                     <!-- Submenu items -->
                     <ul class="submenu" [class.expanded]="currentExpandedMenu === item.label">
                         <li *ngFor="let child of item.children">
-                            <a [routerLink]="[child.route || '/intern-list']" 
-                               [queryParams]="child.route ? null : {filter: child.filter}"
-                               routerLinkActive="active"
-                               class="submenu-item">
+                            <a [routerLink]="[child.route || '/intern-list']"
+                                [queryParams]="child.route ? null : {filter: child.filter}" routerLinkActive="active"
+                                class="submenu-item">
                                 <i class="nav-icon" [ngClass]="getIconForMenuItem(child)"></i>
                                 <span class="nav-label">{{ child.label }}</span>
                             </a>

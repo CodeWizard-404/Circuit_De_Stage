@@ -198,7 +198,7 @@ export class DemandeViewComponent implements OnInit {
     switch (filter) {
       case 'demande_en_attente':
         return this.userRole === RoleType.ENCADRANT ?
-          [DocumentType.DEMANDE_DE_STAGE_SINGER] : [];
+          [DocumentType.DEMANDE_DE_STAGE_SIGNER] : [];
 
       case 'rapport_en_attente':
         return this.userRole === RoleType.ENCADRANT ?
@@ -210,7 +210,7 @@ export class DemandeViewComponent implements OnInit {
 
       case 'bulletin_en_attente':
         return this.userRole === RoleType.SERVICE_ADMINISTRATIVE ?
-          [DocumentType.BULLETIN_DE_MOUVEMENT_VIDE] : [];
+          [DocumentType.BULLETIN_DE_MOUVEMENT] : [];
 
       case 'convocation_en_attente':
         return this.userRole === RoleType.CENTRE_DE_FORMATION ?
@@ -243,6 +243,9 @@ export class DemandeViewComponent implements OnInit {
       case 'classement_en_attente':
         return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
 
+      case 'document_en_attente':
+        return this.userRole === RoleType.CENTRE_DE_FORMATION;
+
       case 'bulletin_en_attente':
         return this.userRole === RoleType.SERVICE_ADMINISTRATIVE;
 
@@ -265,11 +268,6 @@ export class DemandeViewComponent implements OnInit {
       .sort((a, b) => b.id - a.id)[0];
 
     switch (this.currentFilter) {
-      case 'bulletin_recus':
-        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
-          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE &&
-          relevantDoc?.status === DocumentStatus.SOUMIS;
-
       case 'stagiaire_en_attente':
         return this.userRole === RoleType.DCRH &&
           documentType === DocumentType.CLASSEMENT &&
@@ -289,9 +287,6 @@ export class DemandeViewComponent implements OnInit {
     if (!this.demande || !this.userRole) return false;
 
     switch (this.currentFilter) {
-      case 'bulletin_recus':
-        return this.userRole === RoleType.SERVICE_ADMINISTRATIVE &&
-          documentType === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE;
 
       case 'convocation_recus':
         const relevantDoc = this.demande.documents.find(d => d.type === DocumentType.CONVOCATION_SIGNER);
@@ -309,7 +304,7 @@ export class DemandeViewComponent implements OnInit {
 
     const filter = this.currentFilter;
     const hasRequiredDocument = this.demande.documents.some(
-      doc => doc.type === DocumentType.DEMANDE_DE_STAGE_SINGER
+      doc => doc.type === DocumentType.DEMANDE_DE_STAGE_SIGNER
     );
 
     return filter === 'demande_en_attente' && 

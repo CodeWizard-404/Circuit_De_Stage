@@ -49,6 +49,7 @@
 .status-badge.soumise { background: #fff3cd; color: #856404; }
 .status-badge.valide { background: #d4edda; color: #155724; }
 .status-badge.rejetee { background: #f8d7da; color: #721c24; }
+.status-badge.terminee { background: #cce5ff; color: #004085; }
 
 /* Content Grid */
 .content-grid {
@@ -67,7 +68,7 @@
 
 .card-header {
   padding: 1.5rem;
-  background: linear-gradient(135deg, #d4192c 80%, #ff002677 100%);
+  background:  #D4192C ;
   color: white;
   display: flex;
   align-items: center;

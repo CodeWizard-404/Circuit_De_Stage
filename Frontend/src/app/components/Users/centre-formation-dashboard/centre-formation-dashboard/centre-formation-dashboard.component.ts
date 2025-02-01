@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { DemandeService } from '../../../../services/demande.service';
 import { Demande } from '../../../../classes/demande';
 import { User } from '../../../../classes/user';
-import { DocumentStatus } from '../../../../classes/enums/document-status';
+import { DemandeStatus } from '../../../../classes/enums/demande-status';
 import { StageType } from '../../../../classes/enums/stage-type';
 
 @Component({
@@ -17,10 +17,11 @@ import { StageType } from '../../../../classes/enums/stage-type';
   styleUrls: ['./centre-formation-dashboard.component.css']
 })
 export class CentreFormationDashboardComponent implements OnInit {
-  admin: User | null = null;
+  currentUser: User | null = null;
   demandes: Demande[] = [];
   isLoading = true;
   error: string | null = null;
+  today: Date = new Date();
 
   constructor(
     private authService: AuthService,
@@ -28,7 +29,7 @@ export class CentreFormationDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.admin = this.authService.getCurrentUser() as User;
+    this.currentUser = this.authService.getCurrentUser() as User;
     this.loadDemandes();
   }
 
@@ -39,33 +40,46 @@ export class CentreFormationDashboardComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        this.error = "Error loading training data";
+        this.error = "Erreur de chargement des données";
         this.isLoading = false;
         console.error('Error:', err);
       }
     });
   }
 
-  // Document statistics calculations
-  get documentStats() {
-    const allDocs = this.demandes.flatMap(d => d.documents);
-    return {
-      pending: allDocs.filter(d => d.status === DocumentStatus.SOUMIS).length,
-      validated: allDocs.filter(d => d.status === DocumentStatus.VALIDE).length,
-      rejected: allDocs.filter(d => d.status === DocumentStatus.REJETE).length,
-      total: allDocs.length
-    };
+  get activeStagiaires(): number {
+    return this.demandes.filter(d => 
+      d.status === DemandeStatus.VALIDE && 
+      new Date(d.finStage) > new Date()
+    ).length;
   }
 
-  // Recent document submissions
-  get recentDocuments() {
+  get completedStagiaires(): number {
+    return this.demandes.filter(d => 
+      d.status === DemandeStatus.TERMINEE
+    ).length;
+  }
+
+  getDemandesThisMonth(): number {
+    const now = new Date();
+    return this.demandes.filter(d => {
+      const demandeDate = new Date(d.debutStage);
+      return demandeDate.getMonth() === now.getMonth() && 
+             demandeDate.getFullYear() === now.getFullYear();
+    }).length;
+  }
+
+  getValidatedDemandesCount(): number {
+    return this.demandes.filter(d => d.status === DemandeStatus.VALIDE).length;
+  }
+
+
+  get recentDemandes(): Demande[] {
     return this.demandes
-      .flatMap(d => d.documents)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort((a, b) => new Date(b.debutStage).getTime() - new Date(a.debutStage).getTime())
       .slice(0, 5);
   }
 
-  // Training program statistics
   get trainingStats() {
     const programs = new Map<StageType, number>();
     this.demandes.forEach(d => {

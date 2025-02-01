@@ -18,14 +18,10 @@ import { DocumentStatus } from '../../../../classes/enums/document-status';
 export class FinDuStageComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
-  bulletinVide: Document | null = null;
-  bulletinRempli: Document | null = null;
   rapport: Document | null = null;
   rapportSigne: Document | null = null;
   attestation: Document | null = null;
   selectedRapport: File | null = null;
-  selectedBulletin: File | null = null;
-  bulletinRempliStatus: string | null = null;
   private demandeId: number | null = null;
 
   constructor(
@@ -51,15 +47,6 @@ export class FinDuStageComponent implements OnInit {
         const stagiaireDemande = demandes.find(d => d.stagiaire.id === stagiaire.id);
         if (stagiaireDemande) {
           this.demandeId = stagiaireDemande.id;
-          this.bulletinVide = stagiaireDemande.documents.find(
-            doc => doc.type === DocumentType.BULLETIN_DE_MOUVEMENT_VIDE
-          ) || null;
-          this.bulletinRempli = stagiaireDemande.documents.find(
-            doc => doc.type === DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE
-          ) || null;
-          if (this.bulletinRempli) {
-            this.bulletinRempliStatus = this.bulletinRempli.status === DocumentStatus.VALIDE ? 'Validé' : 'Soumis';
-          }
           this.rapport = stagiaireDemande.documents.find(
             doc => doc.type === DocumentType.RAPPORT
           ) || null;
@@ -87,12 +74,6 @@ export class FinDuStageComponent implements OnInit {
     }
   }
 
-  onBulletinSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files?.length) {
-      this.selectedBulletin = input.files[0];
-    }
-  }
 
   uploadRapport(): void {
     if (!this.selectedRapport || !this.demandeId) return;
@@ -110,21 +91,7 @@ export class FinDuStageComponent implements OnInit {
       });
   }
 
-  uploadBulletin(): void {
-    if (!this.selectedBulletin || !this.demandeId) return;
 
-    this.documentService.uploadDocument(this.demandeId, this.selectedBulletin, DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE)
-      .subscribe({
-        next: () => {
-          this.loadDocuments();
-          this.selectedBulletin = null;
-        },
-        error: (err) => {
-          this.error = "Erreur lors du téléversement du bulletin";
-          console.error('Upload error:', err);
-        }
-      });
-  }
 
   downloadDocument(doc: Document | null, filename: string): void {
     if (!doc) return;

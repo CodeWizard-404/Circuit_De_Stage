@@ -125,48 +125,20 @@
             </div>
         </div>
 
-        <!-- Additional Summary Section -->
-        <div class="summary-section">
-            <div class="summary-card">
-                <h3>Vue d'ensemble</h3>
-                <div class="summary-content">
-                    <div class="summary-item">
-                        <i class="fas fa-calendar-check"></i>
-                        <span>{{ getDemandesThisMonth() }} nouvelles demandes ce mois</span>
-                    </div>
-                    <div class="summary-item">
-                        <i class="fas fa-user-graduate"></i>
-                        <span>{{ getCurrentStagiairesCount() }} stagiaires actifs</span>
-                    </div>
-                    <div class="summary-item">
-                        <i class="fas fa-clock"></i>
-                        <span>{{ getPendingDemandesCount() }} demandes en attente</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Main Content Grid -->
         <div class="dashboard-grid">
             <!-- Quick Actions -->
             <div class="dashboard-card">
                 <h2><i class="fas fa-bolt"></i> Actions rapides</h2>
                 <div class="actions-grid">
-                    <a [routerLink]="['/demandes']" class="action-item">
-                        <i class="fas fa-list-alt"></i>
-                        <span>Gérer les demandes</span>
-                    </a>
+
                     <a [routerLink]="['/users-add']" class="action-item">
                         <i class="fas fa-user-plus"></i>
-                        <span>Ajouter un utilisateur</span>
-                    </a>
-                    <a [routerLink]="['/attestations']" class="action-item">
-                        <i class="fas fa-certificate"></i>
-                        <span>Attestations</span>
+                        <span>+ Utilisateur</span>
                     </a>
                     <a [routerLink]="['/intern-list']" class="action-item">
                         <i class="fas fa-user-graduate"></i>
-                        <span>Liste des stagiaires</span>
+                        <span>Stagiaires</span>
                     </a>
                 </div>
             </div>

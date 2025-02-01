@@ -12,11 +12,19 @@
     <div *ngIf="!isLoading && !error" class="dashboard-content">
         <!-- Welcome Section -->
         <div class="welcome-section">
-            
             <h1>Bonjour, {{ getFullName() }}</h1>
             <p>Bienvenue dans votre espace stagiaire Tunisair</p>
-        </div>
+            
+            <!-- Encadrant Information -->
 
+            <div *ngIf="demande?.encadrant as encadrant" class="info-group encadrant-info">
+                <label>Encadrant:</label>
+                <div class="contact-info">
+                  <p><i class="fas fa-user"></i> {{ encadrant.nom }} {{ encadrant.prenom }}</p>
+                  <p><i class="fas fa-envelope"></i> {{ encadrant.email }}</p>
+                </div>
+              </div>
+        </div>
         <!-- Stats Cards Row -->
         <div class="stats-row">
             <div class="stat-card">

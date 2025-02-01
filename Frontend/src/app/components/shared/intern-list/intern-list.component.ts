@@ -98,10 +98,10 @@ export class InternListComponent implements OnInit {
     switch (filter) {
       case 'demande_en_attente':
         return hasDocument(DocumentType.DEMANDE_DE_STAGE) &&
-          !hasDocument(DocumentType.DEMANDE_DE_STAGE_SINGER);
+          !hasDocument(DocumentType.DEMANDE_DE_STAGE_SIGNER);
 
       case 'demande_valide':
-        return hasDocument(DocumentType.DEMANDE_DE_STAGE_SINGER) &&
+        return hasDocument(DocumentType.DEMANDE_DE_STAGE_SIGNER) &&
           !hasDocument(DocumentType.RAPPORT);
 
       case 'rapport_en_attente':
@@ -109,11 +109,10 @@ export class InternListComponent implements OnInit {
           !hasDocument(DocumentType.RAPPORT_SIGNE);
 
       case 'rapport_valide':
-        return hasDocument(DocumentType.RAPPORT_SIGNE) &&
-        !hasDocument(DocumentType.ATTESTATION);
+        return hasDocument(DocumentType.RAPPORT_SIGNE);
 
       case 'classement_en_attente':
-        return hasDocument(DocumentType.DEMANDE_DE_STAGE_SINGER) &&
+        return hasDocument(DocumentType.DEMANDE_DE_STAGE_SIGNER) &&
           !hasDocument(DocumentType.CLASSEMENT);
 
       case 'classement_valide':
@@ -126,27 +125,19 @@ export class InternListComponent implements OnInit {
 
       case 'prise_service_valide':
           return hasDocument(DocumentType.PRISE_DE_SERVICE) &&
-          !hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_VIDE);
+          !hasDocument(DocumentType.RAPPORT_SIGNE);
 
       case 'bulletin_en_attente':
-        return hasDocument(DocumentType.PRISE_DE_SERVICE) &&
-          !hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_VIDE);
-
-      case 'bulletin_envoyer':
-        return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_VIDE) &&
-        !hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE);
-
-      case 'bulletin_recus':
-        return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE) &&
-          !hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE, DocumentStatus.VALIDE);
+        return hasDocument(DocumentType.RAPPORT_SIGNE) &&
+          !hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT);
 
       case 'bulletin_valide':
-        return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE, DocumentStatus.VALIDE) &&
+        return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT) &&
         !hasDocument(DocumentType.ATTESTATION);
 
       case 'attestation_en_attente':
-        return hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT_REMPLIE, DocumentStatus.VALIDE) &&
-        hasDocument(DocumentType.RAPPORT_SIGNE) &&  
+        return hasDocument(DocumentType.RAPPORT_SIGNE) &&
+        hasDocument(DocumentType.BULLETIN_DE_MOUVEMENT) &&  
         !hasDocument(DocumentType.ATTESTATION);
         
       case 'attestation_valide':
@@ -157,8 +148,7 @@ export class InternListComponent implements OnInit {
           !hasDocument(DocumentType.CLASSEMENT, DocumentStatus.VALIDE);
 
       case 'stagiaire_valide':
-        return hasDocument(DocumentType.CLASSEMENT, DocumentStatus.VALIDE) &&
-          !hasDocument(DocumentType.ATTESTATION);
+        return hasDocument(DocumentType.CLASSEMENT, DocumentStatus.VALIDE);
 
       case 'convocation_en_attente':
         return hasDocument(DocumentType.CLASSEMENT, DocumentStatus.VALIDE) &&
@@ -181,8 +171,7 @@ export class InternListComponent implements OnInit {
           !hasDocument(DocumentType.PRISE_DE_SERVICE);
 
       case 'document_valide':
-        return hasDocument(DocumentType.PRISE_DE_SERVICE) &&
-        !hasDocument(DocumentType.ATTESTATION);
+        return hasDocument(DocumentType.PRISE_DE_SERVICE);
 
       default:
         return true;

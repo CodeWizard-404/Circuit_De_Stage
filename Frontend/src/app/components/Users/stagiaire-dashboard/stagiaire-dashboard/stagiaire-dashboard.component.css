@@ -104,6 +104,18 @@ mat-nav-list a mat-icon {
   gap: 1.5rem;
 }
 
+.encadrant-info {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ffbaba;
+  border-radius: 5px;
+}
+
+.encadrant-info h3 {
+  margin-bottom: 5px;
+}
+
 .stats-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

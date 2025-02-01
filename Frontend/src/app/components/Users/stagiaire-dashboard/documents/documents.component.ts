@@ -46,7 +46,7 @@ export class DocumentsComponent implements OnInit {
             doc => doc.type === DocumentType.LAISSER_PASSER
           ) || null;
           this.bulletinMouvementDoc = stagiaireDemande.documents.find(
-            doc => doc.type === DocumentType.BULLETIN_DE_MOUVEMENT_VIDE
+            doc => doc.type === DocumentType.BULLETIN_DE_MOUVEMENT
           ) || null;
         }
         this.isLoading = false;

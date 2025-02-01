@@ -5,6 +5,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { DemandeService } from '../../../../services/demande.service';
 import { Stagiaire } from '../../../../classes/stagiaire';
 import { Demande } from '../../../../classes/demande';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
   selector: 'app-stagiaire-dashboard',
@@ -21,7 +22,8 @@ export class StagiaireDashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private demandeService: DemandeService
+    private demandeService: DemandeService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -36,8 +38,21 @@ export class StagiaireDashboardComponent implements OnInit {
 
   private loadDemandeInfo(): void {
     this.demandeService.getAllDemandes().subscribe({
-      next: (demandes: Demande[]) => {
+      next: async (demandes: Demande[]) => {
         this.demande = demandes.find(d => d.stagiaire.id === this.stagiaire?.id) || null;
+        
+        // Load encadrant details if demande exists
+        if (this.demande?.encadrant?.id) {  // Add optional chaining
+          try {
+            const encadrant = await this.userService.getUserById(this.demande.encadrant.id).toPromise();
+            if (encadrant) {
+              this.demande.encadrant = { ...this.demande.encadrant, ...encadrant };
+            }
+          } catch (err) {
+            console.error('Error loading encadrant details:', err);
+          }
+        }
+        
         this.isLoading = false;
       },
       error: (err) => {
@@ -47,7 +62,6 @@ export class StagiaireDashboardComponent implements OnInit {
       }
     });
   }
-
   getDaysRemaining(): number {
     if (!this.demande?.finStage) return 0;
     const end = new Date(this.demande.finStage);

@@ -1,11 +1,11 @@
 package Circuit_De_Stage.Backend.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import Circuit_De_Stage.Backend.Entities.*;
+import Circuit_De_Stage.Backend.Entities.Enum.DemandeStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentStatus;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import Circuit_De_Stage.Backend.Repositories.*;
@@ -32,15 +32,19 @@ public class DocumentService {
     @Autowired
     private UserDocumentSeenRepository userDocumentSeenRepository;
 
+    @Autowired
+    private StagiaireService stagiaireService;
+
     
     
 
-    public Document uploadDocument(int demandeId, MultipartFile file, DocumentType type) throws IOException, Throwable {
+    @SuppressWarnings("null")
+	public Document uploadDocument(int demandeId, MultipartFile file, DocumentType type) throws IOException, Throwable {
         Demande demande = demandeRepository.findById(demandeId)
                 .orElseThrow(() -> new RuntimeException("Demande not found"));
 
         
-        Stagiaire stagiaire = demande.getStagiaire();
+		Stagiaire stagiaire = demande.getStagiaire();
         User encadrant = demande.getEncadrant();
 
         String uploaderName = "";
@@ -67,6 +71,16 @@ public class DocumentService {
         if (stagiaire != null) {
             document.setStagiaire(stagiaire);
         }
+        
+        // Set Demande status to TERMINEE immediately if ATTESTATION is uploaded
+        if (type == DocumentType.ATTESTATION) {
+            demande.setStatus(DemandeStatus.TERMINEE);
+            demandeRepository.save(demande); // Save status change
+
+            // Schedule deactivation for 48 hours later
+            stagiaireService.scheduleDeactivation(stagiaire.getId());
+        }
+
 
         document.setDemande(demande);
         return documentRepository.save(document);
@@ -145,6 +159,8 @@ public class DocumentService {
         emailService.sendEmail(stagiaire.getEmail(), subject, body);
     }
 
+    
+    //To Be Removed
     public void updateSeenStatus(int documentId, int utilisateurId, boolean seen) {
     	UserDocumentSeen status = userDocumentSeenRepository.findByDocumentIdAndUtilisateurId(documentId, utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Status for the document and user not found"));

@@ -175,7 +175,7 @@ public class ForumService {
         authService.registerStagiaire(demande);
 
         // Schedule deactivation 48 hours after stageFin date
-        stagiaireService.scheduleDeactivation(demande.getStagiaire().getId(), demande.getFinStage().toInstant());
+        stagiaireService.scheduleDeactivation(demande.getStagiaire().getId());
     }
     
     public void rejectDemande(int demandeId, String rejectionReason) {
@@ -238,8 +238,6 @@ public class ForumService {
                 .orElseThrow(() -> new RuntimeException("Demande not found"));
 	}
     
-	
-
     @Transactional
     private void deleteRejectedDemande(int demandeId) {
         Demande demande = demandeRepository.findById(demandeId)

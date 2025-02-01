@@ -212,7 +212,8 @@
       </div>
 
       <!-- Action buttons (validate/reject) -->
-      <div *ngIf="demande.status === demandeStatus.SOUMISE" class="actions-card">
+      <div *ngIf="demande.status === demandeStatus.SOUMISE" >
+        <div *ngIf="shouldShowRejectDemande()" class="actions-card">
         <div class="card-header">
           <i class="fas fa-tasks"></i>
           <h2>Actions</h2>
@@ -241,6 +242,8 @@
           </div>
         </div>
       </div>
+
+    </div>
     </div>
   </div>
 </div>

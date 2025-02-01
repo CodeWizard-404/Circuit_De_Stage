@@ -18,7 +18,6 @@ import { DemandeStatus } from '../../../../classes/enums/demande-status';
 export class EncadrantDashboardComponent implements OnInit {
   encadrant: User | null = null;
   demandes: Demande[] = [];
-  pendingDocuments: Document[] = [];
   isLoading = true;
   error: string | null = null;
   today: Date = new Date();
@@ -26,7 +25,6 @@ export class EncadrantDashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private demandeService: DemandeService,
-    private documentService: DocumentService
   ) {}
 
   ngOnInit(): void {
@@ -41,8 +39,9 @@ export class EncadrantDashboardComponent implements OnInit {
 
   private loadDashboardData(): void {
     this.demandeService.getAllDemandes().subscribe({
-      next: (demandes) => {
-        this.demandes = demandes.filter(d => d.encadrant?.id === this.encadrant?.id);
+      next: (demandes: Demande[]) => {
+        this.demandes = demandes;
+        this.isLoading = false;
       },
       error: (err) => this.handleError(err)
     });
@@ -65,6 +64,7 @@ export class EncadrantDashboardComponent implements OnInit {
 
   getPendingValidationsCount(): number {
     return this.demandes.filter(d => d.status === 'SOUMISE').length;
+
   }
 
   getCompletedValidationsCount(): number {

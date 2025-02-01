@@ -120,8 +120,6 @@ export class SidebarComponent implements OnInit {
           role: RoleType.SERVICE_ADMINISTRATIVE,
           children: [
             { label: 'En attente', filter: 'bulletin_en_attente' },
-            { label: 'Envoyés', filter: 'bulletin_envoyer' },
-            { label: 'Reçus', filter: 'bulletin_recus' },
             { label: 'Validés', filter: 'bulletin_valide' }
           ]
         },
@@ -222,8 +220,6 @@ export class SidebarComponent implements OnInit {
       prise_service_valide: 'fas fa-check-double',
       bulletin: 'fas fa-file-invoice',
       bulletin_en_attente: 'fas fa-pause-circle',
-      bulletin_envoyer: 'fas fa-paper-plane',
-      bulletin_recus: 'fas fa-inbox',
       bulletin_valide: 'fas fa-check-square',
       attestation: 'fas fa-file-signature',
       attestation_en_attente: 'fas fa-file-upload',

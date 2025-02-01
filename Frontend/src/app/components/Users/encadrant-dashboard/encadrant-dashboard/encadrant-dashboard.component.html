@@ -34,17 +34,7 @@
                 </div>
                 <div class="stat-content">
                     <h3>{{ demandes.length }}</h3>
-                    <p>Stagiaires assignés</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-file-signature"></i>
-                </div>
-                <div class="stat-content">
-                    <h3>{{ getPendingValidationsCount() }}</h3>
-                    <p>Validations en attente</p>
+                    <p>Stagiaires</p>
                 </div>
             </div>
 
@@ -60,6 +50,16 @@
 
             <div class="stat-card">
                 <div class="stat-icon">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ getPendingValidationsCount() }}</h3>
+                    <p>Validations en attente</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
                     <i class="fas fa-check-double"></i>
                 </div>
                 <div class="stat-content">
@@ -67,6 +67,9 @@
                     <p>Validations terminées</p>
                 </div>
             </div>
+
+
+
         </div>
 
         <!-- Main Content Grid -->
@@ -75,14 +78,9 @@
             <div class="dashboard-card">
                 <h2><i class="fas fa-bolt"></i> Actions Rapides</h2>
                 <div class="actions-grid">
-                    <a [routerLink]="['/demande']" class="action-item">
+                    <a [routerLink]="['/intern-list']"  class="action-item">
                         <i class="fas fa-list-ul"></i>
-                        <span>Gérer les demandes</span>
-                    </a>
-
-                    <a [routerLink]="['/rapports']" class="action-item">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Rapports de stage</span>
+                        <span>Voir les demandes</span>
                     </a>
 
                 </div>
@@ -105,7 +103,7 @@
                                 <span class="date">{{ demande.debutStage | date:'dd/MM/yyyy' }}</span>
                             </div>
                         </div>
-                        <a [routerLink]="['/demande', demande.id]" class="view-btn">
+                        <a [routerLink]="['/demande-view', demande.id]" class="view-btn">
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
