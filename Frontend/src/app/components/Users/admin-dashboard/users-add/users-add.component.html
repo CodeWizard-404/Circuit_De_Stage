@@ -148,6 +148,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="error-notification" *ngIf="emailExists">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Cette adresse email existe déjà. Veuillez en utiliser une autre.</span>
+                </div>
+                
 
                 <!-- Form Actions -->
                 <div class="form-actions">

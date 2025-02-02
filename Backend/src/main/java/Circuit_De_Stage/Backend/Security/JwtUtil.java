@@ -28,14 +28,14 @@ public class JwtUtil {
     // Generate a secure key using the HS512 algorithm
     //private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    public String generateToken(String utilisateur) {
-        return Jwts.builder()
-                .setSubject(utilisateur)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day expiration
-                .signWith(secretKey)
-                .compact();
-    }
+public String generateToken(String utilisateur) {
+    return Jwts.builder()
+            .setSubject(utilisateur)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day expiration
+            .signWith(secretKey)
+            .compact();
+}
 
     public String extractUsername(String token) {
         return Jwts.parserBuilder()

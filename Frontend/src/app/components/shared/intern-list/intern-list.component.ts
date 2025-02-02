@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { StageType } from '../../../classes/enums/stage-type';
-import { Stagiaire } from '../../../classes/stagiaire';
-import { StagiaireService } from '../../../services/stagiaire.service';
 import { DemandeService } from '../../../services/demande.service';
 import { Demande } from '../../../classes/demande';
 import { Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { DocumentType } from '../../../classes/enums/document-type';
 import { AuthService } from '../../../services/auth.service';
 import { DocumentStatus } from '../../../classes/enums/document-status';
-import { User } from '../../../classes/user';
 import { Document } from '../../../classes/document';
 
 @Component({

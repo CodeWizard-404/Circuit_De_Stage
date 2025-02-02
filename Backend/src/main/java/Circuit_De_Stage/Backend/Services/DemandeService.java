@@ -26,7 +26,7 @@ import Circuit_De_Stage.Backend.Repositories.UserRepository;
 import io.jsonwebtoken.io.IOException;
 
 @Service
-public class ForumService {
+public class DemandeService {
 
     @Autowired
     private DemandeRepository demandeRepository;
@@ -233,7 +233,7 @@ public class ForumService {
         return demandeRepository.findAll();
     }
 
-	public Demande getStagiaireInfo(int id) {
+	public Demande getDemandeInfo(int id) {
         return demandeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Demande not found"));
 	}

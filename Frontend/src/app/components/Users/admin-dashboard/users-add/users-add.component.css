@@ -231,3 +231,23 @@ select {
     background-position: right 1rem center;
     background-size: 1em;
 }
+
+
+.error-notification {
+    background-color: #d4192ca2;
+    border: 1px solid #d4192cd8;
+    color: rgb(255, 255, 255);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeIn 0.3s ease-out;
+    border-radius: 15px;
+}
+
+.error-notification i {
+    font-size: 1.2rem;
+}
+

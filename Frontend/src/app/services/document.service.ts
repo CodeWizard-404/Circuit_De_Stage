@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Document } from '../classes/document';
 import { DocumentStatus } from '../classes/enums/document-status';
-import { DocumentType } from '../classes/enums/document-type';  // Add this import
+import { DocumentType } from '../classes/enums/document-type';  
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
@@ -40,6 +40,9 @@ export class DocumentService {
   rejectDocument(documentId: number, reason: string): Observable<void> {
     return this.http.put<void>(`${environment.apiUrl}/document/${documentId}/reject`, { reason });
   }
+
+
+
 
   markAsSeen(documentId: number): Observable<void> {
     return this.http.put<void>(`${environment.apiUrl}/document/${documentId}/seen`, {});

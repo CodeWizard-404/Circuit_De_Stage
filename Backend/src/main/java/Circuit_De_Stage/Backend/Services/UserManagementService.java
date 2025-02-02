@@ -31,6 +31,13 @@ public class UserManagementService {
     
     
     public void createUser(User user) {
+        // Check if a user with the same email already exists
+        boolean emailExists = utilisateurRepository.existsByEmail(user.getEmail());
+        if (emailExists) {
+            throw new RuntimeException("email exists");
+        }
+
+        // Encode the password and save the user
         user.setPasse(passwordEncoder.encode(user.getPasse()));
         utilisateurRepository.save(user);
     }

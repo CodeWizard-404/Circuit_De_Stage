@@ -177,7 +177,7 @@ export class InternFormComponent {
       this.demandeService.submitDemande(formData).subscribe({
         next: () => this.router.navigate(['/confirmation']),
         error: (err) => {
-          this.errorMessage = err.error?.message || 'Une demande de se type de stage existe deja.';
+          this.errorMessage = err.error?.message || 'Une demande de ce type de stage existe deja.';
           console.error('Submission error:', err);
         },
       });

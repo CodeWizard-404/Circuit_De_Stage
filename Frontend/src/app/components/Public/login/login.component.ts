@@ -44,7 +44,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      // Try to login and redirect based on user role
+      // to login and redirect based on user role
       this.authService.login(email, password).subscribe({
         next: () => this.authService.navigateBasedOnRole(),
         error: (err) => this.errorMessage = 'Identifiants invalides'

@@ -4,8 +4,8 @@ import Circuit_De_Stage.Backend.Entities.Demande;
 import Circuit_De_Stage.Backend.Entities.User;
 import Circuit_De_Stage.Backend.Entities.Enum.DocumentType;
 import Circuit_De_Stage.Backend.Repositories.UserRepository;
+import Circuit_De_Stage.Backend.Services.DemandeService;
 import Circuit_De_Stage.Backend.Services.DocumentService;
-import Circuit_De_Stage.Backend.Services.ForumService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +34,13 @@ public class DemandeController {
     private UserRepository userRepository;
     
     @Autowired
-    private final ForumService forumService;
+    private final DemandeService demandeService;
 
     @Autowired
     private DocumentService documentService;
 
-    public DemandeController(ForumService forumService) {
-        this.forumService = forumService;
+    public DemandeController(DemandeService demandeService) {
+        this.demandeService = demandeService;
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -59,7 +59,7 @@ public class DemandeController {
         }
 
         // Pass the demande object and documents to the service
-        forumService.submit(demande, docs);
+        demandeService.submit(demande, docs);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(demande);
     }
@@ -72,33 +72,36 @@ public class DemandeController {
         String email = authentication.getName();
         User encadrant = userRepository.findByEmail(email);
 
-        forumService.validateDemande(id, encadrant.getId());        
+        demandeService.validateDemande(id, encadrant.getId());        
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/reject")
     @PreAuthorize("hasRole('ENCADRANT')")
     public ResponseEntity<Void> rejectDemande(@PathVariable("id") int id, @RequestBody String reason) {
-        forumService.rejectDemande(id, reason);
+    	demandeService.rejectDemande(id, reason);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/document-types")
     public ResponseEntity<Set<DocumentType>> getDocumentTypes(@PathVariable("id") int id) {
-        return ResponseEntity.ok(forumService.getDocumentTypes(id));
+        return ResponseEntity.ok(demandeService.getDocumentTypes(id));
     }
     
     @GetMapping("/ALL")
     @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
     public ResponseEntity<List<Demande>> getAllDemandes() {
-        return ResponseEntity.ok(forumService.getDemandeList());
+        return ResponseEntity.ok(demandeService.getDemandeList());
     }
     
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
     public ResponseEntity<Demande> getDemandeInfo(@PathVariable("id") int id) {
-        return ResponseEntity.ok(forumService.getStagiaireInfo(id));
+        return ResponseEntity.ok(demandeService.getDemandeInfo(id));
     }
+    
+    
+    //to be removed
 
     @PutMapping("/{documentId}/seen")
     @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")

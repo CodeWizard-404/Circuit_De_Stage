@@ -19,6 +19,8 @@ export class UsersAddComponent {
   user: User = new User(0, '', '', '', '', RoleType.SERVICE_ADMINISTRATIVE);
   roles = Object.values(RoleType);
   confirmPassword: string = '';
+  emailExists: boolean = false;
+
 
   constructor(
     private userService: UserService,
@@ -42,12 +44,17 @@ export class UsersAddComponent {
       return;
     }
 
+
     this.userService.createUser(this.user).subscribe({
       next: () => {
         this.toastr.success('User created successfully');
         this.router.navigate(['/service-administrative-dashboard']);
       },
       error: (error) => {
+        if (error.status === 403 || error.error?.message?.includes('email exists')) {
+          this.emailExists = true;
+          this.toastr.error(error.message || 'Cette adresse email existe déjà. Veuillez en utiliser une autre.');
+        }
         this.toastr.error(error.message || 'Failed to create user');
       }
     });
