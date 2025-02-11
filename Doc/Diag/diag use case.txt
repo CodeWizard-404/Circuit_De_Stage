@@ -1,0 +1,68 @@
+@startuml
+left to right direction
+
+actor Stagiaire
+actor Encadrant
+actor DCRH
+actor Service_Administrative
+actor Centre_De_Formation
+
+Stagiaire --> (Téléverser Demande S)
+Stagiaire --> (Télécharger Demande S)
+Stagiaire --> (Suivre Statut du Demande)
+Stagiaire --> (Postuler Demande)
+
+(Téléverser Demande S) -|> (Document Personnel) : Generalization
+(Téléverser Demande S) -|> (Bulletin de Mouvement) : Generalization
+(Téléverser Demande S) -|> (Rapport) : Generalization
+(Téléverser Demande S) -|> (Convocation) : Generalization
+(Télécharger Demande S) -|> (Convocation) : Generalization
+(Télécharger Demande S) -|> (Rapport) : Generalization
+(Télécharger Demande S) -|> (Bulletin de Mouvement) : Generalization
+(Télécharger Demande S) -|> (Laisser Passer) : Generalization
+(Télécharger Demande S) -|> (Attestation) : Generalization
+
+Encadrant --> (Consulter Demande)
+Encadrant --> (Valider Rapport)
+(Consulter Demande) --> (Envoyer Email de Rejet)
+(Consulter Demande) --> (Valider)
+
+DCRH --> (Valider Demande)
+
+Service_Administrative --> (Télécharger Document SA)
+Service_Administrative --> (Téléverser Document SA)
+Service_Administrative --> (Gérer Utilisateur)
+(Télécharger Document SA) --> (Bulletin de Mouvement)
+(Télécharger Document SA) --> (Prise de Service)
+(Téléverser Document SA) --> (Bulletin de Mouvement)
+(Téléverser Document SA) --> (Classement)
+(Gérer Utilisateur) --> (Ajouter)
+(Gérer Utilisateur) --> (Supprimer)
+(Gérer Utilisateur) --> (Modifier)
+(Gérer Utilisateur) --> (Consulter)
+
+Centre_De_Formation --> (Téléverser Document CF)
+Centre_De_Formation --> (Consulter Convocation)
+(Téléverser Document CF) --> (Prise de Service)
+(Téléverser Document CF) --> (Laisser Passer)
+(Consulter Convocation) --> (Envoyer Email de Rejet)
+(Consulter Convocation) --> (Valider)
+
+Encadrant --> (Consulter Stagiaire)
+Service_Administrative --> (Consulter Stagiaire)
+DCRH --> (Consulter Stagiaire)
+Centre_De_Formation --> (Consulter Stagiaire)
+
+(Télécharger Demande S) ..> (Se Connecter) : <<Include>>
+(Téléverser Demande S) ..> (Se Connecter) : <<Include>>
+(Suivre Statut du Demande) ..> (Se Connecter) : <<Include>>
+(Consulter Demande) ..> (Se Connecter) : <<Include>>
+(Valider Rapport) ..> (Se Connecter) : <<Include>>
+(Valider Demande) ..> (Se Connecter) : <<Include>>
+(Télécharger Document SA) ..> (Se Connecter) : <<Include>>
+(Téléverser Document SA) ..> (Se Connecter) : <<Include>>
+(Gérer Utilisateur) ..> (Se Connecter) : <<Include>>
+(Téléverser Document CF) ..> (Se Connecter) : <<Include>>
+(Consulter Convocation) ..> (Se Connecter) : <<Include>>
+
+@enduml

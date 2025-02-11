@@ -1,0 +1,27 @@
+concepetion:
+I. diagram de CU :
+ 1. Acteurs:
+	Intern
+	Admin
+	encadrant
+	DCRH
+	Centre de formation
+ 2. Diagram
+	- Intern:
+	Submit request
+	upload files (cv, letter de motivation, demande de stage, convocation signee, rapport non signee, bulletin de movement remplie)
+	download fiels (convocation non signée, rapport signee, laisser passer, bulletein de movement non remplie, attestation de stage)
+	tack inerships  
+	- Admin:
+	gerer les documents (classment(ajouter ficher classemnt), prise de service(telecharger fichier prise de service), bulletin de movement(upload empty, download after filled from the intern))
+	gerer ls utulisateur
+	- encadrant:
+	valider les demandes (si valider telcharger demande pdf signer et uplode demande signee, si rejet envoyer un reason par mail)
+	valider les rappoer( telecharger le rapport signer, upload rapport signer)
+	- DCRH:
+	valider demande 
+	- centre de formation:
+	gerer les documents ( convocation(upload non signée, telecharger signée), prise de service(upload fichier), laisser passer(upload fichier))
+	
+	
+	

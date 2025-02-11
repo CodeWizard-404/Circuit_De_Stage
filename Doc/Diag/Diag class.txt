@@ -1,0 +1,78 @@
+@startuml
+class Document {
+    +id: int
+    +type: string
+    +nom: string
+    +fichier: file
+    +status: string
+    +GetStatus()
+    +UpdateStatus()
+    +Telecharger()
+    +Televerser()
+    +ValiderDoc()  
+    +RejeterDoc()  
+}
+
+class Utilisateur {
+    +id: int
+    +nom: string
+    +prenom: string
+    +email: string
+    +passe: string
+    +Login()
+    +Logout()
+    +RecupererPasse()
+    +AfficherProfil() 
+    +ModifierProfil()  
+    +ListerDemandes()
+    +VoirDetailsDemande()
+}
+
+class Demande {
+    +id: int
+    +type: string
+    +stage: string
+    +debutStage: date
+    +finStage: date
+    +status: string
+    +Soumettre()
+    +ValiderDemande()
+    +RejeterDemande()
+    +GetDocTypes()
+}
+
+class Stagiaire {
+    +emailPerso: string
+    +cin: long
+    +tel: long
+    +institut: string
+    +niveau: string
+    +annee: string
+    +specialite: string
+    +registerStagiaire()
+}
+
+' Roles (no methods – all logic centralized in Utilisateur + controlled by API)
+class ServiceAdministrative
+class Encadrant
+class DCRH
+class CentreDeFormation
+
+' Inheritance
+Utilisateur <|-- Stagiaire
+Utilisateur <|-- ServiceAdministrative
+Utilisateur <|-- Encadrant
+Utilisateur <|-- DCRH
+Utilisateur <|-- CentreDeFormation
+
+' Associations
+Stagiaire "1..2" --* "1..*" Demande : "cree par <"
+
+Demande "1" o-- "1..*" Document : "associe des >"
+Demande "1..*" -- "1" Encadrant : "valide ou rejette <"
+
+CentreDeFormation "1" -- "1..*" Document : "valide/rejette >"
+
+ServiceAdministrative "1..*" --> "1..*" Utilisateur : "gère >"
+Utilisateur "1..*" -- "1..*" Demande : "consulte via\nListerDemandes()"
+@enduml
