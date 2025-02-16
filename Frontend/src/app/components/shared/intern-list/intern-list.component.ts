@@ -64,7 +64,8 @@ export class InternListComponent implements OnInit {
     if (this.searchName || this.selectedStageType || this.selectedYear) {
       this.filtered = this.filtered.filter(demande => {
         const matchesName = !this.searchName ||
-          demande.stagiaire.nom.toLowerCase().includes(this.searchName.toLowerCase());
+          demande.stagiaire.nom.toLowerCase().includes(this.searchName.toLowerCase())
+          || demande.stagiaire.prenom.toLowerCase().includes(this.searchName.toLowerCase());
 
         const matchesStageType = !this.selectedStageType ||
           demande.stage === this.selectedStageType;
