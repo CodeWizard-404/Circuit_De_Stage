@@ -14,9 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes), 
     provideNativeDateAdapter(),
-    provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor])
-    ),
+    provideHttpClient( withInterceptors([authInterceptor, errorInterceptor])),
     provideAnimations(),
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     provideToastr({

@@ -29,8 +29,8 @@ public class StartupConfig implements CommandLineRunner {
             adminUser.setNom("admin");
             adminUser.setPrenom("admin");
             adminUser.setEmail(adminEmail);
-            adminUser.setPasse(passwordEncoder.encode("admin")); // Encode password
-            adminUser.setType(RoleType.SERVICE_ADMINISTRATIVE); // Set role
+            adminUser.setPasse(passwordEncoder.encode("admin"));
+            adminUser.setType(RoleType.SERVICE_ADMINISTRATIVE);
             userRepository.save(adminUser);
             System.out.println("Service Administrative User created successfully.");
         }

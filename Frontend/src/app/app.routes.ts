@@ -24,14 +24,7 @@ import { FinDuStageComponent } from './components/Users/stagiaire-dashboard/fin-
 
 export const routes: Routes = [
 
-  {
-    path: '',
-    resolve: {
-      redirect: RedirectResolver
-    },
-    children: []
-
-  },
+  { path: '', resolve: {redirect: RedirectResolver},children: []},
 
   // Public routes
   { path: 'intern-form', component: InternFormComponent },
@@ -43,7 +36,7 @@ export const routes: Routes = [
   { path: 'intern-list', component: InternListComponent, canActivate: [authGuard, roleGuard], data: { roles: ['SERVICE_ADMINISTRATIVE', 'DCRH', 'ENCADRANT', 'CENTRE_DE_FORMATION'] }  },
   { path: 'demande-view/:id', component: DemandeViewComponent, canActivate: [authGuard, roleGuard], data: { roles: ['SERVICE_ADMINISTRATIVE', 'DCRH', 'ENCADRANT', 'CENTRE_DE_FORMATION'] }  },
 
-  // Role-protected routes
+  // Users routes
   { path: 'users-admin', component: UsersListComponent, canActivate: [authGuard], data: { role: 'SERVICE_ADMINISTRATIVE' }  },
   { path: 'users-encadrant', component: UsersListComponent, canActivate: [authGuard], data: { role: 'ENCADRANT' }  },
   { path: 'users-dcrh', component: UsersListComponent, canActivate: [authGuard], data: { role: 'DCRH' }  },
@@ -51,20 +44,20 @@ export const routes: Routes = [
   { path: 'users-add', component: UsersAddComponent, canActivate: [authGuard], data: { role: 'SERVICE_ADMINISTRATIVE' }  },
   { path: 'users-edit/:id', component: UsersManagementComponent, canActivate: [authGuard], data: { role: 'SERVICE_ADMINISTRATIVE' }  },
 
+  // Dashboard
   { path: 'encadrant-dashboard', component: EncadrantDashboardComponent, canActivate: [authGuard], data: { role: 'ENCADRANT' }  },
   { path: 'service-administrative-dashboard', component: ServiceAdministrativeDashboardComponent, canActivate: [authGuard], data: { role: 'SERVICE_ADMINISTRATIVE' }  },
   { path: 'dcrh-dashboard', component: DcrhDashboardComponent, canActivate: [authGuard], data: { role: 'DCRH' }  },
   { path: 'centre-formation-dashboard', component: CentreFormationDashboardComponent, canActivate: [authGuard], data: { role: 'CENTRE_DE_FORMATION' }  },
   
+  // Stagiaire routes
   { path: 'stagiaire-dashboard', component: StagiaireDashboardComponent, canActivate: [authGuard], data: { role: 'STAGIAIRE' }  },
   { path: 'demande', component: DemandeComponent, canActivate: [authGuard], data: { role: 'STAGIAIRE' }  },
   { path: 'convocation', component: ConvocationComponent, canActivate: [authGuard], data: { role: 'STAGIAIRE' }  },
   { path: 'document', component: DocumentsComponent, canActivate: [authGuard], data: { role: 'STAGIAIRE' }  },
   { path: 'fin-du-stage', component: FinDuStageComponent, canActivate: [authGuard], data: { role: 'STAGIAIRE' }  },
 
-
-  
-  // Wildcard route for 404
+  // Route for 404
   { path: '**', component: ErrorComponent },
 ];
 
