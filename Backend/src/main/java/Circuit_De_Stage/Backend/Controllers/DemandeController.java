@@ -100,23 +100,4 @@ public class DemandeController {
         return ResponseEntity.ok(demandeService.getDemandeInfo(id));
     }
     
-    
-    //to be removed
-
-    @PutMapping("/{documentId}/seen")
-    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
-    public ResponseEntity<Void> markAsSeen(@PathVariable int documentId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
-        documentService.updateSeenStatus(documentId, user.getId(), true);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{documentId}/status")
-    @PreAuthorize("hasAnyRole('ENCADRANT', 'DCRH', 'SERVICE_ADMINISTRATIVE', 'CENTRE_DE_FORMATION')")
-    public ResponseEntity<Boolean> getSeenStatus(@PathVariable int documentId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(auth.getName());
-        return ResponseEntity.ok(documentService.Status(documentId, user.getId()));
-    }
 }
