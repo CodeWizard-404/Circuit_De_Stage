@@ -37,18 +37,18 @@ import { DemandeStatus } from '../../../classes/enums/demande-status';
   styleUrls: ['./intern-form.component.css']
 })
 export class InternFormComponent {
-  isLinear = true; // Stepper linear mode
-  documentTypes = Object.values(DocumentType); // Document types
-  stageTypes = Object.values(StageType); // Stage types
-  documentsMap = new Map<DocumentType, File>(); // Map to store selected files
-  requiredDocuments: DocumentType[] = []; // Required documents for the selected stage type
-  errorMessage: string = ''; // Error message
-  internForm: FormGroup; // Main form group
-  personalInfo: FormGroup; // Personal information form group
-  internshipInfo: FormGroup; // Internship information form group
-  institueInfo: FormGroup; // Institute information form group
-  niveaux = ['Licence', 'Master', 'Prepa', 'Ingénierie', 'Doctorat']; // Education levels
-  annees = ['1er', '2eme', '3eme']; // Years
+  isLinear = true; 
+  documentTypes = Object.values(DocumentType); 
+  stageTypes = Object.values(StageType); 
+  documentsMap = new Map<DocumentType, File>(); 
+  requiredDocuments: DocumentType[] = []; 
+  errorMessage: string = ''; 
+  internForm: FormGroup;
+  personalInfo: FormGroup; 
+  internshipInfo: FormGroup; 
+  institueInfo: FormGroup; 
+  niveaux = ['Licence', 'Master', 'Prepa', 'Ingénierie', 'Doctorat']; 
+  annees = ['1er', '2eme', '3eme']; 
   
   constructor(
     private fb: FormBuilder,

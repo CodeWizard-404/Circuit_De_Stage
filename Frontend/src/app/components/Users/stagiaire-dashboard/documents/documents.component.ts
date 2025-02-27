@@ -26,63 +26,71 @@ export class DocumentsComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+  // Initialize component data when the component loads
   ngOnInit(): void {
-    this.loadDocuments();
+    this.loadDocuments(); // Load documents for the current user
   }
 
+  // Load documents associated with the current stagiaire (intern)
   private loadDocuments(): void {
-    const stagiaire = this.authService.getCurrentUser();
+    const stagiaire = this.authService.getCurrentUser(); // Get the current user
     if (!stagiaire) {
-      this.error = "Utilisateur non authentifié";
-      this.isLoading = false;
+      this.error = "Utilisateur non authentifié"; // Show an error message if the user is not authenticated
+      this.isLoading = false; // Stop the loading indicator
       return;
     }
 
     this.demandeService.getAllDemandes().subscribe({
       next: (demandes: Demande[]) => {
+        // Find the demande associated with the current stagiaire
         const stagiaireDemande = demandes.find(d => d.stagiaire.id === stagiaire.id);
         if (stagiaireDemande) {
+          // Find the "Laisser Passer" document
           this.laisserPasserDoc = stagiaireDemande.documents.find(
             doc => doc.type === DocumentType.LAISSER_PASSER
           ) || null;
+
+          // Find the "Bulletin de Mouvement" document
           this.bulletinMouvementDoc = stagiaireDemande.documents.find(
             doc => doc.type === DocumentType.BULLETIN_DE_MOUVEMENT
           ) || null;
         }
-        this.isLoading = false;
+        this.isLoading = false; // Stop the loading indicator
       },
       error: (err) => {
-        this.error = "Erreur lors du chargement des documents";
-        this.isLoading = false;
-        console.error('Error loading documents:', err);
+        this.error = "Erreur lors du chargement des documents"; // Show an error message
+        this.isLoading = false; // Stop the loading indicator
+        console.error('Error loading documents:', err); // Log the error for debugging
       }
     });
   }
 
+  // Download a specific document
   downloadDocument(doc: Document | null, filename: string): void {
-    if (!doc) return;
-
+    if (!doc) return; // Do nothing if the document is not available
     this.documentService.downloadDocument(doc.id).subscribe({
       next: (blob: Blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
-        window.URL.revokeObjectURL(url);
+        const url = window.URL.createObjectURL(blob); // Create a temporary URL for the file
+        const link = document.createElement('a'); // Create a link element
+        link.href = url; // Set the link's URL
+        link.download = filename; // Set the file name for download
+        link.click(); // Simulate a click to start the download
+        window.URL.revokeObjectURL(url); // Release the temporary URL
       },
       error: (err) => {
-        this.error = "Erreur lors du téléchargement";
-        console.error('Download error:', err);
+        this.error = "Erreur lors du téléchargement"; // Show an error message
+        console.error('Download error:', err); // Log the error for debugging
       }
     });
   }
 
+  // Download the "Laisser Passer" document
   downloadLaisserPasser(): void {
-    this.downloadDocument(this.laisserPasserDoc, 'Laisser_Passer.pdf');
+    this.downloadDocument(this.laisserPasserDoc, 'Laisser_Passer.pdf'); // Call the generic download method
   }
 
+  // Download the "Bulletin de Mouvement" document
   downloadBulletinMouvement(): void {
-    this.downloadDocument(this.bulletinMouvementDoc, 'Bulletin_de_Mouvement.pdf');
+    this.downloadDocument(this.bulletinMouvementDoc, 'Bulletin_de_Mouvement.pdf'); // Call the generic download method
   }
 }

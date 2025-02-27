@@ -59,15 +59,15 @@
 
 @media (max-width: 768px) {
   .confirmation-container {
-    padding: 1rem;
+      padding: 1rem;
   }
 
   .confirmation-actions {
-    flex-direction: column;
+      flex-direction: column;
   }
 
   .confirmation-actions button {
-    width: 100%;
-    margin: 0.5rem 0;
+      width: 100%;
+      margin: 0.5rem 0;
   }
 }

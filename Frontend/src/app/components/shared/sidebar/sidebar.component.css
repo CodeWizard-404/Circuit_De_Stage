@@ -5,16 +5,6 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.logo img {
-    height: 40px;
-    width: auto;
-}
-
 .user-profile {
     display: flex;
     align-items: center;
@@ -37,11 +27,6 @@
     justify-content: center;
     font-weight: 600;
     font-size: 0.9rem;
-}
-
-.user-avatar i {
-    font-size: 1.25rem;
-    color: white;
 }
 
 .user-info {
@@ -119,29 +104,6 @@
     transform: translateX(3px);
 }
 
-.sidebar-footer {
-    padding: 1.5rem;
-    border-top: 1px solid #f0f0f0;
-}
-
-/* Scrollbar Styling */
-.sidebar-nav::-webkit-scrollbar {
-    width: 4px;
-}
-
-.sidebar-nav::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.sidebar-nav::-webkit-scrollbar-thumb {
-    background: #d4d4d4;
-    border-radius: 10px;
-}
-
-.sidebar-nav::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
 .menu-group {
     margin-bottom: 0.5rem;
     background: rgba(255, 255, 255, 0.05);
@@ -157,7 +119,6 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
     background-color: #ffffff;
 }
 
@@ -196,81 +157,16 @@
     display: flex;
     align-items: center;
     transition: all 0.2s ease;
-    position: relative;
 }
 
-.submenu-item:before {
-    content: '';
-    position: absolute;
-    left: 2.4rem;
-    width: 100%;
-    height: 100%;
-    background: #ff4d4d33;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.submenu-item:hover:before {
-    opacity: 1;
-}
-
-.submenu-item .nav-icon {
-    font-size: 0.8rem;
-    width: 16px;
-    margin-right: 0.8rem;
-    color: #666;
-}
-
-.menu-item, .submenu-item {
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-item:hover, .submenu-item:hover {
+.submenu-item:hover {
     background: #fff1f2;
     color: #D4192C;
 }
 
-.menu-item.active, .submenu-item.active {
+.submenu-item.active {
     background: #D4192C;
     color: white;
-}
-
-.menu-item.active .nav-icon, 
-.submenu-item.active .nav-icon {
-    color: white;
-}
-
-/* Add ripple effect */
-.menu-item:after,
-.submenu-item:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(212, 25, 44, 0.3);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-}
-
-.menu-item:focus:not(:active)::after,
-.submenu-item:focus:not(:active)::after {
-    animation: ripple 1s ease-out;
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-    }
-    100% {
-        transform: scale(100, 100);
-        opacity: 0;
-    }
 }
 
 @media (max-width: 768px) {
