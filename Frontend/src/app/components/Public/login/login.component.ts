@@ -31,7 +31,6 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
   ) {
     // Setup login form with email and password fields
     this.loginForm = this.fb.group({

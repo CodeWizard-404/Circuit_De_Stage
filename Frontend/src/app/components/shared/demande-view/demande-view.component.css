@@ -49,7 +49,6 @@
 .status-badge.soumise { background: #fff3cd; color: #856404; }
 .status-badge.valide { background: #d4edda; color: #155724; }
 .status-badge.rejetee { background: #f8d7da; color: #721c24; }
-.status-badge.terminee { background: #cce5ff; color: #004085; }
 
 /* Content Grid */
 .content-grid {
@@ -68,7 +67,7 @@
 
 .card-header {
   padding: 1.5rem;
-  background:  #D4192C ;
+  background: #D4192C;
   color: white;
   display: flex;
   align-items: center;
@@ -112,7 +111,6 @@
   border-radius: 10px;
 }
 
-
 .date-item {
   display: flex;
   align-items: center;
@@ -140,11 +138,6 @@
   padding: 1rem;
   background: #f8f9fa;
   border-radius: 10px;
-  transition: transform 0.2s;
-}
-
-.document-item:hover {
-  transform: translateX(5px);
 }
 
 .document-info {
@@ -168,7 +161,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.2s;
 }
 
 .action-button.download {
@@ -234,11 +226,6 @@
   background: #e9ecef;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.file-label:hover {
-  background: #dee2e6;
 }
 
 /* Animations */
@@ -283,6 +270,7 @@
 /* Document Actions */
 .document-actions {
   gap: 0.5rem;
+  display: flex;
 }
 
 /* Reject Form */
@@ -291,171 +279,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.reject-confirm {
-  background: #dc3545;
-  color: white;
-}
-
-.reject-confirm:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Responsive Design */
-@media (max-width: 1610px) {
-
-  .date-range {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .date-separator {
-    width: 100%;
-    height: 2px;
-    margin: 0.5rem 0;
-  }
-
-  .document-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 1400px) {
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .documents-card {
-    grid-column: 1 / -1;
-  }
-
-  .date-range {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .date-separator {
-    width: 100%;
-    height: 2px;
-    margin: 0.5rem 0;
-  }
-}
-
-@media (max-width: 992px) {
-  .demande-view-wrapper {
-    padding: 1rem;
-  }
-
-  .header-section {
-    padding: 1.5rem;
-  }
-
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .status-badge {
-    align-self: flex-start;
-  }
-
-  .date-range {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .date-separator {
-    width: 100%;
-    height: 2px;
-    margin: 0.5rem 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .document-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .document-actions {
-    width: 100%;
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .action-button {
-    flex: 1;
-    justify-content: center;
-  }
-
-  .upload-form {
-    gap: 0.75rem;
-  }
-
-  .actions-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .reject-form {
-    width: 100%;
-  }
-}
-
-@media (max-width: 576px) {
-
-  
-  .card-header {
-    padding: 1rem;
-  }
-
-  .card-content {
-    padding: 1rem;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .document-details h3 {
-    font-size: 0.875rem;
-  }
-
-  .action-button {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.75rem;
-  }
-}
-
-/* Document Status Colors */
-.document-item.soumis { border-left: 4px solid #ff9800; }
-.document-item.valide { border-left: 4px solid #28a745; }
-.document-item.rejete { border-left: 4px solid #dc3545; }
-
-/* Action Buttons Large */
-.action-button.validate-large,
-.action-button.reject-large {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  justify-content: center;
-  margin-top: 0rem;
-}
-
-.action-button.validate-large {
-  background: #28a745;
-  color: white;
-}
-
-.action-button.reject-large {
-  background: #dc3545;
-  color: white;
 }
 
 /* Contact Info Enhancement */
@@ -512,34 +335,24 @@
   color: #856404;
 }
 
-/* Hover Effects Enhancement */
-.action-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Action Buttons Large */
+.action-button.validate-large,
+.action-button.reject-large {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  justify-content: center;
+  margin-top: 0rem;
 }
 
-.action-button.download:hover {
-  background: #dee2e6;
+.action-button.validate-large {
+  background: #28a745;
+  color: white;
 }
 
-.action-button.validate:hover {
-  background: #218838;
-}
-
-.action-button.reject:hover {
-  background: #c82333;
-}
-
-.action-button.upload:hover {
-  background: #c31826;
-}
-
-.action-button.validate-large:hover {
-  background: #218838;
-}
-
-.action-button.reject-large:hover {
-  background: #c82333;
+.action-button.reject-large {
+  background: #dc3545;
+  color: white;
 }
 
 /* Textarea Enhancement */
@@ -550,30 +363,84 @@ textarea {
   border-radius: 8px;
   resize: vertical;
   min-height: 100px;
-  transition: border-color 0.2s;
 }
 
-textarea:focus {
-  outline: none;
-  border-color: #D4192C;
-  box-shadow: 0 0 0 2px rgba(212, 25, 44, 0.1);
+/* Document Status Colors */
+.document-item.soumis { border-left: 4px solid #ff9800; }
+.document-item.valide { border-left: 4px solid #28a745; }
+.document-item.rejete { border-left: 4px solid #dc3545; }
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .content-grid {
+      grid-template-columns: 1fr;
+  }
+
+  .documents-card {
+      grid-column: 1 / -1;
+  }
+
+  .date-range {
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .date-separator {
+      width: 100%;
+      height: 2px;
+      margin: 0.5rem 0;
+  }
 }
 
-/* Print Styles */
-@media print {
+@media (max-width: 992px) {
   .demande-view-wrapper {
-    padding: 0;
-    background: white;
+      padding: 1rem;
   }
 
-  .action-button,
-  .upload-section,
-  .actions-card {
-    display: none;
+  .header-section {
+      padding: 1.5rem;
   }
 
-  .card-header {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+  }
+
+  .status-badge {
+      align-self: flex-start;
+  }
+
+  .date-range {
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .date-separator {
+      width: 100%;
+      height: 2px;
+      margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .document-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+  }
+
+  .document-actions {
+      width: 100%;
+      gap: 0.5rem;
+  }
+
+  .action-button {
+      flex: 1;
+      justify-content: center;
+  }
+
+  .upload-form {
+      gap: 0.75rem;
   }
 }

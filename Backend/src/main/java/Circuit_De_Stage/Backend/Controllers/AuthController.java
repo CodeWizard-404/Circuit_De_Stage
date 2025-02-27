@@ -21,48 +21,61 @@ import Circuit_De_Stage.Backend.Security.JwtUtil;
 import Circuit_De_Stage.Backend.Services.AuthService;
 import jakarta.mail.MessagingException;
 
-@RestController
-@RequestMapping("/api/auth")
-@CrossOrigin
+@RestController // Marks this class as a REST controller
+@RequestMapping("/api/auth") // Base URL path for all endpoints in this controller
+@CrossOrigin // Enables CORS for all endpoints in this controller
 public class AuthController {
- @Autowired
- private AuthService authService;
 
- @Autowired
- private JwtUtil jwtUtil;
+    @Autowired // Injects the AuthService bean
+    private AuthService authService;
 
- @Autowired
- private UserRepository utilisateurRepository;
+    @Autowired // Injects the JwtUtil bean
+    private JwtUtil jwtUtil;
 
- @Autowired
- private StagiaireRepository stagiaireRepository;
+    @Autowired // Injects the UserRepository bean
+    private UserRepository utilisateurRepository;
 
- @PostMapping("/login")
- public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
-     String email = credentials.get("email");
-     String password = credentials.get("password");
-     String token = authService.login(email, password);
-     return ResponseEntity.ok(token);
- }
+    @Autowired // Injects the StagiaireRepository bean
+    private StagiaireRepository stagiaireRepository;
 
- @PostMapping("/forgot-password")
- public ResponseEntity<Void> forgotPassword(@RequestBody Map<String, String> request) throws MessagingException {
-     String email = request.get("email");
-     authService.recoverPassword(email);
-     return ResponseEntity.ok().build();
- }
+    /**
+     * Handles user login.
+     * Accepts email and password, validates credentials, and returns a JWT token.
+     */
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+        String email = credentials.get("email"); // Extract email from request body
+        String password = credentials.get("password"); // Extract password from request body
+        String token = authService.login(email, password); // Authenticate and generate JWT token
+        return ResponseEntity.ok(token); // Return the token in the response
+    }
 
- @GetMapping("/me")
- public ResponseEntity<Object> getCurrentUser(@RequestHeader("Authorization") String token) {
-     String email = jwtUtil.extractUsername(token.substring(7)); 
-     User user = utilisateurRepository.findByEmail(email);
-     if (user != null) {
-         return ResponseEntity.ok(user);
-     }
-     Stagiaire stagiaire = stagiaireRepository.findByEmail(email);
-     if (stagiaire != null) {
-         return ResponseEntity.ok(stagiaire);
-     }
-     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
- }
+    /**
+     * Handles password recovery.
+     * Sends a password reset link to the provided email address.
+     */
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody Map<String, String> request) throws MessagingException {
+        String email = request.get("email"); // Extract email from request body
+        authService.recoverPassword(email); // Trigger password recovery process
+        return ResponseEntity.ok().build(); // Return a 200 OK response
+    }
+
+    /**
+     * Retrieves the current authenticated user's details.
+     * Uses the JWT token from the "Authorization" header to identify the user.
+     */
+    @GetMapping("/me")
+    public ResponseEntity<Object> getCurrentUser(@RequestHeader("Authorization") String token) {
+        String email = jwtUtil.extractUsername(token.substring(7)); // Extract email from the JWT token
+        User user = utilisateurRepository.findByEmail(email); // Check if the user exists in the "User" table
+        if (user != null) {
+            return ResponseEntity.ok(user); // Return the user details if found
+        }
+        Stagiaire stagiaire = stagiaireRepository.findByEmail(email); // Check if the user exists in the "Stagiaire" table
+        if (stagiaire != null) {
+            return ResponseEntity.ok(stagiaire); // Return the stagiaire details if found
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"); // Return 404 if no user is found
+    }
 }
